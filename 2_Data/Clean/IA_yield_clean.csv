@@ -1,0 +1,991 @@
+"State","County","Commodity","Value","Year","Yield_Mg_p_ha"
+"Iowa","Boone","oats",113,"2020",4.52
+"Iowa","Hamilton","oats",117.6,"2020",4.704
+"Iowa","Hardin","oats",67.2,"2020",2.688
+"Iowa","Benton","oats",79.2,"2020",3.168
+"Iowa","Clinton","oats",72,"2020",2.88
+"Iowa","Iowa","oats",69.4,"2020",2.776
+"Iowa","Jackson","oats",61.7,"2020",2.468
+"Iowa","Johnson","oats",82.2,"2020",3.288
+"Iowa","Jones","oats",68,"2020",2.72
+"Iowa","Linn","oats",78.3,"2020",3.132
+"Iowa","Butler","oats",70.5,"2020",2.82
+"Iowa","Mitchell","oats",89.6,"2020",3.584
+"Iowa","Winnebago","oats",72.5,"2020",2.9
+"Iowa","Worth","oats",84.3,"2020",3.372
+"Iowa","Allamakee","oats",62.4,"2020",2.496
+"Iowa","Black Hawk","oats",77.3,"2020",3.092
+"Iowa","Bremer","oats",90.1,"2020",3.604
+"Iowa","Buchanan","oats",72.6,"2020",2.904
+"Iowa","Chickasaw","oats",76.2,"2020",3.048
+"Iowa","Clayton","oats",64.2,"2020",2.568
+"Iowa","Delaware","oats",81.8,"2020",3.272
+"Iowa","Dubuque","oats",59.5,"2020",2.38
+"Iowa","Fayette","oats",70,"2020",2.8
+"Iowa","Howard","oats",77.5,"2020",3.1
+"Iowa","Winneshiek","oats",62.5,"2020",2.5
+"Iowa","Lyon","oats",79.9,"2020",3.196
+"Iowa","O Brien","oats",80,"2020",3.2
+"Iowa","Plymouth","oats",94.4,"2020",3.776
+"Iowa","Sioux","oats",105.9,"2020",4.236
+"Iowa","Monroe","oats",73.8,"2020",2.952
+"Iowa","Davis","oats",67.9,"2020",2.716
+"Iowa","Van Buren","oats",62.7,"2020",2.508
+"Iowa","Washington","oats",80.8,"2020",3.232
+"Iowa","Audubon","oats",74.7,"2020",2.988
+"Iowa","Greene","oats",82.7,"2020",3.308
+"Iowa","Shelby","oats",98.4,"2020",3.936
+"Iowa","Jasper","oats",61.1,"2019",2.444
+"Iowa","Other (Combined) Counties","oats",62.6,"2019",2.504
+"Iowa","Benton","oats",65.2,"2019",2.608
+"Iowa","Clinton","oats",64.4,"2019",2.576
+"Iowa","Johnson","oats",54.2,"2019",2.168
+"Iowa","Jones","oats",64.3,"2019",2.572
+"Iowa","Linn","oats",66.1,"2019",2.644
+"Iowa","Other (Combined) Counties","oats",59.3,"2019",2.372
+"Iowa","Kossuth","oats",52.1,"2019",2.084
+"Iowa","Other (Combined) Counties","oats",53.2,"2019",2.128
+"Iowa","Allamakee","oats",60.2,"2019",2.408
+"Iowa","Bremer","oats",77,"2019",3.08
+"Iowa","Buchanan","oats",61.2,"2019",2.448
+"Iowa","Chickasaw","oats",60.5,"2019",2.42
+"Iowa","Clayton","oats",60.3,"2019",2.412
+"Iowa","Dubuque","oats",64.2,"2019",2.568
+"Iowa","Fayette","oats",64.8,"2019",2.592
+"Iowa","Other (Combined) Counties","oats",70.1,"2019",2.804
+"Iowa","Winneshiek","oats",59.9,"2019",2.396
+"Iowa","Lyon","oats",69.2,"2019",2.768
+"Iowa","O Brien","oats",59.7,"2019",2.388
+"Iowa","Osceola","oats",48,"2019",1.92
+"Iowa","Other (Combined) Counties","oats",84.3,"2019",3.372
+"Iowa","Plymouth","oats",71.2,"2019",2.848
+"Iowa","Sioux","oats",71.2,"2019",2.848
+"Iowa","Other (Combined) Counties","oats",39.6,"2019",1.584
+"Iowa","Van Buren","oats",42.3,"2019",1.692
+"Iowa","Greene","oats",47.9,"2019",1.916
+"Iowa","Guthrie","oats",58.6,"2019",2.344
+"Iowa","Other (Combined) Counties","oats",66.4,"2019",2.656
+"Iowa","Shelby","oats",74.6,"2019",2.984
+"Iowa","Woodbury","oats",82,"2019",3.28
+"Iowa","Boone","hay",3.35,"2018",3.03912
+"Iowa","Boone","oats",57.9,"2018",2.316
+"Iowa","Hamilton","hay",3.45,"2018",3.12984
+"Iowa","Hardin","oats",70,"2018",2.8
+"Iowa","Jasper","oats",54.5,"2018",2.18
+"Iowa","Other (Combined) Counties","hay",3.6,"2018",3.26592
+"Iowa","Other (Combined) Counties","oats",69.6,"2018",2.784
+"Iowa","Polk","hay",4.3,"2018",3.90096
+"Iowa","Poweshiek","oats",59.7,"2018",2.388
+"Iowa","Story","oats",55,"2018",2.2
+"Iowa","Tama","oats",50.7,"2018",2.028
+"Iowa","Webster","hay",3.7,"2018",3.35664
+"Iowa","Benton","oats",65.5,"2018",2.62
+"Iowa","Cedar","oats",60.7,"2018",2.428
+"Iowa","Iowa","oats",76.6,"2018",3.064
+"Iowa","Jackson","hay",4.45,"2018",4.03704
+"Iowa","Jackson","oats",52.5,"2018",2.1
+"Iowa","Linn","oats",55.1,"2018",2.204
+"Iowa","Other (Combined) Counties","hay",4.1,"2018",3.71952
+"Iowa","Other (Combined) Counties","oats",51.4,"2018",2.056
+"Iowa","Scott","oats",77.5,"2018",3.1
+"Iowa","Cerro Gordo","oats",75,"2018",3
+"Iowa","Humboldt","hay",4.2,"2018",3.81024
+"Iowa","Mitchell","oats",62.1,"2018",2.484
+"Iowa","Other (Combined) Counties","hay",2.9,"2018",2.63088
+"Iowa","Other (Combined) Counties","oats",54.3,"2018",2.172
+"Iowa","Winnebago","hay",3.75,"2018",3.402
+"Iowa","Wright","hay",3.2,"2018",2.90304
+"Iowa","Allamakee","hay",4.05,"2018",3.67416
+"Iowa","Bremer","oats",80.3,"2018",3.212
+"Iowa","Buchanan","oats",61.1,"2018",2.444
+"Iowa","Clayton","hay",4.25,"2018",3.8556
+"Iowa","Clayton","oats",59.2,"2018",2.368
+"Iowa","Dubuque","hay",4.5,"2018",4.0824
+"Iowa","Dubuque","oats",62.9,"2018",2.516
+"Iowa","Fayette","oats",54.8,"2018",2.192
+"Iowa","Howard","oats",40.6,"2018",1.624
+"Iowa","Other (Combined) Counties","hay",4.4,"2018",3.99168
+"Iowa","Other (Combined) Counties","oats",68.4,"2018",2.736
+"Iowa","Winneshiek","hay",3.95,"2018",3.58344
+"Iowa","Winneshiek","oats",77,"2018",3.08
+"Iowa","Clay","hay",3.05,"2018",2.76696
+"Iowa","Emmet","hay",3.5,"2018",3.1752
+"Iowa","Lyon","hay",4.8,"2018",4.35456
+"Iowa","Lyon","oats",88.3,"2018",3.532
+"Iowa","O Brien","oats",76.7,"2018",3.068
+"Iowa","Other (Combined) Counties","hay",4.15,"2018",3.76488
+"Iowa","Other (Combined) Counties","oats",65.3,"2018",2.612
+"Iowa","Palo Alto","hay",2.15,"2018",1.95048
+"Iowa","Plymouth","oats",90.8,"2018",3.632
+"Iowa","Sioux","oats",88,"2018",3.52
+"Iowa","Appanoose","hay",2.75,"2018",2.4948
+"Iowa","Clarke","hay",3.1,"2018",2.81232
+"Iowa","Lucas","oats",56.5,"2018",2.26
+"Iowa","Marion","oats",66.9,"2018",2.676
+"Iowa","Monroe","hay",3.05,"2018",2.76696
+"Iowa","Other (Combined) Counties","hay",3.15,"2018",2.85768
+"Iowa","Other (Combined) Counties","oats",56.8,"2018",2.272
+"Iowa","Ringgold","hay",3,"2018",2.7216
+"Iowa","Union","hay",3.05,"2018",2.76696
+"Iowa","Union","oats",70.2,"2018",2.808
+"Iowa","Warren","hay",2.85,"2018",2.58552
+"Iowa","Davis","hay",2.5,"2018",2.268
+"Iowa","Davis","oats",60,"2018",2.4
+"Iowa","Des Moines","hay",3.4,"2018",3.08448
+"Iowa","Jefferson","oats",53.6,"2018",2.144
+"Iowa","Keokuk","hay",4,"2018",3.6288
+"Iowa","Lee","hay",4,"2018",3.6288
+"Iowa","Louisa","hay",3.9,"2018",3.53808
+"Iowa","Other (Combined) Counties","hay",3.25,"2018",2.9484
+"Iowa","Other (Combined) Counties","oats",64,"2018",2.56
+"Iowa","Van Buren","hay",2.6,"2018",2.35872
+"Iowa","Van Buren","oats",53.8,"2018",2.152
+"Iowa","Washington","oats",54.4,"2018",2.176
+"Iowa","Adair","hay",4.1,"2018",3.71952
+"Iowa","Adams","oats",64.8,"2018",2.592
+"Iowa","Mills","hay",4.15,"2018",3.76488
+"Iowa","Other (Combined) Counties","hay",3.7,"2018",3.35664
+"Iowa","Other (Combined) Counties","oats",56.4,"2018",2.256
+"Iowa","Taylor","hay",3.5,"2018",3.1752
+"Iowa","Audubon","hay",3.2,"2018",2.90304
+"Iowa","Carroll","oats",61.5,"2018",2.46
+"Iowa","Greene","oats",34.7,"2018",1.388
+"Iowa","Other (Combined) Counties","hay",4.1,"2018",3.71952
+"Iowa","Other (Combined) Counties","oats",76.6,"2018",3.064
+"Iowa","Shelby","oats",76.9,"2018",3.076
+"Iowa","Boone","oats",103.8,"2017",4.152
+"Iowa","Grundy","hay",3.45,"2017",3.12984
+"Iowa","Hamilton","hay",3.15,"2017",2.85768
+"Iowa","Jasper","oats",90,"2017",3.6
+"Iowa","Other (Combined) Counties","hay",3.4,"2017",3.08448
+"Iowa","Other (Combined) Counties","oats",101.2,"2017",4.048
+"Iowa","Poweshiek","hay",2.7,"2017",2.44944
+"Iowa","Poweshiek","oats",76.7,"2017",3.068
+"Iowa","Tama","oats",104.7,"2017",4.188
+"Iowa","Webster","hay",3.35,"2017",3.03912
+"Iowa","Benton","oats",87.5,"2017",3.5
+"Iowa","Clinton","hay",4.5,"2017",4.0824
+"Iowa","Clinton","oats",63.4,"2017",2.536
+"Iowa","Jackson","hay",3.7,"2017",3.35664
+"Iowa","Johnson","hay",3.15,"2017",2.85768
+"Iowa","Johnson","oats",73.9,"2017",2.956
+"Iowa","Jones","hay",3.9,"2017",3.53808
+"Iowa","Jones","oats",66.3,"2017",2.652
+"Iowa","Linn","hay",3.4,"2017",3.08448
+"Iowa","Linn","oats",78.8,"2017",3.152
+"Iowa","Muscatine","oats",75,"2017",3
+"Iowa","Other (Combined) Counties","hay",4,"2017",3.6288
+"Iowa","Other (Combined) Counties","oats",74.4,"2017",2.976
+"Iowa","Scott","oats",88.8,"2017",3.552
+"Iowa","Franklin","hay",3.8,"2017",3.44736
+"Iowa","Hancock","hay",4.55,"2017",4.12776
+"Iowa","Humboldt","hay",2.75,"2017",2.4948
+"Iowa","Mitchell","hay",4.5,"2017",4.0824
+"Iowa","Mitchell","oats",72.4,"2017",2.896
+"Iowa","Other (Combined) Counties","hay",3.2,"2017",2.90304
+"Iowa","Other (Combined) Counties","oats",82.6,"2017",3.304
+"Iowa","Winnebago","hay",3.15,"2017",2.85768
+"Iowa","Worth","hay",4.35,"2017",3.94632
+"Iowa","Worth","oats",79.8,"2017",3.192
+"Iowa","Wright","hay",2.9,"2017",2.63088
+"Iowa","Allamakee","hay",4.2,"2017",3.81024
+"Iowa","Allamakee","oats",73.8,"2017",2.952
+"Iowa","Buchanan","oats",83.9,"2017",3.356
+"Iowa","Chickasaw","hay",3.9,"2017",3.53808
+"Iowa","Clayton","hay",3.95,"2017",3.58344
+"Iowa","Clayton","oats",60.7,"2017",2.428
+"Iowa","Delaware","hay",4.6,"2017",4.17312
+"Iowa","Dubuque","hay",4.35,"2017",3.94632
+"Iowa","Dubuque","oats",67.6,"2017",2.704
+"Iowa","Fayette","hay",3.55,"2017",3.22056
+"Iowa","Fayette","oats",77.9,"2017",3.116
+"Iowa","Howard","hay",4.35,"2017",3.94632
+"Iowa","Howard","oats",73.2,"2017",2.928
+"Iowa","Other (Combined) Counties","hay",4.2,"2017",3.81024
+"Iowa","Other (Combined) Counties","oats",73.7,"2017",2.948
+"Iowa","Winneshiek","hay",3.65,"2017",3.31128
+"Iowa","Emmet","hay",4,"2017",3.6288
+"Iowa","Lyon","hay",5.2,"2017",4.71744
+"Iowa","O Brien","hay",3,"2017",2.7216
+"Iowa","O Brien","oats",80.8,"2017",3.232
+"Iowa","Other (Combined) Counties","hay",4.25,"2017",3.8556
+"Iowa","Other (Combined) Counties","oats",99.6,"2017",3.984
+"Iowa","Palo Alto","oats",98.1,"2017",3.924
+"Iowa","Plymouth","oats",109.5,"2017",4.38
+"Iowa","Sioux","oats",91.3,"2017",3.652
+"Iowa","Decatur","hay",3,"2017",2.7216
+"Iowa","Madison","hay",3.1,"2017",2.81232
+"Iowa","Marion","hay",2.9,"2017",2.63088
+"Iowa","Other (Combined) Counties","hay",2.65,"2017",2.40408
+"Iowa","Ringgold","hay",3.2,"2017",2.90304
+"Iowa","Davis","hay",2.7,"2017",2.44944
+"Iowa","Davis","oats",67,"2017",2.68
+"Iowa","Des Moines","hay",3.35,"2017",3.03912
+"Iowa","Henry","oats",127,"2017",5.08
+"Iowa","Lee","hay",3.15,"2017",2.85768
+"Iowa","Louisa","hay",3.1,"2017",2.81232
+"Iowa","Mahaska","oats",86.8,"2017",3.472
+"Iowa","Other (Combined) Counties","hay",3.3,"2017",2.99376
+"Iowa","Other (Combined) Counties","oats",72.9,"2017",2.916
+"Iowa","Van Buren","hay",2.8,"2017",2.54016
+"Iowa","Van Buren","oats",74.2,"2017",2.968
+"Iowa","Wapello","hay",2.4,"2017",2.17728
+"Iowa","Washington","hay",2.8,"2017",2.54016
+"Iowa","Cass","hay",3.5,"2017",3.1752
+"Iowa","Fremont","hay",4.3,"2017",3.90096
+"Iowa","Montgomery","hay",4.05,"2017",3.67416
+"Iowa","Other (Combined) Counties","hay",3.5,"2017",3.1752
+"Iowa","Audubon","hay",4.1,"2017",3.71952
+"Iowa","Audubon","oats",81,"2017",3.24
+"Iowa","Crawford","oats",99.1,"2017",3.964
+"Iowa","Monona","hay",4.65,"2017",4.21848
+"Iowa","Other (Combined) Counties","hay",4.1,"2017",3.71952
+"Iowa","Other (Combined) Counties","oats",73.3,"2017",2.932
+"Iowa","Woodbury","oats",55.6,"2017",2.224
+"Iowa","Boone","corn",161.6,"2020",10.14848
+"Iowa","Boone","soybeans",50,"2020",3.365
+"Iowa","Dallas","corn",140.5,"2020",8.8234
+"Iowa","Dallas","soybeans",45.4,"2020",3.05542
+"Iowa","Grundy","corn",183.7,"2020",11.53636
+"Iowa","Grundy","soybeans",59.8,"2020",4.02454
+"Iowa","Hamilton","corn",167.2,"2020",10.50016
+"Iowa","Hamilton","soybeans",50.5,"2020",3.39865
+"Iowa","Hardin","corn",156.6,"2020",9.83448
+"Iowa","Hardin","soybeans",51.8,"2020",3.48614
+"Iowa","Polk","corn",151,"2020",9.4828
+"Iowa","Polk","soybeans",49.2,"2020",3.31116
+"Iowa","Poweshiek","corn",139,"2020",8.7292
+"Iowa","Poweshiek","soybeans",53.8,"2020",3.62074
+"Iowa","Story","corn",149.2,"2020",9.36976
+"Iowa","Story","soybeans",51.3,"2020",3.45249
+"Iowa","Tama","corn",133.5,"2020",8.3838
+"Iowa","Tama","soybeans",55.2,"2020",3.71496
+"Iowa","Webster","corn",174,"2020",10.9272
+"Iowa","Webster","soybeans",49.5,"2020",3.33135
+"Iowa","Benton","corn",145.6,"2020",9.14368
+"Iowa","Benton","soybeans",55.7,"2020",3.74861
+"Iowa","Cedar","corn",154.1,"2020",9.67748
+"Iowa","Cedar","soybeans",55.3,"2020",3.72169
+"Iowa","Clinton","corn",179.4,"2020",11.26632
+"Iowa","Clinton","soybeans",55.9,"2020",3.76207
+"Iowa","Iowa","corn",151.9,"2020",9.53932
+"Iowa","Iowa","soybeans",48.9,"2020",3.29097
+"Iowa","Jackson","corn",186.7,"2020",11.72476
+"Iowa","Jackson","soybeans",53.7,"2020",3.61401
+"Iowa","Johnson","corn",162.2,"2020",10.18616
+"Iowa","Johnson","soybeans",50.9,"2020",3.42557
+"Iowa","Jones","corn",172.6,"2020",10.83928
+"Iowa","Jones","soybeans",53,"2020",3.5669
+"Iowa","Linn","corn",165.9,"2020",10.41852
+"Iowa","Muscatine","corn",173.8,"2020",10.91464
+"Iowa","Muscatine","soybeans",54.6,"2020",3.67458
+"Iowa","Scott","corn",182.3,"2020",11.44844
+"Iowa","Scott","soybeans",59.9,"2020",4.03127
+"Iowa","Butler","corn",193.9,"2020",12.17692
+"Iowa","Butler","soybeans",53.2,"2020",3.58036
+"Iowa","Cerro Gordo","corn",183.6,"2020",11.53008
+"Iowa","Cerro Gordo","soybeans",58.7,"2020",3.95051
+"Iowa","Floyd","corn",188.5,"2020",11.8378
+"Iowa","Floyd","soybeans",53,"2020",3.5669
+"Iowa","Franklin","corn",181.1,"2020",11.37308
+"Iowa","Franklin","soybeans",54.3,"2020",3.65439
+"Iowa","Hancock","corn",201.2,"2020",12.63536
+"Iowa","Hancock","soybeans",58.9,"2020",3.96397
+"Iowa","Humboldt","corn",189.5,"2020",11.9006
+"Iowa","Humboldt","soybeans",55.8,"2020",3.75534
+"Iowa","Kossuth","corn",191.5,"2020",12.0262
+"Iowa","Kossuth","soybeans",59.1,"2020",3.97743
+"Iowa","Mitchell","corn",204.5,"2020",12.8426
+"Iowa","Mitchell","soybeans",58.3,"2020",3.92359
+"Iowa","Winnebago","corn",208.3,"2020",13.08124
+"Iowa","Winnebago","soybeans",59.7,"2020",4.01781
+"Iowa","Worth","corn",206.9,"2020",12.99332
+"Iowa","Worth","soybeans",57.2,"2020",3.84956
+"Iowa","Wright","corn",187.1,"2020",11.74988
+"Iowa","Wright","soybeans",54.9,"2020",3.69477
+"Iowa","Allamakee","corn",197.4,"2020",12.39672
+"Iowa","Allamakee","soybeans",57.7,"2020",3.88321
+"Iowa","Black Hawk","corn",170.8,"2020",10.72624
+"Iowa","Black Hawk","soybeans",53.2,"2020",3.58036
+"Iowa","Bremer","corn",188.7,"2020",11.85036
+"Iowa","Buchanan","corn",189.3,"2020",11.88804
+"Iowa","Buchanan","soybeans",55.7,"2020",3.74861
+"Iowa","Chickasaw","corn",186.8,"2020",11.73104
+"Iowa","Chickasaw","soybeans",54.9,"2020",3.69477
+"Iowa","Clayton","corn",192.1,"2020",12.06388
+"Iowa","Clayton","soybeans",59,"2020",3.9707
+"Iowa","Delaware","corn",191.5,"2020",12.0262
+"Iowa","Delaware","soybeans",60,"2020",4.038
+"Iowa","Dubuque","corn",198.3,"2020",12.45324
+"Iowa","Fayette","corn",181.1,"2020",11.37308
+"Iowa","Fayette","soybeans",54.9,"2020",3.69477
+"Iowa","Howard","corn",189.7,"2020",11.91316
+"Iowa","Howard","soybeans",53.5,"2020",3.60055
+"Iowa","Winneshiek","corn",179.2,"2020",11.25376
+"Iowa","Winneshiek","soybeans",52.6,"2020",3.53998
+"Iowa","Buena Vista","corn",184.9,"2020",11.61172
+"Iowa","Cherokee","corn",186.8,"2020",11.73104
+"Iowa","Cherokee","soybeans",56.1,"2020",3.77553
+"Iowa","Clay","corn",169.1,"2020",10.61948
+"Iowa","Clay","soybeans",49.4,"2020",3.32462
+"Iowa","Dickinson","corn",183.2,"2020",11.50496
+"Iowa","Dickinson","soybeans",54.5,"2020",3.66785
+"Iowa","Emmet","corn",187.2,"2020",11.75616
+"Iowa","Emmet","soybeans",55,"2020",3.7015
+"Iowa","Lyon","corn",198.1,"2020",12.44068
+"Iowa","Lyon","soybeans",59.7,"2020",4.01781
+"Iowa","O Brien","corn",200.6,"2020",12.59768
+"Iowa","O Brien","soybeans",60.9,"2020",4.09857
+"Iowa","Osceola","corn",186.3,"2020",11.69964
+"Iowa","Palo Alto","corn",182.1,"2020",11.43588
+"Iowa","Pocahontas","corn",187.3,"2020",11.76244
+"Iowa","Pocahontas","soybeans",53.5,"2020",3.60055
+"Iowa","Sioux","corn",203,"2020",12.7484
+"Iowa","Appanoose","corn",145,"2020",9.106
+"Iowa","Appanoose","soybeans",38.4,"2020",2.58432
+"Iowa","Clarke","corn",156.1,"2020",9.80308
+"Iowa","Clarke","soybeans",45.1,"2020",3.03523
+"Iowa","Decatur","corn",160.2,"2020",10.06056
+"Iowa","Decatur","soybeans",46.5,"2020",3.12945
+"Iowa","Lucas","corn",150.1,"2020",9.42628
+"Iowa","Lucas","soybeans",43,"2020",2.8939
+"Iowa","Madison","corn",172.9,"2020",10.85812
+"Iowa","Madison","soybeans",50.4,"2020",3.39192
+"Iowa","Monroe","corn",156,"2020",9.7968
+"Iowa","Monroe","soybeans",44.5,"2020",2.99485
+"Iowa","Ringgold","corn",160,"2020",10.048
+"Iowa","Ringgold","soybeans",49.7,"2020",3.34481
+"Iowa","Union","corn",180.7,"2020",11.34796
+"Iowa","Union","soybeans",51.2,"2020",3.44576
+"Iowa","Warren","corn",169,"2020",10.6132
+"Iowa","Warren","soybeans",48.5,"2020",3.26405
+"Iowa","Wayne","corn",169.7,"2020",10.65716
+"Iowa","Wayne","soybeans",43.8,"2020",2.94774
+"Iowa","Davis","corn",170.9,"2020",10.73252
+"Iowa","Davis","soybeans",41.2,"2020",2.77276
+"Iowa","Des Moines","corn",191.3,"2020",12.01364
+"Iowa","Des Moines","soybeans",59.5,"2020",4.00435
+"Iowa","Henry","corn",173,"2020",10.8644
+"Iowa","Henry","soybeans",53.9,"2020",3.62747
+"Iowa","Jefferson","corn",168.3,"2020",10.56924
+"Iowa","Jefferson","soybeans",52.8,"2020",3.55344
+"Iowa","Keokuk","corn",164.4,"2020",10.32432
+"Iowa","Keokuk","soybeans",50.6,"2020",3.40538
+"Iowa","Lee","corn",175.3,"2020",11.00884
+"Iowa","Lee","soybeans",51.2,"2020",3.44576
+"Iowa","Louisa","corn",182.6,"2020",11.46728
+"Iowa","Louisa","soybeans",52.3,"2020",3.51979
+"Iowa","Mahaska","corn",181.8,"2020",11.41704
+"Iowa","Van Buren","corn",154.4,"2020",9.69632
+"Iowa","Van Buren","soybeans",43.3,"2020",2.91409
+"Iowa","Wapello","corn",171.6,"2020",10.77648
+"Iowa","Wapello","soybeans",51,"2020",3.4323
+"Iowa","Washington","corn",186.5,"2020",11.7122
+"Iowa","Washington","soybeans",52.2,"2020",3.51306
+"Iowa","Adair","corn",169.7,"2020",10.65716
+"Iowa","Adair","soybeans",47.2,"2020",3.17656
+"Iowa","Adams","corn",174.2,"2020",10.93976
+"Iowa","Cass","corn",178.5,"2020",11.2098
+"Iowa","Cass","soybeans",48.4,"2020",3.25732
+"Iowa","Fremont","corn",195.9,"2020",12.30252
+"Iowa","Fremont","soybeans",53.8,"2020",3.62074
+"Iowa","Mills","corn",183.2,"2020",11.50496
+"Iowa","Mills","soybeans",48.3,"2020",3.25059
+"Iowa","Montgomery","corn",185.6,"2020",11.65568
+"Iowa","Montgomery","soybeans",48.3,"2020",3.25059
+"Iowa","Page","corn",182.6,"2020",11.46728
+"Iowa","Page","soybeans",51.5,"2020",3.46595
+"Iowa","Pottawattamie","corn",177.3,"2020",11.13444
+"Iowa","Pottawattamie","soybeans",47.1,"2020",3.16983
+"Iowa","Taylor","corn",167.2,"2020",10.50016
+"Iowa","Taylor","soybeans",46.2,"2020",3.10926
+"Iowa","Audubon","corn",171.7,"2020",10.78276
+"Iowa","Audubon","soybeans",47.4,"2020",3.19002
+"Iowa","Calhoun","corn",160.5,"2020",10.0794
+"Iowa","Calhoun","soybeans",46.8,"2020",3.14964
+"Iowa","Carroll","corn",151.4,"2020",9.50792
+"Iowa","Carroll","soybeans",53.8,"2020",3.62074
+"Iowa","Crawford","corn",182.3,"2020",11.44844
+"Iowa","Crawford","soybeans",53.2,"2020",3.58036
+"Iowa","Greene","corn",154.6,"2020",9.70888
+"Iowa","Greene","soybeans",48.1,"2020",3.23713
+"Iowa","Guthrie","corn",152.2,"2020",9.55816
+"Iowa","Guthrie","soybeans",44.7,"2020",3.00831
+"Iowa","Harrison","corn",181.2,"2020",11.37936
+"Iowa","Harrison","soybeans",51.1,"2020",3.43903
+"Iowa","Ida","corn",189.3,"2020",11.88804
+"Iowa","Ida","soybeans",54.5,"2020",3.66785
+"Iowa","Monona","corn",179.4,"2020",11.26632
+"Iowa","Monona","soybeans",54.9,"2020",3.69477
+"Iowa","Sac","corn",161.9,"2020",10.16732
+"Iowa","Sac","soybeans",46.2,"2020",3.10926
+"Iowa","Shelby","corn",191.6,"2020",12.03248
+"Iowa","Shelby","soybeans",51.8,"2020",3.48614
+"Iowa","Woodbury","corn",192.1,"2020",12.06388
+"Iowa","Woodbury","soybeans",55.7,"2020",3.74861
+"Iowa","Boone","corn",194.8,"2019",12.23344
+"Iowa","Boone","soybeans",53.2,"2019",3.58036
+"Iowa","Dallas","corn",195,"2019",12.246
+"Iowa","Dallas","soybeans",54.4,"2019",3.66112
+"Iowa","Grundy","corn",209.8,"2019",13.17544
+"Iowa","Grundy","soybeans",56.3,"2019",3.78899
+"Iowa","Hamilton","corn",198.2,"2019",12.44696
+"Iowa","Hamilton","soybeans",51.4,"2019",3.45922
+"Iowa","Hardin","corn",200.2,"2019",12.57256
+"Iowa","Hardin","soybeans",53.9,"2019",3.62747
+"Iowa","Jasper","corn",209.3,"2019",13.14404
+"Iowa","Jasper","soybeans",56.5,"2019",3.80245
+"Iowa","Marshall","corn",221.9,"2019",13.93532
+"Iowa","Marshall","soybeans",60.6,"2019",4.07838
+"Iowa","Polk","corn",196.7,"2019",12.35276
+"Iowa","Polk","soybeans",51,"2019",3.4323
+"Iowa","Poweshiek","corn",200.3,"2019",12.57884
+"Iowa","Poweshiek","soybeans",53.4,"2019",3.59382
+"Iowa","Story","corn",189.3,"2019",11.88804
+"Iowa","Story","soybeans",50,"2019",3.365
+"Iowa","Tama","corn",204.8,"2019",12.86144
+"Iowa","Tama","soybeans",53.4,"2019",3.59382
+"Iowa","Webster","corn",202.9,"2019",12.74212
+"Iowa","Webster","soybeans",49.1,"2019",3.30443
+"Iowa","Benton","corn",197.6,"2019",12.40928
+"Iowa","Benton","soybeans",57.9,"2019",3.89667
+"Iowa","Cedar","corn",193.7,"2019",12.16436
+"Iowa","Clinton","corn",196.1,"2019",12.31508
+"Iowa","Clinton","soybeans",59.5,"2019",4.00435
+"Iowa","Iowa","corn",190.6,"2019",11.96968
+"Iowa","Iowa","soybeans",52.3,"2019",3.51979
+"Iowa","Jackson","corn",185.5,"2019",11.6494
+"Iowa","Johnson","corn",181.3,"2019",11.38564
+"Iowa","Johnson","soybeans",55.5,"2019",3.73515
+"Iowa","Jones","corn",203,"2019",12.7484
+"Iowa","Jones","soybeans",57.2,"2019",3.84956
+"Iowa","Linn","corn",223.7,"2019",14.04836
+"Iowa","Linn","soybeans",56.5,"2019",3.80245
+"Iowa","Muscatine","corn",173.2,"2019",10.87696
+"Iowa","Muscatine","soybeans",55.2,"2019",3.71496
+"Iowa","Other (Combined) Counties","soybeans",55.2,"2019",3.71496
+"Iowa","Scott","corn",189.3,"2019",11.88804
+"Iowa","Scott","soybeans",60.5,"2019",4.07165
+"Iowa","Butler","corn",209.5,"2019",13.1566
+"Iowa","Butler","soybeans",55,"2019",3.7015
+"Iowa","Cerro Gordo","corn",191.8,"2019",12.04504
+"Iowa","Cerro Gordo","soybeans",52.7,"2019",3.54671
+"Iowa","Floyd","corn",202.9,"2019",12.74212
+"Iowa","Floyd","soybeans",54.3,"2019",3.65439
+"Iowa","Franklin","corn",202.7,"2019",12.72956
+"Iowa","Franklin","soybeans",54.1,"2019",3.64093
+"Iowa","Hancock","corn",193.3,"2019",12.13924
+"Iowa","Hancock","soybeans",49.6,"2019",3.33808
+"Iowa","Humboldt","corn",198.7,"2019",12.47836
+"Iowa","Humboldt","soybeans",54.9,"2019",3.69477
+"Iowa","Kossuth","corn",198.7,"2019",12.47836
+"Iowa","Kossuth","soybeans",57.4,"2019",3.86302
+"Iowa","Mitchell","corn",194.5,"2019",12.2146
+"Iowa","Mitchell","soybeans",49.8,"2019",3.35154
+"Iowa","Winnebago","corn",198.8,"2019",12.48464
+"Iowa","Winnebago","soybeans",54.2,"2019",3.64766
+"Iowa","Worth","corn",196.5,"2019",12.3402
+"Iowa","Worth","soybeans",51,"2019",3.4323
+"Iowa","Wright","corn",197,"2019",12.3716
+"Iowa","Wright","soybeans",54.1,"2019",3.64093
+"Iowa","Allamakee","corn",187.2,"2019",11.75616
+"Iowa","Black Hawk","corn",205.1,"2019",12.88028
+"Iowa","Black Hawk","soybeans",51.9,"2019",3.49287
+"Iowa","Bremer","corn",212.5,"2019",13.345
+"Iowa","Bremer","soybeans",52.5,"2019",3.53325
+"Iowa","Buchanan","corn",218.9,"2019",13.74692
+"Iowa","Buchanan","soybeans",55.2,"2019",3.71496
+"Iowa","Chickasaw","corn",212.1,"2019",13.31988
+"Iowa","Chickasaw","soybeans",54.5,"2019",3.66785
+"Iowa","Clayton","corn",197.5,"2019",12.403
+"Iowa","Clayton","soybeans",56.4,"2019",3.79572
+"Iowa","Delaware","corn",204.6,"2019",12.84888
+"Iowa","Dubuque","corn",216.4,"2019",13.58992
+"Iowa","Dubuque","soybeans",60.2,"2019",4.05146
+"Iowa","Fayette","corn",200.5,"2019",12.5914
+"Iowa","Fayette","soybeans",55.5,"2019",3.73515
+"Iowa","Howard","corn",194.2,"2019",12.19576
+"Iowa","Howard","soybeans",52.1,"2019",3.50633
+"Iowa","Other (Combined) Counties","soybeans",56.4,"2019",3.79572
+"Iowa","Winneshiek","corn",200.4,"2019",12.58512
+"Iowa","Winneshiek","soybeans",55.6,"2019",3.74188
+"Iowa","Buena Vista","corn",190.8,"2019",11.98224
+"Iowa","Buena Vista","soybeans",53.5,"2019",3.60055
+"Iowa","Cherokee","corn",208.9,"2019",13.11892
+"Iowa","Cherokee","soybeans",58.8,"2019",3.95724
+"Iowa","Clay","corn",185.5,"2019",11.6494
+"Iowa","Clay","soybeans",50.9,"2019",3.42557
+"Iowa","Dickinson","corn",170,"2019",10.676
+"Iowa","Dickinson","soybeans",51.3,"2019",3.45249
+"Iowa","Lyon","corn",186.6,"2019",11.71848
+"Iowa","Lyon","soybeans",54.8,"2019",3.68804
+"Iowa","O Brien","corn",204.9,"2019",12.86772
+"Iowa","O Brien","soybeans",56,"2019",3.7688
+"Iowa","Osceola","corn",182.5,"2019",11.461
+"Iowa","Osceola","soybeans",50.5,"2019",3.39865
+"Iowa","Other (Combined) Counties","corn",191.2,"2019",12.00736
+"Iowa","Other (Combined) Counties","soybeans",54,"2019",3.6342
+"Iowa","Palo Alto","corn",198.3,"2019",12.45324
+"Iowa","Palo Alto","soybeans",55.6,"2019",3.74188
+"Iowa","Plymouth","corn",217.8,"2019",13.67784
+"Iowa","Sioux","corn",192.2,"2019",12.07016
+"Iowa","Sioux","soybeans",60.8,"2019",4.09184
+"Iowa","Appanoose","corn",166.8,"2019",10.47504
+"Iowa","Madison","corn",175.7,"2019",11.03396
+"Iowa","Madison","soybeans",52.3,"2019",3.51979
+"Iowa","Marion","corn",170.7,"2019",10.71996
+"Iowa","Marion","soybeans",54,"2019",3.6342
+"Iowa","Monroe","corn",162.3,"2019",10.19244
+"Iowa","Monroe","soybeans",56.1,"2019",3.77553
+"Iowa","Other (Combined) Counties","corn",152.3,"2019",9.56444
+"Iowa","Other (Combined) Counties","soybeans",50.1,"2019",3.37173
+"Iowa","Union","corn",168.9,"2019",10.60692
+"Iowa","Union","soybeans",53.7,"2019",3.61401
+"Iowa","Warren","soybeans",52.3,"2019",3.51979
+"Iowa","Wayne","corn",151.5,"2019",9.5142
+"Iowa","Wayne","soybeans",52.5,"2019",3.53325
+"Iowa","Davis","corn",160,"2019",10.048
+"Iowa","Davis","soybeans",54.6,"2019",3.67458
+"Iowa","Des Moines","corn",176.9,"2019",11.10932
+"Iowa","Des Moines","soybeans",55.1,"2019",3.70823
+"Iowa","Henry","corn",164.5,"2019",10.3306
+"Iowa","Henry","soybeans",56.9,"2019",3.82937
+"Iowa","Jefferson","corn",162.7,"2019",10.21756
+"Iowa","Jefferson","soybeans",53.3,"2019",3.58709
+"Iowa","Keokuk","corn",175.5,"2019",11.0214
+"Iowa","Keokuk","soybeans",55.8,"2019",3.75534
+"Iowa","Lee","corn",172.5,"2019",10.833
+"Iowa","Lee","soybeans",54.8,"2019",3.68804
+"Iowa","Louisa","corn",174.6,"2019",10.96488
+"Iowa","Louisa","soybeans",54.3,"2019",3.65439
+"Iowa","Mahaska","corn",189.9,"2019",11.92572
+"Iowa","Mahaska","soybeans",53.7,"2019",3.61401
+"Iowa","Van Buren","corn",171,"2019",10.7388
+"Iowa","Van Buren","soybeans",53.9,"2019",3.62747
+"Iowa","Wapello","corn",176.5,"2019",11.0842
+"Iowa","Wapello","soybeans",55.5,"2019",3.73515
+"Iowa","Washington","corn",178.9,"2019",11.23492
+"Iowa","Washington","soybeans",54.7,"2019",3.68131
+"Iowa","Adair","corn",176.6,"2019",11.09048
+"Iowa","Adair","soybeans",53.3,"2019",3.58709
+"Iowa","Cass","corn",200.3,"2019",12.57884
+"Iowa","Cass","soybeans",56.9,"2019",3.82937
+"Iowa","Mills","corn",202.9,"2019",12.74212
+"Iowa","Montgomery","corn",204.8,"2019",12.86144
+"Iowa","Montgomery","soybeans",58.3,"2019",3.92359
+"Iowa","Other (Combined) Counties","corn",189.6,"2019",11.90688
+"Iowa","Other (Combined) Counties","soybeans",55.8,"2019",3.75534
+"Iowa","Page","corn",191.4,"2019",12.01992
+"Iowa","Page","soybeans",55.9,"2019",3.76207
+"Iowa","Pottawattamie","corn",208,"2019",13.0624
+"Iowa","Pottawattamie","soybeans",58.5,"2019",3.93705
+"Iowa","Taylor","corn",161.7,"2019",10.15476
+"Iowa","Taylor","soybeans",49.9,"2019",3.35827
+"Iowa","Audubon","corn",216,"2019",13.5648
+"Iowa","Audubon","soybeans",58.9,"2019",3.96397
+"Iowa","Calhoun","corn",198.8,"2019",12.48464
+"Iowa","Calhoun","soybeans",55.1,"2019",3.70823
+"Iowa","Carroll","corn",219.7,"2019",13.79716
+"Iowa","Carroll","soybeans",58.8,"2019",3.95724
+"Iowa","Crawford","corn",234.7,"2019",14.73916
+"Iowa","Crawford","soybeans",61.9,"2019",4.16587
+"Iowa","Greene","corn",201.4,"2019",12.64792
+"Iowa","Greene","soybeans",54.2,"2019",3.64766
+"Iowa","Guthrie","corn",196.7,"2019",12.35276
+"Iowa","Guthrie","soybeans",54.2,"2019",3.64766
+"Iowa","Monona","corn",203.9,"2019",12.80492
+"Iowa","Monona","soybeans",55.8,"2019",3.75534
+"Iowa","Other (Combined) Counties","corn",210,"2019",13.188
+"Iowa","Other (Combined) Counties","soybeans",55.9,"2019",3.76207
+"Iowa","Sac","corn",220.6,"2019",13.85368
+"Iowa","Sac","soybeans",59.3,"2019",3.99089
+"Iowa","Shelby","corn",217.3,"2019",13.64644
+"Iowa","Shelby","soybeans",58.7,"2019",3.95051
+"Iowa","Woodbury","corn",218.2,"2019",13.70296
+"Iowa","Woodbury","soybeans",56.8,"2019",3.82264
+"Iowa","Boone","corn",193.7,"2018",12.16436
+"Iowa","Boone","soybeans",54.6,"2018",3.67458
+"Iowa","Dallas","corn",174,"2018",10.9272
+"Iowa","Dallas","soybeans",52.8,"2018",3.55344
+"Iowa","Grundy","corn",225.2,"2018",14.14256
+"Iowa","Grundy","soybeans",61.9,"2018",4.16587
+"Iowa","Hamilton","corn",188.9,"2018",11.86292
+"Iowa","Hamilton","soybeans",49.9,"2018",3.35827
+"Iowa","Hardin","corn",216.6,"2018",13.60248
+"Iowa","Hardin","soybeans",59.3,"2018",3.99089
+"Iowa","Jasper","corn",218.6,"2018",13.72808
+"Iowa","Jasper","soybeans",60.7,"2018",4.08511
+"Iowa","Marshall","corn",226,"2018",14.1928
+"Iowa","Marshall","soybeans",61.9,"2018",4.16587
+"Iowa","Polk","corn",186.2,"2018",11.69336
+"Iowa","Polk","soybeans",53.4,"2018",3.59382
+"Iowa","Poweshiek","corn",218.7,"2018",13.73436
+"Iowa","Poweshiek","soybeans",58.2,"2018",3.91686
+"Iowa","Story","corn",192.3,"2018",12.07644
+"Iowa","Story","soybeans",52.8,"2018",3.55344
+"Iowa","Tama","corn",224.3,"2018",14.08604
+"Iowa","Tama","soybeans",60.1,"2018",4.04473
+"Iowa","Webster","corn",188.1,"2018",11.81268
+"Iowa","Webster","soybeans",51.1,"2018",3.43903
+"Iowa","Benton","corn",214.6,"2018",13.47688
+"Iowa","Benton","soybeans",61,"2018",4.1053
+"Iowa","Cedar","corn",222.3,"2018",13.96044
+"Iowa","Cedar","soybeans",63.3,"2018",4.26009
+"Iowa","Clinton","corn",210.9,"2018",13.24452
+"Iowa","Clinton","soybeans",58.3,"2018",3.92359
+"Iowa","Iowa","corn",211.7,"2018",13.29476
+"Iowa","Iowa","soybeans",56,"2018",3.7688
+"Iowa","Jackson","corn",202.4,"2018",12.71072
+"Iowa","Jackson","soybeans",58.1,"2018",3.91013
+"Iowa","Johnson","corn",212.3,"2018",13.33244
+"Iowa","Johnson","soybeans",59.9,"2018",4.03127
+"Iowa","Jones","corn",208.9,"2018",13.11892
+"Iowa","Jones","soybeans",60.1,"2018",4.04473
+"Iowa","Linn","corn",215.4,"2018",13.52712
+"Iowa","Linn","soybeans",57.7,"2018",3.88321
+"Iowa","Muscatine","corn",209.6,"2018",13.16288
+"Iowa","Muscatine","soybeans",61.7,"2018",4.15241
+"Iowa","Scott","corn",214,"2018",13.4392
+"Iowa","Scott","soybeans",63.7,"2018",4.28701
+"Iowa","Butler","corn",211.3,"2018",13.26964
+"Iowa","Butler","soybeans",56.1,"2018",3.77553
+"Iowa","Cerro Gordo","corn",184.4,"2018",11.58032
+"Iowa","Cerro Gordo","soybeans",51.7,"2018",3.47941
+"Iowa","Floyd","corn",184.4,"2018",11.58032
+"Iowa","Floyd","soybeans",49.8,"2018",3.35154
+"Iowa","Franklin","corn",204.3,"2018",12.83004
+"Iowa","Franklin","soybeans",58.5,"2018",3.93705
+"Iowa","Hancock","corn",176.7,"2018",11.09676
+"Iowa","Hancock","soybeans",53.2,"2018",3.58036
+"Iowa","Humboldt","corn",162.3,"2018",10.19244
+"Iowa","Humboldt","soybeans",50.4,"2018",3.39192
+"Iowa","Kossuth","corn",180.2,"2018",11.31656
+"Iowa","Kossuth","soybeans",54.2,"2018",3.64766
+"Iowa","Mitchell","corn",193.3,"2018",12.13924
+"Iowa","Mitchell","soybeans",55.6,"2018",3.74188
+"Iowa","Winnebago","corn",180.8,"2018",11.35424
+"Iowa","Winnebago","soybeans",51.8,"2018",3.48614
+"Iowa","Worth","corn",180,"2018",11.304
+"Iowa","Worth","soybeans",53.7,"2018",3.61401
+"Iowa","Wright","corn",180.5,"2018",11.3354
+"Iowa","Wright","soybeans",52.6,"2018",3.53998
+"Iowa","Allamakee","corn",198.4,"2018",12.45952
+"Iowa","Allamakee","soybeans",52.8,"2018",3.55344
+"Iowa","Black Hawk","corn",206.2,"2018",12.94936
+"Iowa","Black Hawk","soybeans",58.4,"2018",3.93032
+"Iowa","Bremer","corn",212.4,"2018",13.33872
+"Iowa","Bremer","soybeans",57.3,"2018",3.85629
+"Iowa","Buchanan","corn",207.1,"2018",13.00588
+"Iowa","Buchanan","soybeans",57.2,"2018",3.84956
+"Iowa","Chickasaw","corn",192.9,"2018",12.11412
+"Iowa","Chickasaw","soybeans",53.2,"2018",3.58036
+"Iowa","Clayton","corn",201.5,"2018",12.6542
+"Iowa","Clayton","soybeans",58.8,"2018",3.95724
+"Iowa","Delaware","corn",224.8,"2018",14.11744
+"Iowa","Delaware","soybeans",63.9,"2018",4.30047
+"Iowa","Dubuque","corn",211.8,"2018",13.30104
+"Iowa","Dubuque","soybeans",62,"2018",4.1726
+"Iowa","Fayette","corn",200.1,"2018",12.56628
+"Iowa","Fayette","soybeans",56.5,"2018",3.80245
+"Iowa","Howard","corn",185.5,"2018",11.6494
+"Iowa","Howard","soybeans",53.7,"2018",3.61401
+"Iowa","Winneshiek","corn",198.1,"2018",12.44068
+"Iowa","Winneshiek","soybeans",51.7,"2018",3.47941
+"Iowa","Buena Vista","corn",193.1,"2018",12.12668
+"Iowa","Buena Vista","soybeans",55.5,"2018",3.73515
+"Iowa","Cherokee","corn",213.3,"2018",13.39524
+"Iowa","Cherokee","soybeans",64.3,"2018",4.32739
+"Iowa","Clay","corn",158.5,"2018",9.9538
+"Iowa","Clay","soybeans",52.6,"2018",3.53998
+"Iowa","Dickinson","corn",160.4,"2018",10.07312
+"Iowa","Dickinson","soybeans",49.8,"2018",3.35154
+"Iowa","Emmet","corn",155.8,"2018",9.78424
+"Iowa","Emmet","soybeans",46.7,"2018",3.14291
+"Iowa","Lyon","corn",193,"2018",12.1204
+"Iowa","Lyon","soybeans",60.6,"2018",4.07838
+"Iowa","O Brien","corn",201.6,"2018",12.66048
+"Iowa","O Brien","soybeans",59.9,"2018",4.03127
+"Iowa","Osceola","corn",180.2,"2018",11.31656
+"Iowa","Osceola","soybeans",57.2,"2018",3.84956
+"Iowa","Palo Alto","corn",157.9,"2018",9.91612
+"Iowa","Palo Alto","soybeans",48.8,"2018",3.28424
+"Iowa","Plymouth","corn",213.8,"2018",13.42664
+"Iowa","Plymouth","soybeans",61.3,"2018",4.12549
+"Iowa","Pocahontas","corn",179.2,"2018",11.25376
+"Iowa","Pocahontas","soybeans",49.7,"2018",3.34481
+"Iowa","Sioux","corn",211.9,"2018",13.30732
+"Iowa","Sioux","soybeans",65.8,"2018",4.42834
+"Iowa","Appanoose","soybeans",45.1,"2018",3.03523
+"Iowa","Clarke","corn",161.8,"2018",10.16104
+"Iowa","Clarke","soybeans",47.9,"2018",3.22367
+"Iowa","Decatur","corn",172.5,"2018",10.833
+"Iowa","Decatur","soybeans",48,"2018",3.2304
+"Iowa","Lucas","soybeans",41.5,"2018",2.79295
+"Iowa","Madison","corn",167.8,"2018",10.53784
+"Iowa","Madison","soybeans",50.9,"2018",3.42557
+"Iowa","Marion","corn",190.2,"2018",11.94456
+"Iowa","Marion","soybeans",58.3,"2018",3.92359
+"Iowa","Monroe","corn",167,"2018",10.4876
+"Iowa","Monroe","soybeans",50.4,"2018",3.39192
+"Iowa","Other (Combined) Counties","corn",142.6,"2018",8.95528
+"Iowa","Ringgold","corn",153.3,"2018",9.62724
+"Iowa","Ringgold","soybeans",47.2,"2018",3.17656
+"Iowa","Union","corn",155.8,"2018",9.78424
+"Iowa","Union","soybeans",48.6,"2018",3.27078
+"Iowa","Warren","corn",163.6,"2018",10.27408
+"Iowa","Warren","soybeans",52,"2018",3.4996
+"Iowa","Wayne","corn",171.6,"2018",10.77648
+"Iowa","Wayne","soybeans",49,"2018",3.2977
+"Iowa","Davis","soybeans",50.2,"2018",3.37846
+"Iowa","Des Moines","corn",195.4,"2018",12.27112
+"Iowa","Des Moines","soybeans",63.8,"2018",4.29374
+"Iowa","Henry","corn",189.7,"2018",11.91316
+"Iowa","Henry","soybeans",62.3,"2018",4.19279
+"Iowa","Jefferson","corn",198.8,"2018",12.48464
+"Iowa","Jefferson","soybeans",62,"2018",4.1726
+"Iowa","Keokuk","corn",203.7,"2018",12.79236
+"Iowa","Keokuk","soybeans",57.7,"2018",3.88321
+"Iowa","Lee","corn",201.3,"2018",12.64164
+"Iowa","Lee","soybeans",64.7,"2018",4.35431
+"Iowa","Louisa","corn",196.5,"2018",12.3402
+"Iowa","Louisa","soybeans",58.1,"2018",3.91013
+"Iowa","Mahaska","corn",207.7,"2018",13.04356
+"Iowa","Mahaska","soybeans",59.7,"2018",4.01781
+"Iowa","Other (Combined) Counties","corn",176.9,"2018",11.10932
+"Iowa","Van Buren","corn",180.9,"2018",11.36052
+"Iowa","Van Buren","soybeans",54.2,"2018",3.64766
+"Iowa","Wapello","soybeans",60.2,"2018",4.05146
+"Iowa","Washington","corn",214.3,"2018",13.45804
+"Iowa","Washington","soybeans",61.5,"2018",4.13895
+"Iowa","Adair","corn",149.5,"2018",9.3886
+"Iowa","Adair","soybeans",50.1,"2018",3.37173
+"Iowa","Adams","corn",171.6,"2018",10.77648
+"Iowa","Adams","soybeans",53.2,"2018",3.58036
+"Iowa","Cass","corn",169.5,"2018",10.6446
+"Iowa","Cass","soybeans",52.6,"2018",3.53998
+"Iowa","Fremont","corn",195.1,"2018",12.25228
+"Iowa","Fremont","soybeans",50.6,"2018",3.40538
+"Iowa","Montgomery","corn",191.5,"2018",12.0262
+"Iowa","Montgomery","soybeans",51.8,"2018",3.48614
+"Iowa","Other (Combined) Counties","corn",196.7,"2018",12.35276
+"Iowa","Other (Combined) Counties","soybeans",52.1,"2018",3.50633
+"Iowa","Page","corn",188.1,"2018",11.81268
+"Iowa","Page","soybeans",50.5,"2018",3.39865
+"Iowa","Taylor","corn",154.4,"2018",9.69632
+"Iowa","Audubon","corn",180,"2018",11.304
+"Iowa","Audubon","soybeans",52.3,"2018",3.51979
+"Iowa","Calhoun","corn",193.3,"2018",12.13924
+"Iowa","Calhoun","soybeans",53.1,"2018",3.57363
+"Iowa","Carroll","corn",208.4,"2018",13.08752
+"Iowa","Carroll","soybeans",59,"2018",3.9707
+"Iowa","Crawford","corn",214,"2018",13.4392
+"Iowa","Crawford","soybeans",61.7,"2018",4.15241
+"Iowa","Greene","corn",201.3,"2018",12.64164
+"Iowa","Greene","soybeans",55.5,"2018",3.73515
+"Iowa","Guthrie","corn",192.2,"2018",12.07016
+"Iowa","Guthrie","soybeans",52,"2018",3.4996
+"Iowa","Harrison","corn",176,"2018",11.0528
+"Iowa","Harrison","soybeans",52.6,"2018",3.53998
+"Iowa","Ida","corn",222.2,"2018",13.95416
+"Iowa","Ida","soybeans",63.8,"2018",4.29374
+"Iowa","Monona","corn",181.4,"2018",11.39192
+"Iowa","Monona","soybeans",55.3,"2018",3.72169
+"Iowa","Sac","corn",213.5,"2018",13.4078
+"Iowa","Sac","soybeans",60.7,"2018",4.08511
+"Iowa","Shelby","corn",189.1,"2018",11.87548
+"Iowa","Shelby","soybeans",57.8,"2018",3.88994
+"Iowa","Woodbury","corn",219.3,"2018",13.77204
+"Iowa","Woodbury","soybeans",59.5,"2018",4.00435
+"Iowa","Boone","corn",192.4,"2017",12.08272
+"Iowa","Boone","soybeans",56.7,"2017",3.81591
+"Iowa","Dallas","corn",187.2,"2017",11.75616
+"Iowa","Dallas","soybeans",54.6,"2017",3.67458
+"Iowa","Grundy","corn",217.3,"2017",13.64644
+"Iowa","Grundy","soybeans",63.6,"2017",4.28028
+"Iowa","Hamilton","corn",194.6,"2017",12.22088
+"Iowa","Hamilton","soybeans",57.2,"2017",3.84956
+"Iowa","Hardin","corn",213.7,"2017",13.42036
+"Iowa","Hardin","soybeans",59.7,"2017",4.01781
+"Iowa","Jasper","corn",204.6,"2017",12.84888
+"Iowa","Jasper","soybeans",60.5,"2017",4.07165
+"Iowa","Marshall","corn",222.4,"2017",13.96672
+"Iowa","Marshall","soybeans",63.5,"2017",4.27355
+"Iowa","Polk","corn",200.3,"2017",12.57884
+"Iowa","Polk","soybeans",57.1,"2017",3.84283
+"Iowa","Poweshiek","corn",215.1,"2017",13.50828
+"Iowa","Poweshiek","soybeans",56.6,"2017",3.80918
+"Iowa","Story","corn",200.3,"2017",12.57884
+"Iowa","Story","soybeans",57.9,"2017",3.89667
+"Iowa","Tama","corn",220.6,"2017",13.85368
+"Iowa","Tama","soybeans",59.5,"2017",4.00435
+"Iowa","Webster","corn",197.9,"2017",12.42812
+"Iowa","Webster","soybeans",57.9,"2017",3.89667
+"Iowa","Benton","corn",215.3,"2017",13.52084
+"Iowa","Benton","soybeans",57.6,"2017",3.87648
+"Iowa","Cedar","corn",222.3,"2017",13.96044
+"Iowa","Cedar","soybeans",59.6,"2017",4.01108
+"Iowa","Clinton","corn",213.3,"2017",13.39524
+"Iowa","Clinton","soybeans",59.7,"2017",4.01781
+"Iowa","Iowa","corn",216.7,"2017",13.60876
+"Iowa","Iowa","soybeans",56.7,"2017",3.81591
+"Iowa","Jackson","corn",202.1,"2017",12.69188
+"Iowa","Jackson","soybeans",59.2,"2017",3.98416
+"Iowa","Johnson","corn",213.1,"2017",13.38268
+"Iowa","Johnson","soybeans",56.4,"2017",3.79572
+"Iowa","Jones","corn",217,"2017",13.6276
+"Iowa","Jones","soybeans",54.9,"2017",3.69477
+"Iowa","Linn","corn",217.4,"2017",13.65272
+"Iowa","Linn","soybeans",56,"2017",3.7688
+"Iowa","Muscatine","corn",206.8,"2017",12.98704
+"Iowa","Muscatine","soybeans",60.3,"2017",4.05819
+"Iowa","Scott","corn",220,"2017",13.816
+"Iowa","Scott","soybeans",63.4,"2017",4.26682
+"Iowa","Butler","corn",211.4,"2017",13.27592
+"Iowa","Butler","soybeans",55.9,"2017",3.76207
+"Iowa","Cerro Gordo","corn",208.9,"2017",13.11892
+"Iowa","Cerro Gordo","soybeans",55.2,"2017",3.71496
+"Iowa","Floyd","corn",203.4,"2017",12.77352
+"Iowa","Floyd","soybeans",54.1,"2017",3.64093
+"Iowa","Franklin","corn",206.1,"2017",12.94308
+"Iowa","Franklin","soybeans",57,"2017",3.8361
+"Iowa","Hancock","corn",200.2,"2017",12.57256
+"Iowa","Hancock","soybeans",57.4,"2017",3.86302
+"Iowa","Humboldt","corn",200.9,"2017",12.61652
+"Iowa","Humboldt","soybeans",58,"2017",3.9034
+"Iowa","Kossuth","corn",205.6,"2017",12.91168
+"Iowa","Kossuth","soybeans",60.4,"2017",4.06492
+"Iowa","Mitchell","corn",213.4,"2017",13.40152
+"Iowa","Mitchell","soybeans",54.4,"2017",3.66112
+"Iowa","Winnebago","corn",210.7,"2017",13.23196
+"Iowa","Winnebago","soybeans",59.9,"2017",4.03127
+"Iowa","Worth","corn",198.5,"2017",12.4658
+"Iowa","Worth","soybeans",54.8,"2017",3.68804
+"Iowa","Wright","corn",206.9,"2017",12.99332
+"Iowa","Wright","soybeans",57.9,"2017",3.89667
+"Iowa","Allamakee","corn",190.5,"2017",11.9634
+"Iowa","Allamakee","soybeans",52.6,"2017",3.53998
+"Iowa","Black Hawk","corn",209.2,"2017",13.13776
+"Iowa","Black Hawk","soybeans",59.5,"2017",4.00435
+"Iowa","Bremer","corn",212.7,"2017",13.35756
+"Iowa","Bremer","soybeans",56.8,"2017",3.82264
+"Iowa","Buchanan","corn",221.3,"2017",13.89764
+"Iowa","Buchanan","soybeans",55.9,"2017",3.76207
+"Iowa","Chickasaw","corn",194.4,"2017",12.20832
+"Iowa","Chickasaw","soybeans",50.4,"2017",3.39192
+"Iowa","Clayton","corn",213.6,"2017",13.41408
+"Iowa","Clayton","soybeans",59,"2017",3.9707
+"Iowa","Delaware","corn",218,"2017",13.6904
+"Iowa","Delaware","soybeans",63,"2017",4.2399
+"Iowa","Dubuque","corn",215.1,"2017",13.50828
+"Iowa","Dubuque","soybeans",59.6,"2017",4.01108
+"Iowa","Fayette","corn",207.6,"2017",13.03728
+"Iowa","Fayette","soybeans",56.3,"2017",3.78899
+"Iowa","Howard","corn",201.7,"2017",12.66676
+"Iowa","Howard","soybeans",51.6,"2017",3.47268
+"Iowa","Winneshiek","corn",199.7,"2017",12.54116
+"Iowa","Winneshiek","soybeans",54.6,"2017",3.67458
+"Iowa","Buena Vista","corn",187.9,"2017",11.80012
+"Iowa","Buena Vista","soybeans",56.5,"2017",3.80245
+"Iowa","Cherokee","corn",203.7,"2017",12.79236
+"Iowa","Cherokee","soybeans",62.4,"2017",4.19952
+"Iowa","Clay","corn",197.3,"2017",12.39044
+"Iowa","Clay","soybeans",57.6,"2017",3.87648
+"Iowa","Dickinson","corn",196.2,"2017",12.32136
+"Iowa","Dickinson","soybeans",57.7,"2017",3.88321
+"Iowa","Emmet","corn",210.1,"2017",13.19428
+"Iowa","Emmet","soybeans",58.9,"2017",3.96397
+"Iowa","Lyon","corn",218.9,"2017",13.74692
+"Iowa","Lyon","soybeans",63.8,"2017",4.29374
+"Iowa","O Brien","corn",213.8,"2017",13.42664
+"Iowa","O Brien","soybeans",62.3,"2017",4.19279
+"Iowa","Osceola","corn",211.6,"2017",13.28848
+"Iowa","Osceola","soybeans",59.7,"2017",4.01781
+"Iowa","Palo Alto","corn",195.4,"2017",12.27112
+"Iowa","Palo Alto","soybeans",57.8,"2017",3.88994
+"Iowa","Plymouth","corn",193,"2017",12.1204
+"Iowa","Plymouth","soybeans",59.6,"2017",4.01108
+"Iowa","Pocahontas","corn",190.9,"2017",11.98852
+"Iowa","Pocahontas","soybeans",58.2,"2017",3.91686
+"Iowa","Sioux","corn",220.7,"2017",13.85996
+"Iowa","Sioux","soybeans",65.2,"2017",4.38796
+"Iowa","Appanoose","corn",170,"2017",10.676
+"Iowa","Appanoose","soybeans",50.7,"2017",3.41211
+"Iowa","Lucas","soybeans",41.4,"2017",2.78622
+"Iowa","Madison","corn",173.1,"2017",10.87068
+"Iowa","Madison","soybeans",52.5,"2017",3.53325
+"Iowa","Marion","corn",185.7,"2017",11.66196
+"Iowa","Marion","soybeans",52.9,"2017",3.56017
+"Iowa","Monroe","corn",169.9,"2017",10.66972
+"Iowa","Monroe","soybeans",51,"2017",3.4323
+"Iowa","Other (Combined) Counties","corn",129.7,"2017",8.14516
+"Iowa","Other (Combined) Counties","soybeans",45,"2017",3.0285
+"Iowa","Ringgold","corn",167.8,"2017",10.53784
+"Iowa","Ringgold","soybeans",48.8,"2017",3.28424
+"Iowa","Union","corn",147.9,"2017",9.28812
+"Iowa","Union","soybeans",44.5,"2017",2.99485
+"Iowa","Warren","corn",183.2,"2017",11.50496
+"Iowa","Warren","soybeans",49.9,"2017",3.35827
+"Iowa","Davis","corn",107.3,"2017",6.73844
+"Iowa","Davis","soybeans",37.6,"2017",2.53048
+"Iowa","Des Moines","corn",200.1,"2017",12.56628
+"Iowa","Des Moines","soybeans",59.6,"2017",4.01108
+"Iowa","Henry","corn",196.4,"2017",12.33392
+"Iowa","Henry","soybeans",60.5,"2017",4.07165
+"Iowa","Jefferson","corn",165.5,"2017",10.3934
+"Iowa","Jefferson","soybeans",46.1,"2017",3.10253
+"Iowa","Keokuk","corn",176.4,"2017",11.07792
+"Iowa","Keokuk","soybeans",51.6,"2017",3.47268
+"Iowa","Lee","corn",178,"2017",11.1784
+"Iowa","Lee","soybeans",53.5,"2017",3.60055
+"Iowa","Louisa","corn",216.6,"2017",13.60248
+"Iowa","Louisa","soybeans",59,"2017",3.9707
+"Iowa","Mahaska","corn",177.2,"2017",11.12816
+"Iowa","Mahaska","soybeans",54.4,"2017",3.66112
+"Iowa","Van Buren","corn",128.2,"2017",8.05096
+"Iowa","Van Buren","soybeans",36.6,"2017",2.46318
+"Iowa","Wapello","corn",153,"2017",9.6084
+"Iowa","Wapello","soybeans",45,"2017",3.0285
+"Iowa","Washington","corn",220.4,"2017",13.84112
+"Iowa","Washington","soybeans",61.7,"2017",4.15241
+"Iowa","Adair","corn",175.2,"2017",11.00256
+"Iowa","Adair","soybeans",50.5,"2017",3.39865
+"Iowa","Adams","corn",179.9,"2017",11.29772
+"Iowa","Adams","soybeans",52.6,"2017",3.53998
+"Iowa","Cass","corn",197.4,"2017",12.39672
+"Iowa","Cass","soybeans",56.9,"2017",3.82937
+"Iowa","Fremont","corn",204.5,"2017",12.8426
+"Iowa","Fremont","soybeans",60.1,"2017",4.04473
+"Iowa","Mills","corn",190.1,"2017",11.93828
+"Iowa","Mills","soybeans",55.7,"2017",3.74861
+"Iowa","Montgomery","corn",199.1,"2017",12.50348
+"Iowa","Montgomery","soybeans",56.2,"2017",3.78226
+"Iowa","Page","corn",193.1,"2017",12.12668
+"Iowa","Page","soybeans",55.4,"2017",3.72842
+"Iowa","Pottawattamie","corn",195.8,"2017",12.29624
+"Iowa","Pottawattamie","soybeans",57,"2017",3.8361
+"Iowa","Taylor","corn",175,"2017",10.99
+"Iowa","Taylor","soybeans",52.8,"2017",3.55344
+"Iowa","Audubon","corn",211.2,"2017",13.26336
+"Iowa","Audubon","soybeans",57.2,"2017",3.84956
+"Iowa","Calhoun","corn",195.1,"2017",12.25228
+"Iowa","Calhoun","soybeans",57.5,"2017",3.86975
+"Iowa","Carroll","corn",211.3,"2017",13.26964
+"Iowa","Carroll","soybeans",60.4,"2017",4.06492
+"Iowa","Crawford","corn",221.9,"2017",13.93532
+"Iowa","Crawford","soybeans",61.3,"2017",4.12549
+"Iowa","Greene","corn",202.2,"2017",12.69816
+"Iowa","Greene","soybeans",56.7,"2017",3.81591
+"Iowa","Guthrie","corn",197.6,"2017",12.40928
+"Iowa","Guthrie","soybeans",59.2,"2017",3.98416
+"Iowa","Harrison","corn",193.2,"2017",12.13296
+"Iowa","Harrison","soybeans",53.7,"2017",3.61401
+"Iowa","Ida","corn",215.7,"2017",13.54596
+"Iowa","Ida","soybeans",62.1,"2017",4.17933
+"Iowa","Monona","corn",196,"2017",12.3088
+"Iowa","Monona","soybeans",57.1,"2017",3.84283
+"Iowa","Sac","corn",194.5,"2017",12.2146
+"Iowa","Sac","soybeans",57.8,"2017",3.88994
+"Iowa","Shelby","corn",207.1,"2017",13.00588
+"Iowa","Shelby","soybeans",58.2,"2017",3.91686
+"Iowa","Woodbury","corn",200.5,"2017",12.5914
+"Iowa","Woodbury","soybeans",58.1,"2017",3.91013
