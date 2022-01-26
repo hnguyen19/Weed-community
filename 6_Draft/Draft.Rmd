@@ -1,0 +1,62 @@
+---
+title: "Weed community composition in simplified versus diverse cropping systems"
+output:
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+    latex_engine: lualatex
+    citation_package: natbib
+bibliography: ecol.bib
+natbiboptions: round
+biblatexoptions:
+  - sortcites = true
+  - sorting = nyt
+  - backend = biber
+  - maxcitenames = 2
+csl: apa-no-ampersand.csl
+---
+
+# Abstract {-}
+
+```{r, child = "Abstract.Rmd"}
+```
+
+# Introduction {-}
+
+```{r, child = "Introduction.Rmd"}
+```
+
+
+# Materials and Methods {-}
+
+```{r, child = "../8 Analysis scripts/MandM2.Rmd"}
+```
+
+# Results {-}  
+
+A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots are available in the Data Repository.  
+
+```{r, child = "../8 Analysis scripts/Crop_yields.Rmd"}
+#, include=FALSE
+```
+
+
+```{r, child = "../8 Analysis scripts/Community.Rmd"}
+#, include=FALSE
+```
+
+```{r, child = "../8 Analysis scripts/Individual-sp-abs2.Rmd"}
+```
+
+
+# Discussion {-}
+
+```{r, child = "Discussion.Rmd"}
+```
+
+
+# Acknowledgements {-}
+
+# References {-}

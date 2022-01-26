@@ -1,0 +1,10 @@
+---
+output: 
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+bibliography: .bib
+---
+

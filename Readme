@@ -1,0 +1,20 @@
+I sincerely thank the R user community, `bookdown` authors, Zotero, and ISU Lunchinators for inspiration, coaching, and troubleshooting. 
+This current structure works best for me.
+
+The following folders are populated as the manuscript submission progresses. 
+
+1_Background: motivation to conduct the research and relevant .pdf of the literature   
+2_Data: raw and clean data sheets  
+3_Doc: data management plan and logistical documents  
+4_Data_wrangling: `.R` files with codes to clean the raw data  
+5_Analysis: `.Rmd` executable files to analyze the data and render report. Each `.Rmd` file is devoted to address one hypothesis
+6_Draft: to put everything together. `.bib` (the Zotero generated bibliography) `Introduction.Rmd`, `MandM.Rmd`, and `Discussion.Rmd` live here.   
+7_Extra: anything else relevant but does not fit into the previous 6 folders. 
+
+General workflow:  
+1 - Each `.Rmd` file is devoted to address one hypothesis. 
+2 - All the pieces are put together under `Draft.Rmd`. The execution of `Draft.Rmd` will generate: 
+  i) a latex-figure folder with all the figures from the `.Rmd` files.
+  ii) a `.tex` file and a `.pdf` file.  
+3 - The `.tex` file is uploaded to Overleaf for final polishing that are very inconvenient or impossible to do in R. 
+
