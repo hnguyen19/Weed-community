@@ -31,17 +31,17 @@ Each experimental unit (eu) data is recorded in one row. Variable explaination i
 + Fresh_MgpHa: yield in Mg per hectare, fresh
 + Dry_MgpHa: yield in Mg per hectare, dried 
 
-#### IA_yield.csv from USDA/NASS 
+#### IA_yield_clean.csv from USDA/NASS 
 + State: Iowa
 + County: Name of 99 counties in Iowa
 + Commodity: Crop: corn grain, soybean grain, oat grain, and alfalfa hay
 + Value: Yield in bushel per acre
 
-#### biom_1720.csv and pldens_1720.csv (continued from the general variables list)
+#### biom_1720_clean.csv and pldens_1720_clean.csv (continued from the general variables list)
 + from SETFA to ARFMI: Bayer codes for weed species names  
 + Total: Whole-community aboveground mass or plant density
 
-#### biom_indices_1720.csv and pldens_indices_1720.csv (continued from the general variables list)
+#### biom_indices_1720_clean.csv and pldens_indices_1720_clean.csv (continued from the general variables list)
 + sample area (m^2): Sampled area per experimental unit
 + Diversity: Simpson's diversity index, calculated with either individual species aboveoground mass or density
 + Dominance: ???
