@@ -36,6 +36,7 @@ Each experimental unit (eu) data is recorded in one row. Variable explaination i
 + County: Name of 99 counties in Iowa
 + Commodity: Crop: corn grain, soybean grain, oat grain, and alfalfa hay
 + Value: Yield in bushel per acre
++ Yield_Mg_p_ha: Yield in Mg per hectare
 
 #### biom_1720_clean.csv and pldens_1720_clean.csv (continued from the general variables list)
 + from SETFA to ARFMI: Bayer codes for weed species names  
@@ -44,6 +45,6 @@ Each experimental unit (eu) data is recorded in one row. Variable explaination i
 #### biom_indices_1720_clean.csv and pldens_indices_1720_clean.csv (continued from the general variables list)
 + sample area (m^2): Sampled area per experimental unit
 + Diversity: Simpson's diversity index, calculated with either individual species aboveoground mass or density
-+ Dominance: ???
++ Dominance: Simpson's dominance index
 + Richness: Number of species 
 + Evenness: Simpson's evenness index, calculated with either individual species aboveoground mass or density
