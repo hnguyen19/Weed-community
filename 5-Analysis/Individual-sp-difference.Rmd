@@ -1,0 +1,524 @@
+---
+output: 
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+bibliography: ecol.bib
+---
+
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE}
+#install.packages("here")
+library(emmeans)
+library(here)
+library(readr)
+library(data.table)
+#need relative path for figures
+knitr::opts_chunk$set(message = FALSE, 
+                      error = FALSE, 
+                      warning = FALSE, 
+                     # fig.width = 8, #change number specs to balance plot size and resolution
+                     # fig.height = 8,
+                     # fig.fullwidth = TRUE,
+                     # fig.path = here("4 Graphs/"), 
+                      dev=c("png"),
+                      fig.pos = "H", 
+                      table.placement = "H")
+                   #   out.extra = "")
+
+library(tidyverse)
+library(magrittr)
+library(lme4)
+library(kableExtra)
+theme_set(theme_bw())
+source("functions.R") 
+library(ggResidpanel)
+#library(lemon)
+library(gridExtra)
+#RNGkind(sample.kind = "Rounding")
+```
+
+
+```{r, include=FALSE}
+dens_1720 <- read.csv(here("2-Data/Clean/pldens_1720_clean.csv"))
+dens_1720_clean <- dens_1720 %>% replace(is.na(.), 0) %>%
+  mutate(zOTHERS = Total - (AMATA + CHEAL + DIGSA + ECHCG + SETFA + SETLU + TAROF)) %>%#keep top seven species and sum all other species in to zOTHERS
+  dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
+    AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>%
+  mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+
+
+
+biom_1720 <- read.csv(here("2-Data/Clean/biom_1720_clean.csv"))
+biom_1720_clean <- biom_1720 %>% replace(is.na(.), 0)%>%
+   mutate(zOTHERS = Total - (AMATA + CHEAL + DIGSA + ECHCG + SETFA + SETLU + TAROF)) %>%#keep top seven species and sum all other species in to zOTHERS
+  dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
+                AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>%
+  mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+
+
+# remove rows that sum to zeros https://www.tutorialspoint.com/how-to-remove-rows-that-contains-all-zeros-in-an-r-data-frame
+#dens_1720_clean <- dens_1720[rowSums(dens_1720[,13:46])>0,] 
+
+dens_1720_clean$Crop <- factor(dens_1720_clean$Crop,
+                               levels = c("corn", "soybean", "oat", "alfalfa"))
+dens_1720_clean$Crop_ID <- factor(dens_1720_clean$Crop_ID,
+                                  levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+#biom_1720_clean <- biom_1720[rowSums(biom_1720[,13:46])>0,] 
+biom_1720_clean$Crop <- factor(biom_1720_clean$Crop, 
+                               levels = c("corn", "soybean", "oat", "alfalfa"))
+
+biom_1720_clean$Crop_ID <- factor(biom_1720_clean$Crop_ID,
+                                  levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+dens_1720_clean %<>% 
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+biom_1720_clean %<>% 
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+# Find minimum non-zero in each matrix, or in the Prop column of the long-format dframe  
+```
+
+
+```{r, include=FALSE}
+
+##### Fit all species at once with split-fit-combine syntax 
+# https://stat585-at-isu.github.io/materials-2019/04_functional-programming/02_purrr.html#23
+
+## contrast coefficients for hand-written contrasts 
+
+C2 <- c(1,rep(0,8)); C3 <- c(0,0,1,rep(0,6)); C4 <- c(rep(0,5),1,rep(0,3))
+S2 <- c(0, 1,rep(0,7)); S3 <- c(rep(0,3), 1,rep(0,5)); S4 <- c(rep(0,6),1,rep(0,2))
+O3 <- c(rep(0,4), 1, rep(0,4)); O4 <- c(rep(0,7),1,0)
+A4 <- c(rep(0,8), 1)
+
+
+# convert wide to long format 
+
+dens_1720_long <- dens_1720_clean %>% 
+  pivot_longer(!c(Crop:Corn_weed_management),
+               names_to = "Species",
+               values_to =  "Density")
+
+# justification of betareg https://www.sciencedirect.com/science/article/pii/S1470160X16305659#sec0020
+# multinomial logistic seems more reasonable https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234
+# https://github.com/bobdouma/proportions_beta_Dirichlet/blob/v.01/Appendix%20S4%20Case_study%202.Rmd
+#https://orcid.org/0000-0002-8779-838X
+#https://stats.stackexchange.com/questions/504644/beta-regression-fitted-values
+
+#singularity because of too many zeros in many species columns 
+
+
+min(dens_1720_long$Density[dens_1720_long$Density>0]) #0.05396072
+
+dens_result_t <- dens_1720_long %>%
+  group_by(Species) %>% 
+  nest() %>%
+  mutate(models=map(data,~lmer(log(Density + 0.05396072) ~ Block 
+                               + Crop_ID + 
+                     Corn_weed_management 
+                     + Crop_ID:Corn_weed_management + 
+                        (1|Year) 
+                     + (1|Year:Block) + 
+                       (1|Year:Crop_ID) 
+                     + (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  +
+                       (1|Block:Year:Crop_ID) ,
+                     data =.x))) %>%
+  ungroup %>%
+  mutate(diag_plots = map(models, resid_panel),
+    jts = map(models, joint_tests),
+    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary),
+         means = map2(data, models,~emmeans(.y, ~ Crop_ID|Corn_weed_management,data=.x, type = "response")),
+        means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")),
+    means_crop = map2(data, models,~emmeans(.y,  "Crop_ID",data=.x, type = "response")),
+    means_herb = map2(data, models,~emmeans(.y,  "Corn_weed_management",data=.x, type = "response")),
+     jts2 = map(means2, joint_tests),
+    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary),
+     arrow_plots = map(means, plot, comparison = TRUE, xlab=expression(plantsm^{"-2"}), ylab = "Crop ID"), 
+
+dens_2yrvs34yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = ((C2+S2)/2) - ((C3+S3+O3+C4+S4+O4+A4)/7) )),
+dens_3yrvs4yr = map(means_crop, contrast, method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+dens_2yrvs3yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = ((C2+S2)/2) -  ((C3+S3+O3)/3) )),
+dens_2yrvs4yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" = ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+dens_CS2yr_vs_CS34yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" = ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+dens_CS3yr_vs_CS4yr = map(means_crop, contrast, method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = ((C3+S3)/2) - ((C4+S4)/2))),
+dens_CS2yr_vs_CS3yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3)/2]" = ((C2+S2)/2) - ((C3+S3)/2))),
+dens_CS2yr_vs_CS4yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C4+S4)/2]" = ((C2+S2)/2) - ((C4+S4)/2))),
+dens_C2vs3_4 = map(means_crop, contrast, method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+dens_C2vs4 = map(means_crop, contrast, method = list("C2 vs C4" = C2 - C4)),
+dens_C2vs3 = map(means_crop, contrast, method = list("C2 vs C3" = C2 - C3)),
+dens_C3vs4 = map(means_crop, contrast, method = list("C3 vs C4" = C3 - C4)),
+dens_S2vs3_4 = map(means_crop, contrast ,method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )),
+dens_S2vs4 = map(means_crop, contrast, method = list("S2 vs S4" = S2 - S4)),
+dens_S2vs3 = map(means_crop, contrast, method = list("S2 vs S3" = S2 - S3)),
+dens_S3vs4 = map(means_crop, contrast, method = list("S3 vs S4" = S3 - S4)),
+dens_oat = map(means_crop,contrast, method = list("O3 vs O4" = O3 - O4 )),
+dens_summer_vs_cool = map(means_crop, contrast,  method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" = (((O3+A4+O4)/3)) - (C2+S2+C3+S3+C4+S4)/6)),
+dens_CS3_vs_O3 = map(means_crop, contrast, method = list("O3 vs [(C3+S3)/2]" = O3 - ((C3+S3)/2))),
+dens_CS4_vs_OA4 = map(means_crop, contrast, method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = ((A4+O4)/2) - ((C4+S4)/2))),
+dens_forage3_vs4 = map(means_crop, contrast,  method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)), 
+dens_conv_low = map(means_herb, contrast,  "pairwise"), 
+         p_cont = map(means, contrast, "pairwise"), 
+         across(models:p_cont, setNames,  .$Species))
+
+
+biom_1720_long <- biom_1720_clean %>% 
+  pivot_longer(!c(Crop:Corn_weed_management), names_to = "Species", values_to =  "Biomass")
+
+min(biom_1720_long$Biomass[biom_1720_long$Biomass>0]) # 0.0005396072
+
+biom_result_t <- biom_1720_long %>%
+  group_by(Species) %>% 
+  nest() %>%
+  mutate(models=map(data,~lmer(log(Biomass + 0.0005396072) ~ Block +
+                                 Crop_ID*Corn_weed_management + 
+                        (1|Year) + (1|Year:Block) + 
+                       (1|Year:Crop_ID) + (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  + (1|Block:Year:Crop_ID),data =.x))) %>%
+  ungroup %>%
+  mutate(jts = map(models, joint_tests),
+         diag_plots = map(models, resid_panel), 
+         jts = map(models, joint_tests), 
+    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary),
+         means = map2(data, models,~ emmeans(.y, ~ Crop_ID | Corn_weed_management,data=.x, type = "response")),
+        means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")),
+    jts2 = map(means2, joint_tests),
+    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary),
+        means_crop = map2(data, models,~emmeans(.y,  "Crop_ID",data=.x, type = "response")),
+    means_herb = map2(data, models,~emmeans(.y,  "Corn_weed_management",data=.x, type = "response")),
+    arrow_plots = map(means, plot, comparison = TRUE, xlab=expression(gm^{"-2"}), ylab = "Crop ID"),
+biom_2yrvs34yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = ((C2+S2)/2) - ((C3+S3+O3+C4+S4+O4+A4)/7) )),
+biom_3yrvs4yr = map(means_crop, contrast, method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+biom_2yrvs3yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = ((C2+S2)/2) -  ((C3+S3+O3)/3) )),
+biom_2yrvs4yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" = ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+biom_CS2yr_vs_CS34yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" = ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+biom_CS3yr_vs_CS4yr = map(means_crop, contrast, method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = ((C3+S3)/2) - ((C4+S4)/2))),
+biom_CS2yr_vs_CS3yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3)/2]" = ((C2+S2)/2) - ((C3+S3)/2))),
+biom_CS2yr_vs_CS4yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C4+S4)/2]" = ((C2+S2)/2) - ((C4+S4)/2))),
+biom_C2vs3_4 = map(means_crop, contrast, method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+biom_C2vs4 = map(means_crop, contrast, method = list("C2 vs C4" = C2 - C4)),
+biom_C2vs3 = map(means_crop, contrast, method = list("C2 vs C3" = C2 - C3)),
+biom_C3vs4 = map(means_crop, contrast, method = list("C3 vs C4" = C3 - C4)),
+biom_S2vs3_4 = map(means_crop, contrast ,method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )),
+biom_S2vs4 = map(means_crop, contrast, method = list("S2 vs S4" = S2 - S4)),
+biom_S2vs3 = map(means_crop, contrast, method = list("S2 vs S3" = S2 - S3)),
+biom_S3vs4 = map(means_crop, contrast, method = list("S3 vs S4" = S3 - S4)),
+biom_oat = map(means_crop,contrast, method = list("O3 vs O4" = O3 - O4 )),
+biom_summer_vs_cool = map(means_crop, contrast,  method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" = (((O3+A4+O4)/3)) - (C2+S2+C3+S3+C4+S4)/6)),
+biom_CS3_vs_O3 = map(means_crop, contrast, method = list("O3 vs [(C3+S3)/2]" = O3 - ((C3+S3)/2))),
+biom_CS4_vs_OA4 = map(means_crop, contrast, method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = ((A4+O4)/2) - ((C4+S4)/2))),
+biom_forage3_vs4 = map(means_crop, contrast,  method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)),
+biom_conv_low = map(means_herb, contrast,  "pairwise"),
+p_cont = map(means, contrast, "pairwise"), 
+across(models:p_cont, setNames,  .$Species))
+
+```
+
+#### How did rotation, crop species, and corn weed management affect individual weed species abundance?{-}  
+
+The stand density and aboveground mass of the seven most abundant weed species are shown in Figure \@ref(fig:all-sp-dens-biom). The effects of crop identity (i.e., rotation system crossed with crop species), corn weed management, and their interaction on the seven most abundant weeds in the present study are shown in Table \@ref(tab:ind-dens-biom-jt). 
+No interactive effects between crop identity and corn weed management were seen in any of those seven species' density or aboveground mass. The main effects of crop identity and corn weed management on stand density and aboveground mass differed by species.  
+
+
+*The hypothesis that "including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean" was partially supported.* Among the seven most abundant weed species, the stand densities were all affected by crop identity, but the aboveground mass was affected by crop identity for only four out of seven species (Table \@ref(tab:ind-dens-biom-jt)).  
+
+```{r ind-dens-biom-jt, echo=FALSE}
+#separate by density and biomass because of large table 
+
+ind_dens_jt <- rbind(#dens_result_t$jts2_clean$ABUTH,
+  dens_result_t$jts2_clean$AMATA,
+                     dens_result_t$jts2_clean$CHEAL,
+                     dens_result_t$jts2_clean$DIGSA,
+                     dens_result_t$jts2_clean$ECHCG,
+                     dens_result_t$jts2_clean$SETFA,
+                     dens_result_t$jts2_clean$SETLU,
+                     #dens_result_t$jts2_clean$SOLPT,
+                     dens_result_t$jts2_clean$TAROF, 
+  dens_result_t$jts2_clean$zOTHERS) 
+ind_dens_df <- as.data.frame(ind_dens_jt)
+
+
+ind_dens_df$F.ratio <- as.numeric(ind_dens_df$F.ratio)
+
+ind_biom_jt <- rbind(#biom_result_t$jts2_clean$ABUTH,
+                     biom_result_t$jts2_clean$AMATA,
+      biom_result_t$jts2_clean$CHEAL,
+      biom_result_t$jts2_clean$DIGSA,
+      biom_result_t$jts2_clean$ECHCG,
+      biom_result_t$jts2_clean$SETFA,
+      biom_result_t$jts2_clean$SETLU,
+      biom_result_t$jts2_clean$TAROF,
+      biom_result_t$jts2_clean$zOTHERS) 
+
+ind_biom_df <- as.data.frame(ind_biom_jt)
+ind_biom_df$F.ratio <- as.numeric(ind_biom_df$F.ratio)
+
+
+ind_dens_biom_jt <- cbind(ind_dens_df, ind_biom_df)
+# can't do left_join here because rows will be reorganized alphabetically
+
+# remove "_" and replace ":" with "x"
+ind_dens_biom_jt$`model term                  ` <- gsub("_", " ", ind_dens_biom_jt$`model term                  `)
+ind_dens_biom_jt$`model term                  ` <- gsub(":", " x ", ind_dens_biom_jt$`model term                  `)
+
+rownames(ind_dens_biom_jt) <- NULL
+
+ind_dens_biom_jt_clean <- ind_dens_biom_jt[,-c(6,7,8)] 
+colnames(ind_dens_biom_jt_clean) <- c("Source of variation", "df1", "df2", rep(c("F.value","p.value"),2))
+
+ind_dens_biom_jt_clean %>%
+  kbl(booktabs = TRUE, 
+      digits = 2,
+      linesep = " ", longtable = FALSE, align = "lrrrrrr",
+    caption = "Treatment effects on the abundance of the most population and vigorous weed species, listed alphabetically. All the other weeds species were grouped into OTHERS") %>% 
+  add_header_above(c(" " = 3, "Stand density" = 2, "Aboveground mass" = 2)) %>% 
+  pack_rows("(A) - AMATA", 1, 3) %>%
+  pack_rows("(B) - CHEAL", 4, 6) %>% 
+    pack_rows("(C) - DIGSA", 7, 9) %>% 
+  pack_rows("(D) - ECHCG",  10, 12) %>%
+    pack_rows("(E) - SETFA",13, 15) %>% 
+  pack_rows("(F) - SETLU", 16, 18) %>% 
+  pack_rows("(G) - TAROF", 19, 21) %>% 
+  pack_rows("(H) - OTHERS", 22, 24) %>% 
+    column_spec(5,border_left = FALSE,
+                border_right = TRUE) %>%
+  kable_styling(latex_options = c("scale_down")) %>%
+  footnote(general = "Corn weed management: low herbicide or conventional. C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+
+
+```
+
+Since increased weed stand density and aboveground mass were not correlated with increased crop yield loss, the magnitude of differences in individual weed density and aboveground mass are not presented here. Significance of differences in individual species density and aboveground mass (p-values) are presented to illustrate community composition shift. Individual species stand density and aboveground mass data were combined over four years and four blocks.     
+
+Averaged over crop identity, DIGSA and SETFA stand density and aboveground mass were affected by corn weed management (p-values = 0.0189 and 0.0196, Table \@ref(tab:ind-dens-biom-jt)). Averaged over corn weed management regimes, the differences in weed species stand density and aboveground mass were observed more often between crop types (Tables \@ref(tab:sp-pval)B and C, and Tables \@ref(tab:\@ref(tab:sp-ct)B and C)) than for individual crops across rotations (Tables \@ref(tab:sp-pval)A and \@ref(tab:sp-ct)A). The main-plot effects concerning crop identity on individual species responses are elaborated below.  
+
+*The cool season crops were responsible for AMATA stand density differences, but those differences were not strong enough to be apparent between rotation averages.* *AMATA stand density and aboveground mass were comparable among all rotation systems averaged over crop phases (p-values > 0.05), among rotations for the same crop species (p-values > 0.05), and within the same crop type across rotations (p-values > 0.05).* Averaged over the same crop types (warm season or cool season), AMATA stand density was significantly different in cool season versus warm season crops (p-value = 0.0001), but AMATA aboveground mass was comparable (p-value = 0.0906) in cool season and warm season crops. Within the same rotation, AMATA stand density was greater in the cool season than in the warm season crops (p-values 0.0143, and 0.0003), but AMATA aboveground mass was comparable in these crop environments (p-values = 0.2355, and 0.0493).  
+
+
+*The cool season crops, especially oat were responsible for CHEAL stand density and aboveground mass differences between rotation averages. CHEAL stand density and aboveground mass were 11-fold (p-value = 0.0001) and 96-fold (p-value = 0.0001) greater in oat than in alfalfa.* CHEAL stand density and aboveground mass were significantly different between the 2-year rotation and the average of the 3-year and 4-year rotations, but comparable between the 3-year and 4-year rotations (p-values = 0.9195 and 0.6114). CHEAL stand density and aboveground mass were comparable across rotations for the same crop species (p-values > 0.05) and within the warm season crops (p-values > 0.05), but significantly different across crop types overall (p-values < 0.0001), between the warm season and cool season crops of the same rotation (p-values = 0.0001), and within the cool season crops (oat versus alfalfa).   
+
+*The cool season crops, especially alfalfa were responsible for DIGSA stand density and aboveground mass differences between rotation averages. DIGSA stand density and aboveground mass were 14-fold (p-value = 0.0001) and 33-fold (p-value = 0.0001) greater in alfalfa than in oat.* DIGSA stand density significantly was different between the 2-year rotation and the average of the 3-year and 4-year rotations (p-value = 0.0072) and between the 3-year and 4-year rotation (p-value < 0.0001). DIGSA aboveground mass was comparable between the 2-year and the average of the 3-year and 4-year rotations (p-value = 0.1098), but significantly different between the 3-year and 4-year rotations (p-value = 0.0001). DIGSA stand density and aboveground mass were comparable across rotations for the same crop species (p-values > 0.05), except for oat (p-values = 0.0062 and 0.0032). Within the 3-year rotation, DIGSA stand density was comparable among crop phases (p-value = 0.0603), but DIGSA aboveground mass was significantly different between oat and the average of corn and soybean phases (p-value < 0.0001). DIGSA stand density and aboveground mass were significantly different across crop types overall, between the warm season and cool season crops of the 4-year rotation (p-values = 0.0001), and within the cool season crops (oat versus alfalfa) (p-values < 0.0001).   
+
+
+*ECHCG responses generally were similar to those of AMATA.* ECHCG stand density and aboveground mass were comparable between all rotation averages (p-values > 0.05), across rotations for the same crop species (p-values > 0.05), within the same crop type across rotations (p-values > 0.05), and within the 3-year rotation (p-values > 0.05). Averaged over the same crop types, ECHCG stand density and aboveground mass were significantly different in cool season versus warm season crops (p-value = 0.0003 and 0.0012). Within the 4-year rotation, ECHCG stand density and aboveground mass were greater in the cool season than in the warm season crops (p-values 0.0014, and 0.0031).   
+
+
+*The cool season crops were responsible for SETFA stand density and aboveground mass differences, but those differences were not strong enough be apparent between rotation averages.*  SETFA stand density and aboveground mass were comparable across all rotation averages (p-values > 0.05), across rotations for the same crop species (p-values > 0.05), within the warm season crops across rotations (p-values > 0.05), and within the cool season crops (p-values > 0.05). Averaged over the same crop types, SETFA stand density and aboveground mass were significantly different in cool season versus warm season crops (p-value < 0.0001 and p-value = 0.0008). Within the same rotation, SETFA stand density and aboveground mass were greater in the cool season than in the warm season crops (p-values = 0.001, 0.018, 0.0001, and 0.0045).  
+
+SETLU stand density and aboveground mass were comparable in most pairs of comparison (p-values > 0.05), with the exception in the warm season versus cool season density (p-value = 0.0404).  
+
+*The cool season crops, especially oat were responsible for TAROF stand density and aboveground mass differences across rotation averages. TAROF stand density and aboveground mass were 6-fold (p-value < 0.0001) and 20-fold (p-value = 0.0001) greater in oat than in alfalfa.* TAROF stand density and aboveground mass were significantly different in the 2-year versus the average of the 3-year and 4-year rotations, and between the 3-year and 4-year rotations (p-values < 0.0001). TAROF stand density and aboveground mass were comparable among the warm season crops across rotations and within the same crops across rotations (p-values > 0.05), except in oat (p-values < 0.0001). TAROF stand density and aboveground mass were significantly different across crop types overall (p-values < 0.0001), across crop types within the same rotations (p-values = 0.0001, 0.0002 and < 0.0001), and between oat versus alfalfa (p-values $\leq$ 0.0001).  
+
+
+```{r, include=FALSE}
+
+## select string starts with "dens_
+dens_ct <- dens_result_t %>% select(contains("dens_")) #extract the contrasts only
+
+## need something here to preserve p-value formats
+dens_ct_list_df <- map(dens_ct , as.data.frame) # same as lapply(dens_ct, as.data.frame, stringAsFactors = FALSE) #give a list of 32 df of 1x238, each df is a contrast
+
+
+dens_ct_df <- lapply(dens_ct_list_df, 
+                     as.data.frame, stringsAsFactors = TRUE) %>%
+  rbindlist(fill = FALSE) #combine everything into a large df
+
+
+## select string starts with "biom_
+biom_ct <- biom_result_t %>% select(contains("biom_")) #extract the contrasts only
+
+biom_ct_list_df <- map(biom_ct , as.data.frame) # same as lapply(dens_ct, as.data.frame, stringAsFactors = FALSE) #give a list of 32 df of 1x238, each df is a contrast
+
+
+biom_ct_df <- lapply(biom_ct_list_df, 
+                     as.data.frame,
+                     stringsAsFactors = FALSE) %>%
+  rbindlist(fill = FALSE) #combine everything into a large df
+```
+
+```{r, include = FALSE}
+## Filter contrast tables by weed species names with `select(contains("Bayer code"))`
+
+AMATA_dens_ct <- dens_ct_df %>% select(contains("AMATA"))
+AMATA_biom_ct <- biom_ct_df %>% select(contains("AMATA"))
+
+AMATA_ct <- AMATA_dens_ct %>% full_join(AMATA_biom_ct, by = "AMATA.contrast")
+rownames(AMATA_ct) <- NULL
+names(AMATA_ct)[1] <- "Contrast"
+
+CHEAL_dens_ct <- dens_ct_df %>% select(contains("CHEAL"))
+CHEAL_biom_ct <- biom_ct_df %>% select(contains("CHEAL"))
+
+CHEAL_ct <- CHEAL_dens_ct %>% full_join(CHEAL_biom_ct, by = "CHEAL.contrast")
+rownames(CHEAL_ct) <- NULL
+names(CHEAL_ct)[1] <- "Contrast"
+
+DIGSA_dens_ct <- dens_ct_df%>%select(contains("DIGSA"))
+DIGSA_biom_ct <- biom_ct_df%>%select(contains("DIGSA"))
+
+DIGSA_ct <- DIGSA_dens_ct %>% full_join(DIGSA_biom_ct, by = "DIGSA.contrast")
+rownames(DIGSA_ct) <- NULL
+names(DIGSA_ct)[1] <- "Contrast"
+
+ECHCG_dens_ct <- dens_ct_df%>%select(contains("ECHCG"))
+ECHCG_biom_ct <- biom_ct_df%>%select(contains("ECHCG"))
+
+ECHCG_ct <- ECHCG_dens_ct %>% full_join(ECHCG_biom_ct, by = "ECHCG.contrast")
+rownames(ECHCG_ct) <- NULL
+names(ECHCG_ct)[1] <- "Contrast"
+
+
+SETFA_dens_ct <- dens_ct_df %>% select(contains("SETFA"))
+SETFA_biom_ct <- biom_ct_df %>% select(contains("SETFA"))
+
+SETFA_ct <- SETFA_dens_ct %>% full_join( SETFA_biom_ct, by = "SETFA.contrast")
+rownames(SETFA_ct) <- NULL
+names(SETFA_ct)[1] <- "Contrast"
+
+SETLU_dens_ct <- dens_ct_df %>% select(contains("SETLU"))
+SETLU_biom_ct <- biom_ct_df %>% select(contains("SETLU"))
+
+SETLU_ct <- SETLU_dens_ct %>% full_join(SETLU_biom_ct, by = "SETLU.contrast")
+rownames(SETLU_ct) <- NULL
+names(SETLU_ct)[1] <- "Contrast"
+
+TAROF_dens_ct <- dens_ct_df %>% select(contains("TAROF"))
+TAROF_biom_ct <- biom_ct_df %>% select(contains("TAROF"))
+
+TAROF_ct <- TAROF_dens_ct %>% full_join(TAROF_biom_ct, by = "TAROF.contrast")
+rownames(TAROF_ct) <- NULL
+names(TAROF_ct)[1] <- "Contrast"
+
+zOTHERS_dens_ct <- dens_ct_df %>% select(contains("zOTHERS"))
+zOTHERS_biom_ct <- biom_ct_df %>% select(contains("zOTHERS"))
+
+zOTHERS_ct <- zOTHERS_dens_ct %>% full_join(zOTHERS_biom_ct, by = "zOTHERS.contrast")
+rownames(zOTHERS_ct) <- NULL
+names(zOTHERS_ct)[1] <- "Contrast"
+
+## Merge all p-value of individual weed species density columns together
+
+seven_pval_dens <-  list(AMATA_ct,
+                     CHEAL_ct,
+                     DIGSA_ct, 
+                     ECHCG_ct,
+                     SETFA_ct,
+                     SETLU_ct,
+                     TAROF_ct) %>%
+                #     zOTHERS_ct)%>% 
+  reduce(left_join, by = "Contrast") %>%
+  select(Contrast, contains("value.x")) 
+
+## Merge all p-value of individual weed species aboveground mass columns together
+seven_pval_biom <-  list(AMATA_ct,
+                     CHEAL_ct,
+                     DIGSA_ct, 
+                     ECHCG_ct,
+                     SETFA_ct,
+                     SETLU_ct,
+                     TAROF_ct) %>%
+             #        zOTHERS_ct) %>% 
+  reduce(left_join, by = "Contrast") %>%
+  select(Contrast, contains("value.y"))
+
+## Merge 2 p-value tables 
+seven_pval <- full_join(seven_pval_dens, seven_pval_biom, by = "Contrast")
+```
+
+
+
+
+```{r sp-pval, echo=FALSE}
+## Clean p-value table
+seven_pval_clean <- seven_pval[c(1,2, 
+                                 5,6,
+                                 9,12, 
+                                 13, 16, 17,
+                                 18:21),]
+
+seven_pval_clean$Contrast <- gsub("", "", seven_pval_clean$Contrast)
+seven_pval_clean$Contrast <- gsub("low ", "", seven_pval_clean$Contrast)
+# everything character, 
+
+# 0.0000 become <.0001
+seven_pval_round <- seven_pval_clean %>% 
+  mutate(across(where(is.numeric), ~ sprintf("%.4f", .))) %>% #keep 4 decimal places
+  mutate(across(0.0000, ~ as.character)) %>% 
+  mutate_if(is.numeric, str_replace_all,
+            pattern = '0.0000', 
+            replacement = '<.0001') %>%
+    mutate_all(function(x) gsub("0.0000", "<.0001",x))
+ # mutate(across(is.character, "<.0001")) #not working
+
+
+seven_pval_round %>%
+  `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
+  kbl(longtable = FALSE, booktabs = TRUE, linesep = "", align = 'lrrrrrrrrrrrrrr',
+    caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>% 
+  add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
+  add_header_above(c(" "= 1,  " p-values " = 14)) %>%
+    column_spec(8, border_left = FALSE, border_right = TRUE) %>%
+  pack_rows("(A) - Rotation system effects", 1, 4) %>%
+  pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
+  pack_rows("(C) - Crop type effects", 10, 13) %>%
+  kable_styling(latex_options = "scale_down") %>%
+  landscape() %>%
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3: soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+
+```
+
+```{r sp-ct, echo=FALSE}
+seven_ct_dens <-  list(AMATA_ct,
+                     CHEAL_ct,
+                     DIGSA_ct, 
+                     ECHCG_ct,
+                     SETFA_ct,
+                     SETLU_ct,
+                     TAROF_ct) %>% 
+  reduce(left_join, by = "Contrast") %>%
+  select(Contrast, contains(".ratio"), -contains("t.ratio"), -contains("ratio.y"))
+  
+seven_ct_biom <-  list(AMATA_ct,
+                     CHEAL_ct,
+                     DIGSA_ct, 
+                     ECHCG_ct,
+                     SETFA_ct,
+                     SETLU_ct,
+                     TAROF_ct) %>% 
+  reduce(left_join, by = "Contrast") %>%
+  select(Contrast, contains(".ratio"), -contains("t.ratio"), -contains("ratio.x"))
+
+seven_ct <- full_join(seven_ct_dens, seven_ct_biom, by = "Contrast")
+
+seven_ct_clean <- seven_ct[c(1,2, 
+                                 5,6,
+                                 9,12, 
+                                 13, 16, 17,
+                                 18:21),]
+
+
+seven_ct_clean$Contrast <- gsub("conv ", "", seven_ct_clean$Contrast)
+seven_ct_clean$Contrast <- gsub("low ", "", seven_ct_clean$Contrast)
+
+seven_ct_clean %>%
+  `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
+  kbl(longtable = FALSE, booktabs = TRUE, digits = 2,
+      linesep = "", align = 'lrrrrrrrrrrrrrr',
+    caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>% 
+  add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
+  add_header_above(c(" "= 1,  " Contrast ratio " = 14)) %>%
+    column_spec(8, border_left = FALSE, border_right = TRUE) %>%
+  pack_rows("(A) - Rotation system effects", 1, 4) %>%
+  pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
+  pack_rows("(C) - Crop type effects", 10, 13) %>%
+  kable_styling(latex_options = "scale_down") %>%
+  landscape() %>%
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3: soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+```
+
+

@@ -1,0 +1,392 @@
+---
+output: 
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+bibliography: ecol.bib
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(emmeans)
+library(here)
+library(readr)
+#need relative path for figures
+knitr::opts_chunk$set(message = FALSE, 
+                      error = FALSE, 
+                      warning = FALSE, 
+                      fig.pos = "H", 
+                      table.placement = "H",
+                    #  out.extra = "",
+                      dev=c("png")) 
+                     # fig.width = 8, #change number specs to balance plot size and resolution
+                    #  fig.height = 8,
+                    #  fig.fullwidth = TRUE,
+                     # fig.path = here("4 Graphs/"), 
+                   #   dev=c("png"),
+                   #   fig.pos = "H", 
+                   #   table.placement = "H")
+                   #   out.extra = "")
+
+library(tidyverse)
+library(magrittr)
+library(lme4)
+#library(corrr)
+library(nlme)
+library(kableExtra)
+theme_set(theme_bw())
+#library(ggpubr)
+source("functions.R") 
+library(ggResidpanel)
+#library(patchwork)
+library(gridExtra)
+library(lemon)
+library(data.table)
+library(ggpubr)
+```
+ 
+
+```{r, echo=FALSE}
+corn <- read_csv("../2-Data/Clean/corn_1720_clean.csv")
+corn  %<>%
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
+            funs(factor(.)))
+
+soy <-  read_csv("../2-Data/Clean/soybean_1720_clean.csv")
+soy  %<>% 
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
+            funs(factor(.)))
+
+oat <- read_csv("../2-Data/Clean/oat_g_1720_clean.csv")
+oat  %<>%  
+  mutate_at(c("Block","Crop_ID", "Year"),
+            funs(factor(.)))
+
+alfalfa <- read_csv("../2-Data/Clean/alfalfa_1720_clean.csv")
+alfalfa %<>%  
+  mutate_at(c("Block", "Year"),
+                        funs(factor(.)))
+```
+
+
+```{r, include=FALSE}
+corn.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block +
+                    Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) ,
+  data=corn)
+
+soy.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=soy)
+
+oat.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID) + 
+                   (1|Block:Year:Crop_ID),
+  data=oat)
+
+## summing all the cuts within one year 
+alf_sum <- alfalfa %>%
+  group_by(Year, Block) %>%
+  summarize(Yield = sum(Dry_MgpHa)) 
+
+alf.lmer <- lmer(Yield ~ Block + (1|Year),
+  data=alf_sum)
+```
+
+
+
+```{r , include=FALSE}
+## ANOVA tables for the effects of crop idenity and corn weed management on crop yields
+
+corn_jt <- print(joint_tests(emmeans(corn.lmer,
+                                     c("Crop_ID", "Corn_weed_management"))), 
+                 export = TRUE)
+soy_jt <- print(joint_tests(emmeans(soy.lmer, 
+                                    c("Crop_ID", "Corn_weed_management"))),
+                export = TRUE)
+
+oat_jt <- print(joint_tests(emmeans(oat.lmer, c("Crop_ID"))),export = TRUE)
+
+
+crop_jt <- rbind(corn_jt$summary,
+                 soy_jt$summary,
+                 oat_jt$summary)
+  
+rownames(crop_jt) <- NULL
+
+colnames(crop_jt) <- c("Model term", "df1", "df2","F.ratio","p.value")
+
+## Merge 3 ANOVA tables  
+crop_df <- as.data.frame(crop_jt)
+
+```
+
+
+
+#### How did rotation system and corn weed management affect crop yields? {-}   
+
+Results of the experiment supported the first hypothesis that "diverse cropping systems, with reduced use of chemical herbicides, would provide weed control equal in effectiveness to the conventional approach in the 2-year rotation". Averaged over four years, soybean was the only crop whose yield was significantly affected by rotation (p-value = 0.0185, Table \@ref(tab:crop-jt-ct)). Soybean yield was 16% higher in the 4-year rotation than in the 2-year rotation (p-value = 0.018). Crop yields in the experiment relative to averages for the state of Iowa and Boone County, where the experiment occurred, are presented in Figure \@ref(fig:crop-bar). Corn weed management regime did not significantly affect crop yields (Table \@ref(tab:crop-jt-ct)).   
+
+```{r crop-jt-ct, echo=FALSE}
+
+## Rotation effect on corn yield
+
+corn_ct <- print(contrast(emmeans(corn.lmer, ~ Crop_ID, 
+                                  infer = c(FALSE,TRUE), 
+                                  type = "response"),
+                          method = "pairwise"), 
+                 export = TRUE)
+
+## Rotation effect on soybean yield
+soy_ct <- print(contrast(emmeans(soy.lmer, ~ Crop_ID,
+                                 infer = c(FALSE,TRUE),
+                                 type = "response"),
+                         method = "pairwise"),
+                export = TRUE)
+
+
+## Rotation effect on oat yield
+
+oat_ct <- print(contrast(emmeans(oat.lmer, ~ Crop_ID,
+                                 infer = c(FALSE,TRUE), 
+                                 type = "response"), 
+                         method = "pairwise", 
+                         adjust = "none"), #no adjustment to get p-value because one comparison https://github.com/rvlenth/emmeans/issues/31
+                export = TRUE) 
+
+## Merge contrast tables for corn, soy and oat yields 
+crop_ct <- rbind(corn_ct$summary, soy_ct$summary, oat_ct$summary)
+crop_ct_df <- as.data.frame(crop_ct)
+
+crop_ct_df$contrast <- gsub("/", "vs", crop_ct_df$contrast )
+
+crop_jt_ct <- cbind(crop_jt, crop_ct_df[,-c(3:6)])
+
+rownames(crop_jt_ct) <- NULL
+
+crop_jt_ct_df <- as.data.frame(crop_jt_ct)
+ 
+crop_jt_ct_df$`Model term` <- gsub("_", " ", crop_jt_ct_df$`Model term`)
+crop_jt_ct_df$`Model term` <- gsub(":", " x ", crop_jt_ct_df$`Model term`)
+
+colnames(crop_jt_ct_df) <- c("Source of variation", "df1", "df2","F.value","p.value", "contrast", "ratio", "p.value")
+
+
+crop_jt_ct_df %>%
+  kbl(booktabs = TRUE, linesep="",  align = "lrrrrlrr",  #digits = 2,
+    caption = "Contrasts of rotation effect (expressed by Crop identity) on crop yields. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+  column_spec(5, border_left = FALSE, border_right = TRUE) %>%
+  add_header_above(c("ANOVA" = 5, "Comparison" = 3)) %>%
+  pack_rows("(A) - Corn", 1, 3) %>%
+  pack_rows("(B) - Soybean", 4, 6) %>%
+  pack_rows("(C) - Oat", 7, 7) %>%
+  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system to which each belong: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+```
+
+
+```{r, include=FALSE}
+## Prepare data sets for crop yield bar graphs as faceted single picture
+
+#emmip gives the same numbers as emm, but emmip is tidier.
+corn.emmip <- emmip(corn.lmer, ~ Crop_ID,
+                    CIs = TRUE,
+                    type = "response", 
+                    plotit = FALSE)
+
+soy.emmip <- emmip(soy.lmer, ~ Crop_ID,
+                   CIs = TRUE, 
+                   type = "response", 
+                   plotit = FALSE)
+
+oat.emmip <- emmip(oat.lmer, ~ Crop_ID,
+                   CIs = TRUE, 
+                   type = "response",
+                   plotit = FALSE)
+
+alf.emmip <- emmip(alf.lmer, ~1,
+                   CIs = TRUE, 
+                   type = "response",
+                   plotit = FALSE)
+
+names(alf.emmip) <- names(oat.emmip)
+alf.emmip$Crop_ID <- gsub("overall", "A4", alf.emmip$Crop_ID)
+alf.emmip$xvar <- gsub("overall", "A4", alf.emmip$xvar)
+
+## All crop yields in one table 
+crops.emmip <- rbind(corn.emmip, soy.emmip, oat.emmip, alf.emmip)
+
+## Duplicate the Crop_ID and save as character
+crops.emmip$Crop_ID_char <- as.character(crops.emmip$Crop_ID)
+
+## Add crop species name to merge with Iowa yields
+crops.emmip_commodity <- crops.emmip %>%
+  mutate(Commodity = ifelse(startsWith(Crop_ID_char,"S"),"soybeans",
+                                        ifelse(startsWith(Crop_ID_char,"O"),"oats",
+                                            ifelse(startsWith(Crop_ID_char,"C"),"corn","hay"))))%>%
+    mutate(Rotation = ifelse(endsWith(Crop_ID_char,"4"),"4-year",
+                                        ifelse(endsWith(Crop_ID_char,"3"),"3-year","2-year")))
+
+
+```
+
+
+```{r, include=FALSE}
+## Iowa and Boone yields 
+IA_yield <- read.csv("../2-Data/Clean/IA_yield_clean.csv")
+
+##Iowa average, need update when 2020 corn, 2019 and 2020 hay, 2019 oat, and 2020 soy yields are  available 
+IA_avg_yield <- IA_yield %>% 
+  group_by(Commodity) %>%
+  summarise(IA_avg = mean(Yield_Mg_p_ha),
+            IA_sd = sd(Yield_Mg_p_ha))
+
+Boone_yield <- IA_yield %>%
+  filter(County == "Boone") %>%
+  group_by(Commodity) %>%
+  summarise(Boone_avg = mean(Yield_Mg_p_ha),
+            Boone_sd = sd(Yield_Mg_p_ha))
+
+```
+
+```{r, include=FALSE}
+## merge Marsden and Iowa/Boone yields 
+crops.emmip.IA <- crops.emmip_commodity %>% 
+  left_join(IA_avg_yield, by = "Commodity") %>%
+  left_join(Boone_yield, by = "Commodity") %>%
+  mutate(Commodity = recode(Commodity, "corn" = "corn grain",
+                            "soybeans" = "soybean grain",
+                            "oats" = "oat grain",
+                            "hay" = "alfalfa hay")) 
+# facet label name change: https://r-graphics.org/recipe-facet-label-text
+
+## rearrange crop corresponding to their sequence in rotations
+crops.emmip.IA$Commodity <- factor(crops.emmip.IA$Commodity, 
+                                         levels=c("corn grain", 
+                                                  "soybean grain",
+                                                  "oat grain", 
+                                                  "alfalfa hay"))
+```
+
+```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.", echo=FALSE, fig.width=8, fig.height=4}
+
+ggplot(crops.emmip.IA , aes(x = Crop_ID, y = yvar, fill = Rotation))+ 
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Dark2") +
+  geom_errorbar(aes(ymin= LCL, ymax= UCL), width=.2) + 
+  facet_grid(.~ Commodity, scales = "free", space = "free") + # scales: remove empty bar, space: equal bar width
+  geom_hline(aes(yintercept = IA_avg, linetype = "IA average")) + 
+  geom_hline(aes(yintercept = Boone_avg, linetype = "Boone County average")) + 
+  ylab("Crop yield (Mg/ha)") +
+  xlab("Crop identity") +
+  labs(linetype = "Yield") +
+  theme(legend.position="bottom")
+```
+
+```{r, include=FALSE}
+corn_IA <- IA_avg_yield %>% filter(Commodity == "corn")
+corn_B <- Boone_yield %>% filter(Commodity == "corn")
+
+## Corn yield bar graph
+corn_bar <- ggplot(corn.emmip, aes(x = Crop_ID, y = yvar)) + 
+  geom_bar(stat = "identity", fill = "#C8102E") + 
+  geom_errorbar(aes(ymin= LCL, ymax= UCL), width=.2) + 
+  geom_hline(data = corn_IA, aes(yintercept = IA_avg, linetype = "IA average")) + 
+  geom_hline(data = corn_B, aes(yintercept = Boone_avg, linetype = "Boone average")) + 
+  geom_ribbon(data=merge(corn_IA, corn.emmip), 
+              aes(ymin= IA_avg - IA_sd, ymax=IA_avg + IA_sd), alpha = 0.2) +
+  scale_x_discrete(breaks=c("C2", "C3", "C4"),
+        labels=c("2-year", "3-year", "4-year")) +
+  labs(linetype = "Yield") +
+  ggtitle("Corn grain") +
+  ylab("") +
+  xlab("Rotation") + 
+  theme(legend.position="bottom") #+ 
+#  scale_color_brewer(palette="Dark2")
+
+# geom_ribbon(data = corn_IA, aes(ymin = IA_avg - IA_sd, ymax = IA_avg + IA_sd)) 
+
+## Soybean yield bar graph 
+   
+# soy.tidy <- tidy(soy.emm)
+soy_IA <- IA_avg_yield %>% filter(Commodity == "soybeans")
+soy_B <- Boone_yield %>% filter(Commodity == "soybeans")
+
+soy_bar <- ggplot(soy.emmip, aes(x = Crop_ID, y = yvar)) + 
+  geom_bar(stat = "identity", fill = "#F1BE48") + 
+  geom_errorbar(aes(ymin= LCL, ymax= UCL), width=.2) + 
+  geom_hline(data = soy_IA , aes(yintercept = IA_avg, linetype = "IA average")) + 
+  geom_ribbon(data=merge(soy_IA, soy.emmip), 
+              aes(ymin= IA_avg - IA_sd, ymax=IA_avg + IA_sd), alpha = 0.5) +
+  geom_hline(data = soy_B, aes(yintercept = Boone_avg, linetype = "Boone average")) + 
+  scale_x_discrete(breaks=c("S2", "S3", "S4"),
+        labels=c("2-year", "3-year", "4-year")) +
+  labs(linetype = "Yield") +
+  ggtitle( "Soybean grain") +
+  ylab("") +
+  xlab("Rotation") + 
+  theme(legend.position="bottom")
+
+## Oat yield bar graph 
+oat_IA <- IA_avg_yield %>% filter(Commodity == "oats")
+oat_B <- Boone_yield %>% filter(Commodity == "oats")
+
+oat_bar <- ggplot(oat.emmip, aes(x = Crop_ID, y = yvar)) + 
+  geom_bar(stat = "identity", fill = "#524727", width = 2/3) + 
+  geom_errorbar(aes(ymin= LCL, ymax= UCL), width=.2 * 2/3) +
+  geom_hline(data = oat_IA , aes(yintercept = IA_avg, linetype = "IA average")) + 
+    geom_ribbon(data=merge(oat_IA, oat.emmip), 
+              aes(ymin= IA_avg - IA_sd, ymax=IA_avg + IA_sd), alpha = 0.2) +
+  geom_hline(data = oat_B, aes(yintercept = Boone_avg, linetype = "Boone average")) + 
+  scale_x_discrete(breaks=c( "O3", "O4"),
+        labels=c( "3-year", "4-year")) +
+  labs(linetype = "Yield") +
+  ggtitle("Oat grain") + # yield (Mg/ha)") +
+  ylab("") +
+  xlab("Rotation") + 
+  theme(legend.position="bottom")
+
+
+## Alfalfa yield bar graph 
+alf_IA <- IA_avg_yield %>% filter(Commodity == "hay")
+alf_B <- Boone_yield %>% filter(Commodity == "hay")
+
+alf_bar <- ggplot(alf.emmip, aes(x = Crop_ID, y = yvar)) + 
+  geom_bar(stat = "identity", fill = "#9B945F", width = 1/3) + 
+  geom_errorbar(aes(ymin= LCL, ymax= UCL), width= .2 * 1/3) +
+  geom_hline(data = alf_IA, aes(yintercept = IA_avg, linetype = "IA average")) + 
+  geom_ribbon(data=merge(alf_IA , alf.emmip), 
+              aes(ymin= IA_avg - IA_sd, ymax=IA_avg + IA_sd), alpha = 0.2) +
+  geom_hline(data = alf_B , aes(yintercept = Boone_avg, linetype = "Boone average")) + 
+  scale_x_discrete(breaks="A4", labels="4-year") +
+  labs(linetype = "Yield") +
+  ggtitle("Alfalfa hay") +  #yield (Mg/ha)
+  #xlab(expression(atop("4 year", paste("Rotation")))) +
+ # xlab("4 year<br>Rotation") +
+ # xlab(expression(paste("4 year \n Rotation"))) +
+  ylab("")+
+  xlab("Rotation") + 
+  theme(legend.position="bottom") # axis.text.x=element_blank())
+
+```
+
+
+
+```{r crop-bar2, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.", include=FALSE, fig.width=8, fig.height=4}
+grid_arrange_shared_legend(corn_bar, soy_bar, oat_bar, alf_bar)
+                        
+```
+

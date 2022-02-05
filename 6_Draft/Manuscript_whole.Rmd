@@ -1,0 +1,68 @@
+---
+title: "Weed community composition in simple and more diverse cropping systems"
+header-includes:
+   - \usepackage{lineno}
+   - \linenumbers
+output:
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+    latex_engine: lualatex
+    citation_package: natbib
+bibliography: ecol.bib
+natbiboptions: round
+biblatexoptions:
+  - sortcites = true
+  - sorting = nyt
+  - backend = biber
+  - maxcitenames = 2
+csl: apa-no-ampersand.csl
+---
+
+# Abstract {-}
+
+```{r, child = "Abstract.Rmd"}
+```
+
+# Introduction {-}
+
+```{r, child = "Introduction.Rmd"}
+```
+
+
+# Materials and Methods {-}
+
+```{r, child = "../8-Analysis/MandM2.Rmd"}
+```
+
+# Results {-}  
+
+A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with `ggResidpanel` [version 0.3.0 @goodeGgResidpanelPanelsInteractive2019] are available in the Data Repository.  
+
+```{r, child = "../8-Analysis/Crop_yields.Rmd"}
+#, include=FALSE
+```
+
+
+```{r, child = "../8-Analysis/Community.Rmd"}
+#, include=FALSE
+```
+
+```{r, child = "../8-Analysis/Individual-sp-difference.Rmd"}
+```
+
+
+# Discussion {-}
+
+```{r, child = "Discussion.Rmd"}
+```
+
+
+# Acknowledgements {-}
+
+The authors thank Matt Woods, Mike Fiscus, and the Iowa State University's Agronomy Research Farm crew for field management; Wendy Borja-Diaz, Lydia English, Jessica Juarez-Morales, Samantha Kanselaar, Jessica Nelson, Elizabeth Oys, Ana Poznanski, Andrew Riehl, Angela Soto-Saenz, Mickala Stallman, David Weisberger, and Wyatt Westfall for field and laboratory assistance; Katherine Goode, Audrey McCombs, Philip Dixon and ISU's statistical consulting group for data analysis assistance; Russ Lenth and other Stackoverflow community members for answering HTXN's coding questions; Micheal Owen for reviewing the manuscript; and Overleaf staff for \LaTeX\ assistance in compiling the manuscript.
+
+
+# References {-}
