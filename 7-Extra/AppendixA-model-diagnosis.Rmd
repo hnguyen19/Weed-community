@@ -1,0 +1,439 @@
+---
+output: 
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+bibliography: ecol.bib
+---
+
+Diagnosis plots for all the statistical models used in "Impact of cropping system diversification on vegetative and reproductive characteristics of waterhemp (Amaranthus tuberculatus)" with `ggResidpanel` [@goodeGgResidpanelPanelsInteractive2019].
+
+
+```{r, include=FALSE}
+library(emmeans)
+library(here)
+library(tidyverse)
+library(lme4)
+library(magrittr)
+library(ggResidpanel)
+library(patchwork)
+knitr::opts_chunk$set(message = FALSE, 
+                      error = FALSE, 
+                      warning = FALSE, 
+                      fig.width = 8, #change number specs to balance plot size and resolution
+                      fig.height = 8,
+                      fig.fullwidth = T,
+                     # fig.path = here("4 Graphs/"), 
+                      dev=c("png"),
+                      fig.pos = "H", 
+                      table.placement = "H")
+
+# Always log-transform possitive data: https://statmodeling.stat.columbia.edu/2019/08/21/you-should-usually-log-transform-your-positive-data/
+```
+
+#### Crop yield at the experiment site {-}
+
+Crop identity in these yield models represented rotation system (2-year, 3-year or 4-year) for corn and soybean or 3-year and 4-year for oat.  
+
+```{r, include=FALSE}  
+### Experiment site crop yields
+corn <- read_csv("../2-Data/Clean/corn_1720_clean.csv")
+corn  %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+soy <-  read_csv("../2-Data/Clean/soybean_1720_clean.csv")
+soy  %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+oat <- read_csv("../2-Data/Clean/oat_g_1720_clean.csv")
+oat  %<>%  mutate_at(c("Block","Crop_ID", "Year"),funs(factor(.)))
+
+```
+
+
+```{r corn-mod, echo = TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on corn yield over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect corn yield?
+
+corn.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block + 
+                    Crop_ID*Corn_weed_management + 
+                    (1|Year) +
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) + 
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) ,
+  data=corn) #corn was harvested on hafl-plot basis
+
+resid_panel(corn.lmer, "all")
+```
+
+```{r soy-mod, echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on soybean yield over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect soybean yield?
+
+soy.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block + 
+                   Crop_ID*Corn_weed_management + 
+                   (1|Year) + 
+                   (1|Year:Block) + 
+                   (1|Year:Crop_ID) + 
+                   (1|Year:Corn_weed_management) +
+                   (1|Year:Crop_ID:Corn_weed_management)  + 
+                   (1|Block:Year:Crop_ID),
+  data=soy) #soybean was harvested on hafl-plot basis
+
+resid_panel(soy.lmer, "all")
+```
+
+
+```{r oat-mod, echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity on oat yield over four years with four blocks of replication."}
+## Did crop identity affect oat yield?
+# crop identity represented rotation system (3-year or 4-year)
+
+oat.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID) +
+                   (1|Block:Year:Crop_ID),
+  data=oat) #oat was harvested in whol-plot basis 
+
+resid_panel(oat.lmer, "all")
+```
+
+
+#### Community ecological indices {-}  
+
+Crop identities in these ecological indices models were the combinations of the crop species names' one-letter abbreviation and the rotation to which the crop belonged.
+
+```{r, include=FALSE}
+dens_ind_1720 <- read.csv(here("2-Data/Clean/pldens_indices_1720_clean.csv"))
+
+#convert all id columns to factor 
+dens_ind_1720 %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+dens_ind_1720$Crop_ID <- factor(dens_ind_1720$Crop_ID,
+                                levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+dens_ind_1720$Crop <- factor(dens_ind_1720$Crop,
+                             levels = c("corn", "soybean", "oat", "alfalfa"))
+
+#dens_indices_1720 <- dens_ind_1720[,-c(1,2,3,8,13,14,16,17)] 
+
+#dens_ind_1720 <- dens_ind_1720[rowSums(dens_ind_1720[, 12:15]) > 0, ]
+```
+
+
+```{r dens-div-mod, echo = TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community density diversity index over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community diversity index?
+
+dens_diversity.lmer1 <- lmer(log(Diversity + 1) ~ Block + 
+                               Crop_ID*Corn_weed_management + 
+                               (1|Year) + (1|Year:Block) + 
+                               (1|Year:Crop_ID) + 
+                               (1|Year:Corn_weed_management) +
+                               (1|Year:Crop_ID:Corn_weed_management)  +
+                               (1|Block:Year:Crop_ID) , 
+                   data = dens_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))) 
+# summary(dens_diversity.lmer1)$sigma #0.27
+resid_panel(dens_diversity.lmer1, "all")
+```
+
+```{r dens-even-mod, echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community density evenness index over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community evenness index?
+
+#min(dens_ind_1720$Evenness[dens_ind_1720$Evenness > 0])  #0.016156463
+dens_even.lmer4 <- lmer(log(Evenness + 0.016156463) ~  Block + 
+                          Crop_ID * Corn_weed_management + 
+                          (1|Year) + 
+                          (1|Year:Block) + 
+                          (1|Year:Crop_ID) +
+                          (1|Year:Corn_weed_management) +
+                          (1|Year:Crop_ID:Corn_weed_management)  +
+                          (1|Block:Year:Crop_ID) , 
+                   data = dens_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))) 
+#summary(dens_even.lmer4)$sigma # 0.68 # second best sigma, better than arcsin sqrt transform and more spread out points
+
+resid_panel(dens_even.lmer4, "all")
+```
+
+```{r dens-rich-mod, echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community density richness index over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community density richness index?  
+
+dens_rich.lmer2 <- lmer(log(Richness+1) ~ Block + 
+                          Crop_ID * Corn_weed_management + 
+                          (1|Year) +
+                          (1|Year:Block) + 
+                          (1|Year:Crop_ID) +
+                         (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management) + 
+                         (1|Block:Year:Crop_ID) , 
+                   data = dens_ind_1720, 
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))) 
+# summary(dens_rich.lmer2)$sigma  #0.288
+resid_panel(dens_rich.lmer2, "all" )
+```
+
+
+```{r, include=FALSE}
+biom_ind_1720 <- read_csv("../2-Data/Clean/biom_indices_1720_clean.csv")
+
+#convert all id columns to factor 
+biom_ind_1720  %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+biom_ind_1720$Crop_ID <- factor(biom_ind_1720$Crop_ID, levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+# zero variance solutions in glmer and lmer models: https://rpubs.com/bbolker/6226
+# Block is fixed
+```
+
+```{r biom-div-mod, echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community aboveground mass diversity index over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community biomass diversity index?
+
+# min(biom_ind_1720$Diversity[biom_ind_1720$Diversity > 0])
+biom_diversity.lmer1 <- lmer(log(Diversity + 1 ) ~  Block + 
+                               Crop_ID * Corn_weed_management + 
+                               (1|Year) + 
+                               (1|Block:Year) + 
+                               (1|Year:Crop_ID) + 
+                               (1|Year:Corn_weed_management) + 
+                               (1|Year:Crop_ID:Corn_weed_management)  + 
+                               (1|Block:Year:Crop_ID)  , 
+                   data = biom_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))) 
+# summary(biom_diversity.lmer1)$sigma #0.25
+
+resid_panel(biom_diversity.lmer1, "all")
+```
+ 
+```{r biom-even-mod,  echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community aboveground mass evenness index over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community aboveground mass evenness index?
+min(biom_ind_1720$Evenness[biom_ind_1720$Evenness > 0]) 
+biom_even.lmer4 <- lmer(log(Evenness + 0.015101721 ) ~ Block + 
+                          Crop_ID * Corn_weed_management + 
+                        (1|Year) + (1|Year:Block) + 
+                       (1|Year:Crop_ID) + (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  + 
+                         (1|Block:Year:Crop_ID) , 
+                   data = biom_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))) 
+#summary(biom_even.lmer4)$sigma # 0.72 # second best sigma, points more spread-out 
+
+resid_panel(biom_even.lmer4, "all")
+```
+
+```{r biom-rich-mod,  echo=TRUE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community aboveground mass richness index over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community aboveground mass richness index?
+
+# min( biom_ind_1720$Richness[ biom_ind_1720$Richness > 0])
+biom_rich.lmer2 <- lmer(log(Richness + 1) ~  Block + 
+                          Crop_ID * Corn_weed_management + 
+                        (1|Year)  +
+                          (1|Year:Block) + 
+                       (1|Year:Crop_ID) +
+                         (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  +
+                         (1|Block:Year:Crop_ID) , 
+                   data = biom_ind_1720, 
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))) 
+
+#summary(biom_rich.lmer2)$sigma  #0.2935
+
+resid_panel(biom_rich.lmer2 , "all")
+```
+
+
+
+#### Total weed community density and aboveground mass {-}
+
+```{r, include=FALSE}
+# Read in community total biomass 
+total_biom_17_20 <- read_csv("../2-Data/Clean/biom_1720_clean.csv")
+
+total_biom <- total_biom_17_20[,-c(9:42)] #keep total abovegorund mass only
+
+total_biom <- total_biom   %<>%
+  mutate_at(c("Block","Crop_ID", "Corn_weed_management",  "Year"),
+            funs(factor(.)))
+
+total_biom$Crop_ID <- factor(total_biom$Crop_ID,
+                             levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+# Read in community total density
+total_dens_17_20 <- read_csv(here("2-Data/Clean/pldens_1720_clean.csv"))
+total_dens <- total_dens_17_20[,-c(9:42)] #keep total density only
+total_dens <- total_dens   %<>%
+  mutate_at(c("Block","Crop_ID", "Corn_weed_management", "Year"),
+            funs(factor(.)))
+
+total_dens$Crop_ID <- factor(total_dens$Crop_ID,
+                             levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+```
+
+```{r all-biom-mod, echo=FALSE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community aboveground mass over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community aboveground mass?
+
+# min( total_biom$Total[ total_biom$Total > 0]) #0.00108
+comm_biom_lmer <- lmer(log(Total + 0.00108)  ~ Block + 
+                        Crop_ID * Corn_weed_management + 
+                        (1|Year)  +
+                        (1|Year:Block) + 
+                       (1|Year:Crop_ID) + 
+                        (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  +
+                        (1|Block:Year:Crop_ID) ,
+                   data = total_biom) 
+
+
+resid_panel(comm_biom_lmer, "all")
+```
+
+```{r all-dens-mod, echo=FALSE, fig.cap="Diagnosis plot for the effect of crop identity and corn weed management on weed community density over four years with four blocks of replication."}
+## Did crop identity and corn weed management affect weed community density?
+
+# min( total_dens$Total[ total_dens$Total > 0]) #0.054
+comm_dens_lmer <- lmer(log(Total + 0.054)  ~ Block +
+                        Crop_ID * Corn_weed_management + 
+                        (1|Year)  + 
+                        (1|Year:Block) + 
+                       (1|Year:Crop_ID) + 
+                        (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  +
+                        (1|Block:Year:Crop_ID) ,
+                   data = total_dens) 
+
+resid_panel(comm_dens_lmer, "all")
+```
+
+#### Top seven species individual density {-}
+
+
+```{r, include=FALSE}
+# Read in individual weed species density 
+dens_1720 <- read.csv(here("2-Data/Clean/pldens_1720_clean.csv"))
+dens_1720_clean <- dens_1720 %>%
+  replace(is.na(.), 0) %>%
+  mutate(zOTHERS = Total - (AMATA + CHEAL + DIGSA + ECHCG + SETFA + SETLU + TAROF)) %>% #keep top seven species and sum all other species in to zOTHERS
+  dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
+    AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>% 
+  mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+
+
+biom_1720 <- read.csv(here("2-Data/Clean/biom_1720_clean.csv"))
+biom_1720_clean <- biom_1720 %>% 
+  replace(is.na(.), 0)%>%
+   mutate(zOTHERS = Total - (AMATA + CHEAL + DIGSA + ECHCG + SETFA + SETLU + TAROF)) %>% #keep top seven species and sum all other species in to zOTHERS
+  dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
+                AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>%
+  mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+
+
+# remove rows that sum to zeros https://www.tutorialspoint.com/how-to-remove-rows-that-contains-all-zeros-in-an-r-data-frame
+#dens_1720_clean <- dens_1720[rowSums(dens_1720[,13:46])>0,] 
+
+dens_1720_clean$Crop <- factor(dens_1720_clean$Crop, levels = c("corn", "soybean", "oat", "alfalfa"))
+dens_1720_clean$Crop_ID <- factor(dens_1720_clean$Crop_ID, levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+#biom_1720_clean <- biom_1720[rowSums(biom_1720[,13:46])>0,] 
+biom_1720_clean$Crop <- factor(biom_1720_clean$Crop, levels = c("corn", "soybean", "oat", "alfalfa"))
+
+biom_1720_clean$Crop_ID <- factor(biom_1720_clean$Crop_ID, levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+dens_1720_clean %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+biom_1720_clean %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+# Find minimum non-zero in each matrix, or in the Prop column of the long-format dframe  
+```
+
+
+```{r, echo=TRUE}
+
+##### Fit all species at once with split-fit-combine syntax 
+# https://stat585-at-isu.github.io/materials-2019/04_functional-programming/02_purrr.html#23
+
+
+# convert wide to long format 
+
+dens_1720_long <- dens_1720_clean %>% 
+  pivot_longer(!c(Crop:Corn_weed_management), 
+               names_to = "Species", values_to =  "Density")
+
+#singularity because of too many zeros in many species columns 
+
+
+# min(dens_1720_long$Density[dens_1720_long$Density>0]) #0.05396072
+
+dens_result_t <- dens_1720_long %>%
+  group_by(Species) %>% 
+  nest() %>%
+  mutate(models=map(data,~lmer(log(Density + 0.05396072) ~ Block + Crop_ID +
+                                 Corn_weed_management  +
+                                 Crop_ID:Corn_weed_management + 
+                                 (1|Year) + (1|Year:Block) + 
+                                 (1|Year:Crop_ID) + 
+                                 (1|Year:Corn_weed_management) + 
+                                 (1|Year:Crop_ID:Corn_weed_management)  +
+                                 (1|Block:Year:Crop_ID) ,data =.x))) %>%
+  ungroup %>%
+  mutate(diag_plots = map(models, resid_panel, "all"),
+    jts = map(models, joint_tests),
+         across(diag_plots:jts, setNames,  .$Species))
+```
+
+
+```{r sp-dens-diag, echo=FALSE, fig.cap= "Diagnosis plot for the effect of crop identity and corn weed management on the aboveground mass of (A) - AMATA, (B) - CHEAL, (C) - DIGSA, (D) - ECHCG, (E) - SETFA, (F) - SETLU, and (G) - TAROF", fig.height=22, fig.width=22}
+
+list(dens_result_t$diag_plots$AMATA,
+dens_result_t$diag_plots$CHEAL,
+dens_result_t$diag_plots$DIGSA,
+dens_result_t$diag_plots$ECHCG,
+dens_result_t$diag_plots$SETFA,
+dens_result_t$diag_plots$SETLU,
+dens_result_t$diag_plots$TAROF) %>%
+  wrap_plots() +
+  plot_annotation(tag_levels = "A")
+```
+
+#### Top seven species individual aboveground mass {-}
+
+```{r, echo=TRUE}
+
+biom_1720_long <- biom_1720_clean %>% 
+  pivot_longer(!c(Crop:Corn_weed_management), 
+               names_to = "Species", values_to =  "Biomass")
+
+# min(biom_1720_long$Biomass[biom_1720_long$Biomass>0]) # 0.0005396072
+
+biom_result_t <- biom_1720_long %>%
+  group_by(Species) %>% 
+  nest() %>%
+  mutate(models=map(data,~lmer(log(Biomass + 0.0005396072) ~ Block + 
+                                 Crop_ID +  Corn_weed_management +
+                                 Crop_ID:Corn_weed_management +
+                                 (1|Year) + (1|Year:Block) + 
+                                 (1|Year:Crop_ID) + 
+                                 (1|Year:Corn_weed_management) + 
+                                 (1|Year:Crop_ID:Corn_weed_management)  +
+                                 (1|Block:Year:Crop_ID),data =.x))) %>%
+  ungroup %>%
+  mutate(jts = map(models, joint_tests),
+         diag_plots = map(models, resid_panel,"all"), 
+across(jts:diag_plots, setNames,  .$Species))
+
+```
+
+```{r sp-biom-diag, echo=FALSE, fig.cap= "Diagnosis plot for the effect of crop identity and corn weed management on the density of (A) - AMATA, (B) - CHEAL, (C) - DIGSA, (D) - ECHCG, (E) - SETFA, (F) - SETLU, and (G) - TAROF", fig.height=22, fig.width=22}
+
+list(biom_result_t$diag_plots$AMATA,
+biom_result_t$diag_plots$CHEAL,
+biom_result_t$diag_plots$DIGSA,
+biom_result_t$diag_plots$ECHCG,
+biom_result_t$diag_plots$SETFA,
+biom_result_t$diag_plots$SETLU,
+biom_result_t$diag_plots$TAROF) %>%
+  wrap_plots() +
+  plot_annotation(tag_levels = "A")
+```
+
+
