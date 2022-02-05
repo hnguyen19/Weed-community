@@ -11,7 +11,7 @@ The following folders are populated as the manuscript submission progresses.
 
 4-Data-wrangling: `.R` files with codes to clean the raw data  
 
-5-Analysis: `.Rmd` executable files to analyze the data and render report. Each `.Rmd` file is devoted to address one set of hypothesis.
+5-Analysis: `.Rmd` executable files to analyze the data and render report. Each `.Rmd` file is devoted to address one set of questions.
 + Crop_yields.Rmd: Did rotation and corn herbicide affect crop yield? How are yields at the experiment site compared to Iowa's and Boone County's yields?
 + Community.Rmd: Did crop identity and corn herbicide affect community diversity, evenness, and richness indices? How?  
 + Individual-sp-difference.Rmd: Did crop identity and corn herbicide affect individual density and aboveground mass of 7 most abundant species? How?  
