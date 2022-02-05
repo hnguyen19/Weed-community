@@ -5,7 +5,6 @@ output:
     toc: false
     number_sections: false
     extra_dependencies: ["float"]
-bibliography: ecol.bib
 ---
 
 
@@ -33,16 +32,8 @@ library(magrittr)
 library(lme4)
 library(kableExtra)
 theme_set(theme_bw())
-<<<<<<< HEAD
 library(ggResidpanel)
 library(gridExtra)
-=======
-source("functions.R") 
-library(ggResidpanel)
-#library(lemon)
-library(gridExtra)
-#RNGkind(sample.kind = "Rounding")
->>>>>>> fd81336defee112302aadeef9eb15831252ae278
 ```
 
 
@@ -448,9 +439,7 @@ seven_pval_clean <- seven_pval[c(1,2,
 
 seven_pval_clean$Contrast <- gsub("", "", seven_pval_clean$Contrast)
 seven_pval_clean$Contrast <- gsub("low ", "", seven_pval_clean$Contrast)
-# everything character, 
 
-# 0.0000 become <.0001
 seven_pval_round <- seven_pval_clean %>% 
   mutate(across(where(is.numeric), ~ sprintf("%.4f", .))) %>% #keep 4 decimal places
   mutate(across(0.0000, ~ as.character)) %>% 
@@ -458,17 +447,13 @@ seven_pval_round <- seven_pval_clean %>%
             pattern = '0.0000', 
             replacement = '<.0001') %>%
     mutate_all(function(x) gsub("0.0000", "<.0001",x))
- # mutate(across(is.character, "<.0001")) #not working
+
 
 
 seven_pval_round %>%
   `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
   kbl(longtable = FALSE, booktabs = TRUE, linesep = "", align = 'lrrrrrrrrrrrrrr',
-<<<<<<< HEAD
     caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
-=======
-    caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>% 
->>>>>>> fd81336defee112302aadeef9eb15831252ae278
   add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
   add_header_above(c(" "= 1,  " p-values " = 14)) %>%
     column_spec(8, border_left = FALSE, border_right = TRUE) %>%
@@ -477,7 +462,7 @@ seven_pval_round %>%
   pack_rows("(C) - Crop type effects", 10, 13) %>%
   kable_styling(latex_options = "scale_down") %>%
   landscape() %>%
-  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3: soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 
 ```
 
@@ -518,13 +503,9 @@ seven_ct_clean %>%
   `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
   kbl(longtable = FALSE, booktabs = TRUE, digits = 2,
       linesep = "", align = 'lrrrrrrrrrrrrrr',
-<<<<<<< HEAD
     caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
-=======
-    caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>% 
->>>>>>> fd81336defee112302aadeef9eb15831252ae278
   add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
-  add_header_above(c(" "= 1,  " Contrast ratio " = 14)) %>%
+  add_header_above(c(" " = 1, " Contrast ratio " = 14)) %>%
     column_spec(8, border_left = FALSE, border_right = TRUE) %>%
   pack_rows("(A) - Rotation system effects", 1, 4) %>%
   pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%

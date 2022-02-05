@@ -44,7 +44,7 @@ row.names(herb_id) <- NULL
 
 
 ```{r herb-id, echo=FALSE}
-herb_id[-c(3:5,10:12,17:19,24:26,32:34,37:39,42:44,47:49),] %>%
+herb_id %>%
   `colnames<-` (c("Year", "Activity or input", rep(c("Low herbicide", "Conventional herbicide"), 2))) %>%
   kbl(longtable = FALSE, linesep = "", row.names = FALSE,
       caption = "Crop variety or hybrid and management from 2017 to 2020") %>%

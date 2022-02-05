@@ -45,20 +45,16 @@ A lack of any obvious bias in plots of residuals versus predicted values suggest
 
 
 ```{r, child = "../5-Analysis/Crop_yields.Rmd"}
-
 ```
+
 
 ```{r, child = "../5-Analysis/Community.Rmd"}
-#, include=FALSE
 ```
+
 
 ```{r, child = "../5-Analysis/Individual-sp-difference.Rmd"}
-
 ```
 
-```{r, child = "../5-Analysis/Individual-sp-difference.Rmd"}
-
-```
 
 
 # Discussion {-}
