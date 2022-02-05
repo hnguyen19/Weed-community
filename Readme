@@ -4,15 +4,25 @@ Weed communities in three cropping systems suitable for the Midwestern USA were 
 The following folders are populated as the manuscript submission progresses. 
 
 1-Background: motivation to conduct the research and relevant .pdf of the literature   
+
 2-Data: raw and clean data sheets  
+
 3-Picture: graphics for manuscript submission.
+
 4-Data-wrangling: `.R` files with codes to clean the raw data  
+
 5-Analysis: `.Rmd` executable files to analyze the data and render report. Each `.Rmd` file is devoted to address one set of hypothesis.
 + Crop_yields.Rmd: Did rotation and corn herbicide affect crop yield? How are yields at the experiment site compared to Iowa's and Boone County's yields?
 + Community.Rmd: Did crop identity and corn herbicide affect community diversity, evenness, and richness indices? How?  
 + Individual-sp-difference.Rmd: Did crop identity and corn herbicide affect individual density and aboveground mass of 7 most abundant species? How?  
-6_Draft: to put everything together in Manuscript_whole.Rmd. `ecol.bib` (the Zotero generated bibliography) `Introduction.Rmd`, `MandM.Rmd`, and `Discussion.Rmd` live here.   
-7-Extra: anything else relevant but does not fit into the previous 6 folders. 
+
+6_Draft: to put everything together in Manuscript_whole.Rmd. 
++ `ecol.bib` (the Zotero generated bibliography)
++ `Introduction.Rmd`
++ `MandM.Rmd` 
++ `Discussion.Rmd`  
+
+7-Extra: AppendixA-model-diagnosis.Rmd - model diagnosis
 
 General workflow:  
 1 - Each `.Rmd` file is devoted to address one hypothesis. 
@@ -20,7 +30,6 @@ General workflow:
   i) a latex-figure folder with all the figures from the `.Rmd` files.
   ii) a `.tex` file and a `.pdf` file.  
 3 - The `.tex` file is uploaded to Overleaf for final polishing that are very inconvenient or impossible to do in R. 
-
 
 
 I sincerely thank the R user community, `bookdown` authors, Zotero, and ISU Lunchinators for inspiration, coaching, and troubleshooting. 
