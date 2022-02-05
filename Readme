@@ -5,7 +5,7 @@ The following folders are populated as the manuscript submission progresses.
 
 1-Background: motivation to conduct the research and relevant .pdf of the literature   
 2-Data: raw and clean data sheets  
-3-Doc: data management plan and logistical documents  
+3-Picture: graphics for manuscript submission.
 4-Data-wrangling: `.R` files with codes to clean the raw data  
 5-Analysis: `.Rmd` executable files to analyze the data and render report. Each `.Rmd` file is devoted to address one set of hypothesis.
 + Crop_yields.Rmd: Did rotation and corn herbicide affect crop yield? How are yields at the experiment site compared to Iowa's and Boone County's yields?
