@@ -44,10 +44,6 @@ csl: apa-no-ampersand.csl
 A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with `ggResidpanel` version 0.3.0 [@goodeGgResidpanelPanelsInteractive2019] are available in the Data Repository.  
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 899473a44ee85fd37ef64ae46c31d4ef5f021498
 ```{r, child = "../5-Analysis/Crop_yields.Rmd"}
 
 ```
