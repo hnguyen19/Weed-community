@@ -1,0 +1,1940 @@
+---
+output: 
+  bookdown::pdf_document2: 
+    keep_tex: yes
+    toc: false
+    number_sections: false
+    extra_dependencies: ["float"]
+---
+```{r,  echo=FALSE, message=FALSE, warning=FALSE}
+#install.packages("here")
+library(emmeans)
+library(here)
+library(readr)
+#need relative path for figures
+knitr::opts_chunk$set(message = FALSE, 
+                      error = FALSE, 
+                      warning = FALSE, 
+                     # fig.width = 8, #change number specs to balance plot size and resolution
+                    #  fig.height = 8,
+                      fig.fullwidth = TRUE,
+                     # fig.path = here("4 Graphs/"), 
+                      dev=c("png"),
+                     fig.pos = "H", 
+                      table.placement = "H")
+                   #   out.extra = "")
+
+library(data.table)
+library(tidyverse)
+library(magrittr)
+library(lme4)
+library(kableExtra)
+theme_set(theme_bw())
+source("functions.R") 
+library(gridExtra)
+library(lemon)
+#RNGkind(sample.kind = "Rounding")
+```
+
+
+
+```{r, include=FALSE}
+### Ecological indices calculated with plant population densities
+
+dens_ind_1720 <- read.csv(here("2-Data/Clean/pldens_indices_1720_clean.csv"))
+
+#convert all id columns to factor 
+dens_ind_1720 %<>% 
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
+            funs(factor(.)))
+
+dens_ind_1720$Crop_ID <- factor(dens_ind_1720$Crop_ID,
+                                levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+
+dens_ind_1720$Crop <- factor(dens_ind_1720$Crop,
+                             levels = c("corn", "soybean", "oat", "alfalfa"))
+```
+
+
+```{r, include=FALSE}
+dens_diversity.lmer1 <- lmer(log(Diversity+1) ~ Block + 
+                               Crop_ID * Corn_weed_management +
+                               (1|Year) + 
+                               (1|Year:Block) +
+                               (1|Year:Crop_ID) + 
+                               (1|Year:Corn_weed_management) +
+                               (1|Year:Crop_ID:Corn_weed_management) + 
+                               (1|Block:Year:Crop_ID) , 
+                   data = dens_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4))) 
+summary(dens_diversity.lmer1)$sigma #0.28
+
+
+
+min(dens_ind_1720$Evenness[dens_ind_1720$Evenness > 0]) 
+dens_even.lmer4 <- lmer(log(Evenness+0.016156463) ~  Block + 
+                          Crop_ID * Corn_weed_management +
+                          (1|Year) + 
+                          (1|Year:Block) +
+                          (1|Year:Crop_ID) + 
+                          (1|Year:Corn_weed_management) + 
+                          (1|Year:Crop_ID:Corn_weed_management) +
+                          (1|Block:Year:Crop_ID) , 
+                   data = dens_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4))) 
+summary(dens_even.lmer4)$sigma # 0.68 # second best sigma, better than arcsin sqrt transform and more spread out points
+
+
+dens_rich.lmer2 <- lmer(log(Richness+1) ~ Block + 
+                          Crop_ID * Corn_weed_management + 
+                          (1|Year) +
+                          (1|Year:Block) + 
+                          (1|Year:Crop_ID) +
+                          (1|Year:Corn_weed_management) + 
+                          (1|Year:Crop_ID:Corn_weed_management) + 
+                          (1|Block:Year:Crop_ID) , 
+                   data = dens_ind_1720, 
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4))) 
+summary(dens_rich.lmer2)$sigma  #0.288
+
+```
+
+
+```{r, include=FALSE}
+
+### Ecological indices calculated with plant population biomass densities
+biom_ind_1720 <- read_csv("../2-Data/Clean/biom_indices_1720_clean.csv")
+
+#convert all id columns to factor 
+biom_ind_1720  %<>%  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),funs(factor(.)))
+
+biom_ind_1720$Crop_ID <- factor(biom_ind_1720$Crop_ID, levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+```
+
+```{r, include=FALSE}
+# zero variance: https://rpubs.com/bbolker/6226
+# Block is fixed
+min(biom_ind_1720$Diversity[biom_ind_1720$Diversity > 0])
+biom_diversity.lmer1 <- lmer(log(Diversity + 1 ) ~  Block + 
+                               Crop_ID * Corn_weed_management +
+                               (1|Year) + 
+                               (1|Block:Year) + 
+                               (1|Year:Crop_ID) + 
+                               (1|Year:Corn_weed_management) + 
+                               (1|Year:Crop_ID:Corn_weed_management) +
+                               (1|Block:Year:Crop_ID)  , 
+                   data = biom_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore", 
+                                                                     tol = 1e-4))) 
+summary(biom_diversity.lmer1)$sigma #0.25
+
+ 
+
+min(biom_ind_1720$Evenness[biom_ind_1720$Evenness > 0]) 
+biom_even.lmer4 <- lmer(log(Evenness + 0.015101721 ) ~ Block + 
+                          Crop_ID * Corn_weed_management + 
+                          (1|Year) +
+                          (1|Year:Block) + 
+                          (1|Year:Crop_ID) +
+                          (1|Year:Corn_weed_management) + 
+                          (1|Year:Crop_ID:Corn_weed_management) +
+                          (1|Block:Year:Crop_ID) , 
+                   data = biom_ind_1720,
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4))) 
+summary(biom_even.lmer4)$sigma # 0.72 # second best sigma, points more spread-out 
+
+# Always log-transform positive data: https://statmodeling.stat.columbia.edu/2019/08/21/you-should-usually-log-transform-your-positive-data/
+
+min( biom_ind_1720$Richness[ biom_ind_1720$Richness > 0])
+biom_rich.lmer2 <- lmer(log(Richness + 1) ~  Block + 
+                          Crop_ID * Corn_weed_management + 
+                          (1|Year) + 
+                          (1|Year:Block) + 
+                          (1|Year:Crop_ID) + 
+                          (1|Year:Corn_weed_management) + 
+                          (1|Year:Crop_ID:Corn_weed_management) +
+                          (1|Block:Year:Crop_ID) , 
+                   data = biom_ind_1720, 
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4))) 
+summary(biom_rich.lmer2)$sigma  #0.2935
+
+#reduced model
+biom_rich.lmer2_r <- lmer(log(Richness + 1) ~  Block + 
+                            Crop_ID +
+                            Corn_weed_management + 
+                            (1|Year) +
+                            (1|Year:Block) + 
+                            (1|Year:Crop_ID) + 
+                            (1|Year:Corn_weed_management) + 
+                            (1|Block:Year:Crop_ID) , 
+                   data = biom_ind_1720, 
+                   control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4))) 
+summary(biom_rich.lmer2_r)$sigma  #0.3143426
+
+```
+
+
+```{r, echo=FALSE}
+## density portion
+dens_diversity_jt <- print(joint_tests(emmeans(dens_diversity.lmer1, c('Crop_ID', 'Corn_weed_management'))), export = TRUE)
+dens_even_jt <- print(joint_tests(emmeans(dens_even.lmer4, c('Crop_ID', 'Corn_weed_management'))), export = TRUE)
+dens_rich_jt <- print(joint_tests(emmeans(dens_rich.lmer2, c('Crop_ID', 'Corn_weed_management'))), export = TRUE)
+
+dens_index_jt <- rbind(dens_diversity_jt$summary, dens_even_jt$summary, dens_rich_jt$summary)
+
+
+dens_index_jt_df <- as.data.frame(dens_index_jt)
+
+# make sure that all numeric columns, except p-value, are numeric
+dens_index_jt_df[,c(2:4)] <- sapply(dens_index_jt_df[,c(2:4)],as.numeric)
+
+# round to 2 digits
+dens_index_jt_rounded <- dens_index_jt_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) %>%
+  mutate(across(where(is.numeric), as.character))# %>% #remove trailing zeros
+#  as_tibble 
+
+## biomass portion
+biom_diversity_jt <- print(joint_tests(emmeans(biom_diversity.lmer1,c('Crop_ID', 'Corn_weed_management'))), export = TRUE)
+biom_even_jt <- print(joint_tests(emmeans(biom_even.lmer4,c('Crop_ID', 'Corn_weed_management'))), export = TRUE)
+biom_rich_jt <- print(joint_tests(emmeans(biom_rich.lmer2,c('Crop_ID', 'Corn_weed_management'))), export = TRUE)
+
+biom_index_jt <- rbind( biom_diversity_jt$summary, biom_even_jt$summary, biom_rich_jt$summary) #total biomass, followed by ecological indices
+
+biom_index_jt_df <- as.data.frame(biom_index_jt)
+
+# make sure that all numeric columns, except p-value, are numeric
+biom_index_jt_df[,c(2:4)] <- sapply(biom_index_jt_df[,c(2:4)],as.numeric)
+
+# round to 2 digits
+biom_index_jt_rounded <- biom_index_jt_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) %>%
+  mutate(across(where(is.numeric), as.character))
+```
+
+#### How did rotation system, crop species, and corn weed management affect community ecological indices? {-}  
+
+Crop identity (i.e., rotation system x crop phase combination) significantly affected weed aboveground mass diversity (p-value = 0.0007, Table \@ref(tab:all-index-jt)A), evenness (p-value = 0.0003, Table \@ref(tab:all-index-jt)B), and richness (p-values = 0.013); and stand density evenness (p-value = 0.0064) and richness (p-value = 0.0123, Table \@ref(tab:all-index-jt)C). The ecological indices in each crop phrase, averaged over blocks, years and corn weed management are shown in Figure \@ref(fig:index-arrow-p). The results of contrasts for the effects of rotation systems, rotation system within individual crops, and crop types on community ecological indices are shown in Tables \@ref(tab:dens-indices-ct) and \@ref(tab:biom-indices-ct). For all the significantly differences in ecological indices, crop types were more influential than rotations, with larger differences found across crop types than across rotations.   
+
+```{r all-index-jt, echo=FALSE}
+all_index_jt <-  cbind(dens_index_jt_rounded, biom_index_jt_rounded)  
+rownames(all_index_jt) <- NULL
+
+# remove "_" and replace ":" with "x"
+all_index_jt$`model term                  ` <- gsub("_", " ", all_index_jt$`model term                  `)
+all_index_jt$`model term                  ` <- gsub(":", " x ", all_index_jt$`model term                  `)
+
+all_index_jt[,-c(6:8)] %>%
+  `colnames<-` (c("Source of variation", "df1", "df2", rep(c("F.value","p.value"),2))) %>%
+kable(longtable = FALSE, booktabs = TRUE, digits = 2, align = "lrrrrrr",
+    caption = "ANOVAs of crop identity, corn weed management, and their interactive effects on weed community ecological indices") %>%
+  add_header_above(c(" " = 3, "Stand density" = 2, "Aboveground mass" = 2)) %>%
+    column_spec(5, border_left = FALSE, border_right = TRUE) %>%
+  pack_rows("(A) - Community diversity", 1, 3) %>%
+  pack_rows("(B) - Community evenness", 4, 6) %>%
+  pack_rows("(C) - Community richness", 7, 9) %>%
+  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system in which it occured: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+
+```
+
+
+```{r index-arrow-p, echo=FALSE, fig.cap= "Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.", fig.width= 8, fig.height=13}
+
+## Community stand density ecological indices arrow plots
+dens_diversity_plot <-  arrow_plot(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE),
+                                        type = "response"),
+                                x_label = "Stand diversity index",
+                                title_p = "A")  + xlim(0,4)
+
+dens_even_plot <-  arrow_plot(emmeans(dens_even.lmer4, ~ Crop_ID, 
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           x_label = "Stand evenness index", 
+                           title_p = "B") + xlim(0, 0.35)
+
+dens_rich_plot <-  arrow_plot(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           x_label = "Stand richness index", title_p = "C")
+
+## Community aboveground mass ecological indices arrow plots
+biom_diversity_plot <-  arrow_plot(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE), 
+                                        type = "response"),
+                                x_label = "Aboveground mass diversity index",
+                                title_p = "D") + xlim(0,4)
+
+biom_even_plot <-  arrow_plot(emmeans(biom_even.lmer4, ~ Crop_ID, 
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           x_label = "Aboveground mass evenness index",
+                           title_p = "E") + xlim(0, 0.35)
+
+biom_rich_plot <-  arrow_plot(emmeans(biom_rich.lmer2, ~ Crop_ID, 
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           x_label = "Aboveground mass richness index", 
+                           title_p = "F")
+
+## Combine all the arrow plots into one plane 
+grid.arrange(dens_diversity_plot, 
+             biom_diversity_plot,
+             dens_even_plot,
+             biom_even_plot,
+             dens_rich_plot, 
+             biom_rich_plot,
+             nrow = 3)
+```
+
+_In general, the hypothesis that "weed communities in the more diverse cropping systems are more diverse" was supported._   
+
+Averaged over crop phases within each rotation system (Table \@ref(tab:dens-indices-ct)A), the weed stand diversity index for the 3-year and 4-year rotation systems was comparable with that in the 2-year rotation (p-values = 0.0535 and 0.1575). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed stand density diversity index was comparable among rotations (p-values > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed stand density diversity index was significantly different between the average for the cool season crops (O3, O4, and A4) and the average for the warm season crops (C2, S2, C3, S3, C4, and S4) (p-value = 0.0145), but similar between the warm season and cool season crops in the same rotations (p-values = 0.4666 and 0.0987). The weed stand density diversity index was similar between oat and alfalfa (p-value = 0.7762). 
+
+Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed aboveground mass diversity index was significantly different between the 2-year rotation and the average of the 3-year and 4-year rotations (p-value = 0.0148), and between the 3-year and 4-year rotations (p-value = 0.0209). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed aboveground mass diversity index was similar between rotations (p-values = 0.4217 and 0.2426). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed aboveground mass diversity index was comparable across rotations, except for oat (p-value = 0.0351). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed aboveground mass diversity index was significantly different between the cool season crops and warm season crops averages (p-values < 0.0001) and between the cool season and warm season crops within the same rotation (p-values = 0.034 and 0.0037). The weed aboveground mass diversity index was comparable between oat and alfalfa (p-value = 0.2583).  
+
+
+_The hypothesis that "weed communities in the more diverse cropping systems are more even" was partially supported (Figure \@ref(fig:index-arrow-p)B and E)._ However, a lower community evenness index can occur because the presence of rarer species decreases the overall evenness index [@stirlingEmpiricalRelationshipsSpecies2001]. More details to support this concept are presented later (Figure \@ref(fig:all-sp-dens-biom)C and D).    
+
+
+Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed stand density evenness index was significantly different between the 2-year rotation and the average of the 3-year and 4-year rotations (p-value = 0.006), but comparable between the 3-year and 4-year rotations (p-value = 0.2802). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed stand density evenness index was comparable between rotations (p-values = 0.1539 and 0.5031). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed stand density evenness index was comparable between rotations (p-values > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed stand density evenness index was significantly different between the cool season crops average and the warm season crops average (p-value = 0.0002) and between the cool season and warm season crop in the 4-year rotation (p-value = 0.0012), but similar between the warm season and cool season crops in the 3-year rotation (p-values = 0.4418). The weed stand density evenness index was comparable between oat and alfalfa (p-value = 0.8986).  
+
+Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed aboveground mass evenness index was significantly different between the 2-year rotation and the average of 3-year and 4-year rotations (p-value = 0.0012), but similar between the 3-year and 4-year rotations (p-value = 0.0802). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), weed aboveground mass evenness index was comparable between rotations (p-values = 0.1081 and 0.8682). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed aboveground mass evenness index was comparable across rotations (p-values > 0.05), except for oat (p-value = 0.0189). For different crop types (Table \@ref(tab:biom-indices-ct)C), the weed aboveground mass evenness index was significantly different between the cool season crops average and the warm season crops average (p-value < 0.0001) and between the cool season and warm season crops in the 4-year rotation (p-value = 0.0002), but comparable between the warm season and cool season crops in the 3-year rotation (p-values = 0.141). The weed aboveground mass evenness index was comparable between oat and alfalfa (p-value = 0.5911).  
+
+_The hypothesis that "the weed communities in the more diverse cropping systems are more species-rich" was supported._ 
+
+Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed stand density richness index was comparable in the 2-year rotation and in the average of the 3-year and 4-year rotations  (p-values = 0.1819), but significantly different between the 3-year and 4-year rotation (p-value = 0.0257). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), weed aboveground mass richness index was comparable between the 2-year rotation and the 3-year and 4-year rotations average (p-value = 0.7996) and between the 3-year and 4-year rotations (p-value = 0.3469). For individual crops (Table \@ref(tab:dens-indices-ct)B), the weed stand density richness index was comparable between rotations (p-values > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed stand density richness index was significantly different between the cool season crops average and the warm season crops average (p-value = 0.0003) and between the cool season and warm season crops in the 4-year rotation (p-value = 0.0034), but comparable between the warm season and cool season crops in the 3-year rotation (p-values = 0.0725). The weed stand density richness index was comparable between oat and alfalfa (p-value = 0.9499). 
+
+
+Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed aboveground mass richness index was comparable in the 2-year rotation and in the average of the 3-year and 4-year rotations (p-values = 0.1967), but significantly different between the 3-year and 4-year rotations (p-value = 0.0309). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed aboveground mass richness index was comparable between the 2-year rotation and the 3-year and 4-year rotations average (p-value = 0.7694) and between the 3-year and 4-year rotations (p-value = 0.393). For the same crop types, (Table \@ref(tab:biom-indices-ct)B), the weed aboveground mass richness index was comparable across rotations (p-values > 0.05). For different crop types (Table \@ref(tab:biom-indices-ct)C), the weed aboveground richness index was significantly different between the cool season and warm season crop averages (p-value = 0.0003) and between the cool season and warm season crops in the 4-year rotation (p-value = 0.0766), but comparable between the cool season and warm season crops in the 3-year rotation (p-value = 0.0766). The weed aboveground mass richness index was comparable between oat and alfalfa (p-value = 0.9506).    
+
+```{r, include=FALSE}
+## Coefficients for customized contrasts 
+C2 <- c(1,rep(0,8)); C3 <- c(0,0,1,rep(0,6)); C4 <- c(rep(0,5),1,rep(0,3))
+S2 <- c(0, 1,rep(0,7)); S3 <- c(rep(0,3), 1,rep(0,5)); S4 <- c(rep(0,6),1,rep(0,2))
+O3 <- c(rep(0,4), 1, rep(0,4)); O4 <- c(rep(0,7),1,0)
+A4 <- c(rep(0,8), 1)
+
+
+##### Did rotation affect density diversity, average over all crop phases within the same rotation?
+## 2-year vs (3-year + 4-year)/2
+dens_diversity_2yrvs34yr <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = 
+                                                           ((C2+S2)/2) - ((C3+S3+O3+C4+S4+O4+A4)/7))),
+                                  export = TRUE)
+
+## 3-year vs 4-year
+dens_diversity_3yrvs4yr = print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
+                                                 infer = c(FALSE,TRUE), 
+                                                 type = "response"),
+                                         method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = 
+                                                         ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )), 
+                                export = TRUE)
+## 2-year vs 3-year 
+dens_diversity_2yrvs3yr <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
+                                                  infer = c(FALSE,TRUE), 
+                                                  type = "response"),
+                                          method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = 
+                                                          ((C2+S2)/2) - ((C3+S3+O3)/3) )),
+                                 export = TRUE)
+
+## 2-year vs 4-year 
+dens_diversity_2yrvs4yr = print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                                 infer = c(FALSE,TRUE),  
+                                                 type = "response"), 
+                                         method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" = 
+                                                         ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )), 
+                                export = TRUE)
+
+
+## Corn and soybean average: (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+dens_diversity_CS2yr_vs_CS34yr <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                                         infer = c(FALSE,TRUE),
+                                                         type = "response"), 
+                                                 method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" = 
+                                                                 ((C2+S2)/2) - ((C3+S3+C4+S4)/4) )),
+                                        export = TRUE)
+
+## Corn and soybean average: (C3+S3)/2 vs. C4+S4)/2
+dens_diversity_CS3yr_vs_CS4yr <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                                        infer = c(FALSE,TRUE), 
+                                                        type = "response"),
+                                                method = list("[(C3+S3)/2] vs [(C4+S4)/2]" =
+                                                                ((C3+S3)/2) - ((C4+S4)/2) )),
+                                       export = TRUE)
+
+
+##### Did crop species affect density diversity, across rotations?
+
+#### 3yr: summer vs. cool season crops: (C3+S3)/2 vs. O3
+dens_diversity_CS3_vs_O3 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("O3 vs [(C3+S3)/2]" = O3 - (C3+S3)/2)),
+                                  export = TRUE)
+
+#### 4yr: summer vs. cool season crops: (C4+S4)/2 vs. (O4+A4)/2 
+dens_diversity_CS4_vs_OA4 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                                    infer = c(FALSE,TRUE),
+                                                    type = "response"), 
+                                            method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = 
+                                                            ((A4+O4)/2) - ((C4+S4)/2))), 
+                                   export = TRUE)
+
+#### all summer vs. all cool season crops: 
+dens_diversity_summer_vs_cool <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
+                                                        infer = c(FALSE,TRUE),
+                                                        type = "response"),
+                                                method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" =
+                                                                 ((O3+A4+O4)/3) - ((C2+S2+C3+S3+C4+S4)/6)) ), 
+                                       export = TRUE)
+
+#### Did rotation affect diversity in density composition for the communities grew in the same crop species?  
+# Corn: C2 vs (C3+C4)/2 
+dens_diversity_C2vs3_4 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
+                                                 infer = c(FALSE,TRUE),
+                                                 type = "response"),
+                                         method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+                                export = TRUE)
+# Corn: C3 vs C4
+dens_diversity_C3vs4 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE), 
+                                               type = "response",
+                                               at = list(Crop_ID = c( "C3", "C4"))), "pairwise"),
+                              export = TRUE) #not included in the final table
+
+
+# Soybean: S2 vs (S3+S4)/2 
+dens_diversity_S2vs3_4 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
+                                                 infer = c(FALSE,TRUE), 
+                                                 type = "response"), 
+                                         method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )), 
+                                export = TRUE)
+
+# Soybean: S3 vs S4
+dens_diversity_S3vs4 <-print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response",
+                                              at = list(Crop_ID = c( "S3", "S4"))), "pairwise"),
+                             export = TRUE) #not included in the final table
+
+
+# Oat: O3 vs O4
+dens_diversity_oat <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response", 
+                                             at = list(Crop_ID = c("O3", "O4"))), "pairwise"), 
+                            export = TRUE)
+
+# oat vs alfalfa
+dens_diversity_OA <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"), 
+                                    method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)),
+                           export = TRUE)
+
+
+###### Biomass #######
+##### Did rotation affect density diversity, average over all crop phases within the same rotation?
+
+#2-year vs (3-year + 4-year)/2
+biom_diversity_2yrvs34yr <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = 
+                                                           (C2+S2)/2 - (C3+S3+O3+C4+S4+O4+A4)/7 )),
+                                  export = TRUE)
+
+#3-year vs 4-year average
+biom_diversity_3yrvs4yr = print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                 infer = c(FALSE,TRUE), 
+                                                 type = "response"), 
+                                         method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = 
+                                                         ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+                                export = TRUE)
+
+#2-year vs 3-year average
+biom_diversity_2yrvs3yr <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                  infer = c(FALSE,TRUE),
+                                                  type = "response"),
+                                          method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = 
+                                                          ((C2+S2)/2) - ((C3+S3+O3)/3) )), 
+                                 export = TRUE)
+
+#2-year vs 4-year average
+biom_diversity_2yrvs4yr = print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID, 
+                                                 infer = c(FALSE,TRUE), 
+                                                 type = "response"),
+                                         method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" =
+                                                         ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+                                export = TRUE)
+
+#Corn and soybean average: (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+biom_diversity_CS2yr_vs_CS34yr <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                         infer = c(FALSE,TRUE), 
+                                                         type = "response"),
+                                                 method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" = 
+                                                                 ((C2+S2)/2) - ((C3+S3+C4+S4))/4)),
+                                        export = TRUE)
+
+## Corn and soybean average: (C3+S3)/2 vs. C4+S4)/2
+biom_diversity_CS3yr_vs_CS4yr <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                        infer = c(FALSE,TRUE), 
+                                                        type = "response"), 
+                                                method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = 
+                                                                ((C3+S3)/2) - ((C4+S4)/2))),
+                                       export = TRUE)
+
+
+####### Does crop species affect biomass diversity, different crops, averaged across rotations
+biom_diversity_CS3_vs_O3 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("O3 vs [(C3+S3)/2]" = O3 - (C3+S3)/2)),
+                                  export = TRUE)
+
+#### 4yr: summer vs. cool season crops
+## (C4+S4)/2 vs. (O4+A4)/2 
+biom_diversity_CS4_vs_OA4 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                    infer = c(FALSE,TRUE),  
+                                                    type = "response"),
+                                            method = list("[(O4+A4)/2] vs [(C4+S4)/2]" =
+                                                            ((A4+O4)/2) - ((C4+S4)/2))),
+                                   export = TRUE)
+
+#### all summer vs. all cool season crops 
+biom_diversity_summer_vs_cool <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID, 
+                                                        infer = c(FALSE,TRUE), 
+                                                        type = "response"),
+                                                method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" = 
+                                                                 ((O3+A4+O4)/3) - ((C2+S2+C3+S3+C4+S4)/6))) ,
+                                       export = TRUE)
+
+
+# Corn: C2 vs (C3+C4)/2 
+
+biom_diversity_C2vs3_4 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                 infer = c(FALSE,TRUE), 
+                                                 type = "response"),
+                                         method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+                                export = TRUE)
+# Corn: C3 vs C4
+biom_diversity_C3vs4 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE), 
+                                               type = "response", 
+                                               at = list(Crop_ID = c( "C3", "C4"))), "pairwise"),
+                              export = TRUE) #not included in the final table
+
+# S2 vs (S3+S4)/2 and S3 vs S4
+biom_diversity_S2vs3_4 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                                 infer = c(FALSE,TRUE), 
+                                                 type = "response"),
+                                         method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )),
+                                export = TRUE)
+
+biom_diversity_S3vs4 <-print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID, 
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response", 
+                                              at = list(Crop_ID = c( "S3", "S4"))), "pairwise"),
+                             export = TRUE) #not included in the final table
+
+
+# O3 vs O4
+biom_diversity_oat <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                             infer = c(FALSE,TRUE),
+                                             type = "response", 
+                                             at = list(Crop_ID = c("O3", "O4"))), "pairwise"),
+                            export = TRUE)
+
+# oat vs alfalfa
+biom_diversity_OA <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"), 
+                                    method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)),
+                           export = TRUE)
+```
+
+```{r, include=FALSE}
+
+#### Did rotation affect community stand density evenness? 
+## Rotation effect, overall:
+dens_even_2yrvs34yr <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response"),
+                                      method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" =
+                                                      (C2+S2)/2 - (C3+S3+O3+C4+S4+O4+A4)/7 )),
+                             export = TRUE)
+
+
+dens_even_3yrvs4yr = print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID, 
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"), 
+                                    method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" =
+                                                    ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+                           export = TRUE)
+
+
+dens_even_2yrvs4yr <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID, 
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"),
+                                     method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" = 
+                                                     (C2+S2)/2 - (C4+S4+O4+A4)/4 )),
+                            export = TRUE)
+
+
+dens_even_2yrvs3yr = print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"),
+                                    method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" =
+                                                    (C2+S2)/2 - ((C3+S3+O3)/3) )),
+                           export = TRUE)
+
+## (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+dens_even_CS2yr_vs_CS34yr <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                                    infer = c(FALSE,TRUE), 
+                                                    type = "response"),
+                                            method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" =
+                                                            ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+                                   export = TRUE)
+
+## (C3+S3)/2 vs. C4+S4)/2
+dens_even_CS3yr_vs_CS4yr <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE),
+                                                   type = "response"),
+                                           method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = 
+                                                           ((C3+S3)/2) - ((C4+S4)/2))),
+                                  export = TRUE)
+
+#### Does crop phenology affect density evenness 
+dens_evenn_CS3_vs_O3 <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE),
+                                               type = "response"),
+                                       method = list("O3 vs [(C3+S3)/2]" = O3 - (C3+S3)/2)), 
+                              export = TRUE)
+
+#### 4yr: summer vs. cool
+## (C4+S4)/2 vs. (O4+A4)/2 
+dens_even_CS4_vs_OA4 <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE),
+                                               type = "response"),
+                                       method = list("[(O4+A4)/2] vs [(C4+S4)/2]" =
+                                                       ((A4+O4)/2) - ((C4+S4)/2))),
+                              export = TRUE)
+
+#### all summer vs. all cool
+dens_even_summer_vs_cool <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" =
+                                                           ( ((O3+A4+O4)/3)) - ((C2+S2+C3+S3+C4+S4)/6))),
+                                  export = TRUE)
+
+#### Does rotation affect evenness in density composition for the communities grew in the same crop species?  
+# C2 vs (C3+C4)/2 and C3 vs C4
+dens_even_C2vs3_4 <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"), 
+                                    method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2))),
+                           export = TRUE)
+
+dens_even_C3vs4 <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                          infer = c(FALSE,TRUE),
+                                          type = "response", 
+                                          at = list(Crop_ID = c( "C3", "C4"))),"pairwise"),
+                         export = TRUE) #not included in the final table
+
+# S2 vs (S3+S4)/2 and S3 vs S4
+dens_even_S2vs3_4 <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID, 
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )),
+                           export = TRUE)
+
+dens_even_S3vs4 <-print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                         infer = c(FALSE,TRUE), 
+                                         type = "response", 
+                                         at = list(Crop_ID = c( "S3", "S4"))),"pairwise"),
+                        export = TRUE) #not included in the final table
+
+# O3 vs O4
+dens_even_oat <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE),
+                                        type = "response",
+                                        at = list(Crop_ID = c("O3", "O4"))),"pairwise"), export = TRUE)
+
+# oat vs alfalfa
+dens_even_OA <- print(contrast(emmeans(dens_even.lmer4, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE), 
+                                       type = "response"), 
+                               method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)), export = TRUE)
+
+###### Biomass #######
+#### Does rotation affect biomass evenness 
+
+biom_even_2yrvs34yr <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                              infer = c(FALSE,TRUE),
+                                              type = "response"),
+                                      method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" =
+                                                      (C2+S2)/2 - (C3+S3+O3+C4+S4+O4+A4)/7 )),
+                             export = TRUE)
+
+
+biom_even_3yrvs4yr = print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"), 
+                                    method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = 
+                                                    ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )), 
+                           export = TRUE)
+
+
+biom_even_2yrvs3yr <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"),
+                                     method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = 
+                                                     ((C2+S2)/2) - ((C3+S3+O3)/3) )),
+                            export = TRUE)
+
+
+biom_even_2yrvs4yr = print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" =
+                                                    ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+                           export = TRUE)
+
+
+## (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+biom_even_CS2yr_vs_CS34yr <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                                    infer = c(FALSE,TRUE), 
+                                                    type = "response"),
+                                            method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" =
+                                                            ((C2+S2)/2) - ((C3+S3+C4+S4)/4))), 
+                                   export = TRUE)
+
+## (C3+S3)/2 vs. C4+S4)/2
+biom_even_CS3yr_vs_CS4yr <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID, 
+                                                   infer = c(FALSE,TRUE),
+                                                   type = "response"),
+                                           method = list("[(C3+S3)/2] vs [(C4+S4)/2]" =
+                                                           ((C3+S3)/2) - ((C4+S4)/2))),
+                                  export = TRUE)
+
+#### Does crop phenology affect biomass evenness?
+
+biom_even_CS3_vs_O3 <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID, 
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response"),
+                                      method = list("O3 vs [(C3+S3)/2]" = O3 - ((C3+S3)/2))), 
+                             export = TRUE)
+
+#### 4yr: summer vs. cool
+## (C4+S4)/2 vs. (O4+A4)/2 
+biom_even_CS4_vs_OA4 <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE),
+                                               type = "response"), 
+                                       method = list("[(O4+A4)/2] vs [(C4+S4)/2]" =
+                                                       ((A4+O4)/2) - ((C4+S4)/2))), 
+                              export = TRUE)
+
+#### all summer vs. all cool
+biom_even_summer_vs_cool <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE),
+                                                   type = "response"),
+                                           method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" = 
+                                                           ((O3+A4+O4)/3)  - ((C2+S2+C3+S3+C4+S4)/6))), 
+                                  export = TRUE)
+
+# C2 vs (C3+C4)/2 and C3 vs C4
+biom_even_C2vs3_4 <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"),
+                                    method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+                           export = TRUE)
+
+biom_even_C3vs4 <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID, 
+                                          infer = c(FALSE,TRUE), 
+                                          type = "response",
+                                          at = list(Crop_ID = c( "C3", "C4"))), "pairwise"), 
+                         export = TRUE) 
+
+# S2 vs (S3+S4)/2 and S3 vs S4
+biom_even_S2vs3_4 <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2))),
+                           export = TRUE)
+
+biom_even_S3vs4 <-print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                         infer = c(FALSE,TRUE), 
+                                         type = "response", 
+                                         at = list(Crop_ID = c( "S3", "S4"))),  "pairwise"), 
+                        export = TRUE) 
+
+# O3 vs O4
+biom_even_oat <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID, 
+                                        infer = c(FALSE,TRUE), 
+                                        type = "response",
+                                        at = list(Crop_ID = c("O3", "O4"))),"pairwise"),
+                       export = TRUE)
+
+# oat vs alfalfa
+biom_even_OA <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE), 
+                                       type = "response"), 
+                               method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)), 
+                      export = TRUE)
+```
+
+```{r, include=FALSE}
+
+#### Did rotation affect density richness?
+
+dens_rich_2yrvs34yr <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                              infer = c(FALSE,TRUE),
+                                              type = "response"),
+                                      method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" =
+                                                      ((C2+S2)/2) - ((C3+S3+O3+C4+S4+O4+A4)/7) )),
+                             export = TRUE)
+
+
+dens_rich_3yrvs4yr <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID, infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" =
+                                                    ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+                           export = TRUE)
+
+dens_rich_2yrvs3yr <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID, 
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"),
+                                     method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" =
+                                                     ((C2+S2)/2) - ((C3+S3+O3)/3) )),
+                            export = TRUE)
+
+
+dens_rich_2yrvs4yr = print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" =
+                                                    ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+                           export = TRUE)
+
+## (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+dens_rich_CS2yr_vs_CS34yr <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                                    infer = c(FALSE,TRUE),
+                                                    type = "response"),
+                                            method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" =
+                                                            ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+                                   export = TRUE)
+
+## (C3+S3)/2 vs. C4+S4)/2
+dens_rich_CS3yr_vs_CS4yr <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE),
+                                                   type = "response"),
+                                           method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = 
+                                                           ((C3+S3)/2) - ((C4+S4)/2))),
+                                  export = TRUE)
+
+#### Does crop phenology affect density richness 
+
+## (C3+S3)/2 vs. O3
+dens_rich_CS3_vs_O3 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID, 
+                                              infer = c(FALSE,TRUE),
+                                              type = "response"),
+                                      method = list("O3 vs [(C3+S3)/2]" = O3 - (C3+S3)/2)),
+                             export = TRUE)
+
+#### 4yr: summer vs. cool
+## (C4+S4)/2 vs. (O4+A4)/2 
+dens_rich_CS4_vs_OA4 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE),
+                                               type = "response"),
+                                       method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = 
+                                                       ((A4+O4)/2) - ((C4+S4)/2))), 
+                              export = TRUE)
+
+#### all summer vs. all cool
+dens_rich_summer_vs_cool <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE),
+                                                   type = "response"), 
+                                           method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" =
+                                                           ( ((O3+A4+O4)/3)) - ((C2+S2+C3+S3+C4+S4)/6) )),
+                                  export = TRUE)
+
+
+#### Does rotation affect richness in density composition for the communities grew in the same crop species?  
+# C2 vs (C3+C4)/2 and C3 vs C4
+dens_rich_C2vs3_4 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"),
+                                    method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2))),
+                           export = TRUE)
+
+
+dens_rich_C3vs4 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID, 
+                                          infer = c(FALSE,TRUE), 
+                                          type = "response", 
+                                          at = list(Crop_ID = c( "C3", "C4"))),"pairwise"), export = TRUE) #not included in the final table
+
+
+# S2 vs (S3+S4)/2 and S3 vs S4
+dens_rich_S2vs3_4 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID, 
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )), 
+                           export = TRUE)
+
+dens_rich_S3vs4 <-print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                         infer = c(FALSE,TRUE), 
+                                         type = "response", 
+                                         at = list(Crop_ID = c( "S3", "S4"))), "pairwise"), 
+                        export = TRUE) #not included in the final table
+
+# O3 vs O4
+dens_rich_oat <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE), 
+                                        type = "response",
+                                        at = list(Crop_ID = c("O3", "O4"))),"pairwise"), export = TRUE)
+
+#### Does species affect richness in density composition for the communities grew across crop phases?
+dens_rich_2y <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE),
+                                       type = "response",
+                                       at = list(Crop_ID = c("C2", "S2"))),"pairwise"), export = TRUE)  #not included in the final table
+
+dens_rich_O3vsCS3 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"), 
+                                    method = list("O3 vs [(C3+S3)/2]" = O3 - ((C3+S3)/2))), export = TRUE)
+  
+dens_rich_C3vsS3 <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID, infer = c(FALSE,TRUE),
+                                           type = "response", 
+                                           at = list(Crop_ID = c("C3", "S3"))), "pairwise"),
+                          export = TRUE)
+
+dens_rich_4y <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE), 
+                                       type = "response",
+                                       at = list(Crop_ID = c("C4", "S4", "O4", "A4"))), 
+                               "pairwise"), export = TRUE)
+
+# oat vs alfalfal
+dens_rich_OA <- print(contrast(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE),
+                                       type = "response"),
+                               method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)), 
+                      export = TRUE)
+
+###### Biomass #######
+
+#### Does rotation affect biomass diversity
+biom_rich_2yrvs34yr <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID, 
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response"),
+                                      method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" =
+                                                      (C2+S2)/2 - (C3+S3+O3+C4+S4+O4+A4)/7 )), 
+                             export = TRUE)
+
+
+biom_rich_3yrvs4yr = print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"),
+                                    method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = 
+                                                    ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+                           export = TRUE)
+
+biom_rich_2yrvs3yr <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"),
+                                     method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" =
+                                                     (C2+S2)/2 - (C3+S3+O3)/3 )),
+                            export = TRUE)
+
+
+biom_rich_2yrvs4yr = print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE),
+                                            type = "response"), 
+                                    method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" =
+                                                    ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )), 
+                           export = TRUE)
+
+## (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+biom_rich_CS2yr_vs_CS34yr <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                                    infer = c(FALSE,TRUE),
+                                                    type = "response"),
+                                            method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" =
+                                                            ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+                                   export = TRUE)
+
+## (C3+S3)/2 vs. C4+S4)/2
+biom_rich_CS3yr_vs_CS4yr <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE),
+                                                   type = "response"),
+                                           method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = 
+                                                           ((C3+S3)/2) - ((C4+S4)/2))),
+                                  export = TRUE)
+
+##### Does crop phenology affect biomqss richness 
+## (C3+S3)/2 vs. O3
+biom_rich_CS3_vs_O3 <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response"),
+                                      method = list("O3 vs [(C3+S3)/2]" = O3 - ((C3+S3)/2))),
+                             export = TRUE)
+
+#### 4yr: summer vs. cool
+## (C4+S4)/2 vs. (O4+A4)/2 
+biom_rich_CS4_vs_OA4 <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                               infer = c(FALSE,TRUE),
+                                               type = "response"),
+                                       method = list("[(O4+A4)/2] vs [(C4+S4)/2]" =
+                                                       ((A4+O4)/2) - ((C4+S4)/2))),
+                              export = TRUE)
+
+#### all summer vs. all cool
+biom_rich_summer_vs_cool <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" = 
+                                                           ( ((O3+A4+O4)/3)) - ((C2+S2+C3+S3+C4+S4)/6))),
+                                  export = TRUE)
+
+# C2 vs (C3+C4)/2 and C3 vs C4
+biom_rich_C2vs3_4 <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"), 
+                                    method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+                           export = TRUE)
+
+biom_rich_C3vs4 <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID, 
+                                          infer = c(FALSE,TRUE),
+                                          type = "response",
+                                          at = list(Crop_ID = c("C3", "C4"))), "pairwise"), 
+                         export = TRUE) #not included in the final table
+
+# S2 vs (S3+S4)/2 and S3 vs S4
+biom_rich_S2vs3_4 <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID, 
+                                            infer = c(FALSE,TRUE), 
+                                            type = "response"),
+                                    method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2))),
+                           export = TRUE)
+
+biom_rich_S3vs4 <-print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                         infer = c(FALSE,TRUE),  
+                                         type = "response", 
+                                         at = list(Crop_ID = c("S3", "S4"))),  "pairwise"),
+                        export = TRUE) #not included in the final table
+
+# O3 vs O4
+biom_rich_oat <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID, 
+                                        infer = c(FALSE,TRUE),
+                                        type = "response",
+                                        at = list(Crop_ID = c("O3", "O4"))), "pairwise"), 
+                       export = TRUE)
+
+# oat vs alfalfal
+biom_rich_OA <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE), 
+                                       type = "response"), 
+                               method = list("[(O3+O4)/2] vs A4" = ( ((O3+O4)/2)) - A4)),
+                      export = TRUE)
+```
+
+
+```{r diversity-ct, echo=FALSE}
+dens_diversity <- rbind(dens_diversity_2yrvs34yr$summary,
+                        dens_diversity_3yrvs4yr$summary,
+                        dens_diversity_CS2yr_vs_CS34yr$summary,
+                        dens_diversity_CS3yr_vs_CS4yr$summary,
+                        dens_diversity_C2vs3_4$summary,
+                        dens_diversity_C3vs4$summary,
+                        dens_diversity_S2vs3_4$summary,
+                        dens_diversity_S3vs4$summary,
+                        dens_diversity_oat$summary,
+                        dens_diversity_summer_vs_cool$summary,
+                        dens_diversity_CS3_vs_O3$summary,
+                        dens_diversity_CS4_vs_OA4$summary,
+                        dens_diversity_OA$summary)
+
+dens_diversity_df <- as.data.frame(dens_diversity)
+
+dens_diversity_df[,c(2:6)] <- sapply(dens_diversity_df[,c(2:6)],as.numeric)
+
+dens_diversity_rounded <- dens_diversity_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) #%>%
+ # mutate(across(where(is.numeric), as.character)) #%>% #remove trailing zeros
+#  as_tibble 
+
+
+biom_diversity <- rbind(biom_diversity_2yrvs34yr$summary,
+                        biom_diversity_3yrvs4yr$summary,
+                        biom_diversity_CS2yr_vs_CS34yr$summary,
+                        biom_diversity_CS3yr_vs_CS4yr$summary,
+                        biom_diversity_C2vs3_4$summary,
+                        biom_diversity_C3vs4$summary,
+                        biom_diversity_S2vs3_4$summary,
+                        biom_diversity_S3vs4$summary,
+                        biom_diversity_oat$summary,
+                        biom_diversity_summer_vs_cool$summary,
+                        biom_diversity_CS3_vs_O3$summary,
+                        biom_diversity_CS4_vs_OA4$summary,
+                        biom_diversity_OA$summary)
+
+
+biom_diversity_df <- as.data.frame(biom_diversity)
+
+biom_diversity_df[,c(2:6)] <- sapply(biom_diversity_df[,c(2:6)],as.numeric)
+
+biom_diversity_rounded <- biom_diversity_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) #%>%
+#  mutate(across(where(is.numeric), as.character)) #%>% #remove trailing zeros
+#  as_tibble 
+```
+
+```{r even-ct, echo=FALSE}
+dens_even <- rbind(dens_even_2yrvs34yr$summary,
+                   dens_even_3yrvs4yr$summary,
+                   dens_even_CS2yr_vs_CS34yr$summary,
+                   dens_even_CS3yr_vs_CS4yr$summary,
+                   dens_even_C2vs3_4$summary,
+                   dens_even_C3vs4$summary,
+                   dens_even_S2vs3_4$summary,
+                   dens_even_S3vs4$summary,
+                   dens_even_oat$summary,
+                   dens_even_summer_vs_cool$summary,
+                   dens_evenn_CS3_vs_O3$summary,
+                   dens_even_CS4_vs_OA4$summary,
+                   dens_even_OA$summary)
+dens_even_df <- as.data.frame(dens_even)
+
+dens_even_df[,c(2:6)] <- sapply(dens_even_df[,c(2:6)],as.numeric)
+
+dens_even_rounded <- dens_even_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+biom_even <- rbind(biom_even_2yrvs34yr$summary,
+                   biom_even_3yrvs4yr$summary,
+                   biom_even_CS2yr_vs_CS34yr$summary,
+                   biom_even_CS3yr_vs_CS4yr$summary,
+                   biom_even_C2vs3_4$summary,
+                   biom_even_C3vs4$summary,
+                   biom_even_S2vs3_4$summary,
+                   biom_even_S3vs4$summary,
+                   biom_even_oat$summary,
+                   biom_even_summer_vs_cool$summary,
+                   biom_even_CS3_vs_O3$summary,
+                   biom_even_CS4_vs_OA4$summary,
+                   biom_even_OA$summary)
+
+
+biom_even_df <- as.data.frame(biom_even)
+
+biom_even_df[,c(2:6)] <- sapply(biom_even_df[,c(2:6)],as.numeric)
+
+biom_even_rounded <- biom_even_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+```
+
+```{r rich-ct, echo=FALSE}
+dens_rich <- rbind(dens_rich_2yrvs34yr$summary,
+                   dens_rich_3yrvs4yr$summary,
+                   dens_rich_CS2yr_vs_CS34yr$summary,
+                   dens_rich_CS3yr_vs_CS4yr$summary,
+                   dens_rich_C2vs3_4$summary,
+                   dens_rich_C3vs4$summary,
+                   dens_rich_S2vs3_4$summary,
+                   dens_rich_S3vs4$summary,
+                   dens_rich_oat$summary,
+                   dens_rich_summer_vs_cool$summary,
+                   dens_rich_CS3_vs_O3$summary,
+                   dens_rich_CS4_vs_OA4$summary,
+                   dens_rich_OA$summary)
+
+dens_rich_df <- as.data.frame(dens_rich)
+
+dens_rich_df[,c(2:6)] <- sapply(dens_rich_df[,c(2:6)],as.numeric)
+dens_rich_rounded <- dens_rich_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+
+biom_rich <- rbind(biom_rich_2yrvs34yr$summary,
+                   biom_rich_3yrvs4yr$summary,
+                   biom_rich_CS2yr_vs_CS34yr$summary,
+                   biom_rich_CS3yr_vs_CS4yr$summary,
+                   biom_rich_C2vs3_4$summary,
+                   biom_rich_C3vs4$summary,
+                   biom_rich_S2vs3_4$summary,
+                   biom_rich_S3vs4$summary,
+                   biom_rich_oat$summary,
+                   biom_rich_summer_vs_cool$summary,
+                   biom_rich_CS3_vs_O3$summary,
+                   biom_rich_CS4_vs_OA4$summary,
+                   biom_rich_OA$summary)
+
+
+biom_rich_df <- as.data.frame(biom_rich)
+
+biom_rich_df[,c(2:6)] <- sapply(biom_rich_df[,c(2:6)],as.numeric)
+
+biom_rich_rounded <- biom_rich_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+```
+
+```{r dens-indices-ct, echo=FALSE}
+#each dataframe has to be rounded before left_join
+
+dens_index <-  dens_diversity_rounded %>% 
+  left_join(dens_even_rounded, by =  "contrast                                 ") %>%
+  left_join(dens_rich_rounded, by =  "contrast                                 ") 
+# replace "/" with vs  
+dens_index$`contrast                                 ` <- gsub(" / ", " vs ", dens_index$`contrast                                 ` )
+  
+
+dens_index[,-c(3:6,9:12,15:18)] %>%  
+  `colnames<-` (c("Contrast", rep(c("ratio", "p.value"), 3))) %>% #null, SE, df, t.ratio removed
+kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
+    caption = "Weed stand density ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+   add_header_above(c(" " = 1, "Diversity index" = 2, "Evenness index" = 2, "Richness index" = 2))  %>%
+  pack_rows("(A) - Rotation system effects", 1, 4) %>%
+  pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
+  pack_rows("(C) - Crop type effects", 10, 13)%>%
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4: oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation", threeparttable = TRUE, footnote_as_chunk = TRUE)
+```
+
+
+```{r biom-indices-ct, echo=FALSE}
+#each dataframe has to be rounded before left_join
+biom_index <-  biom_diversity_rounded  %>% 
+  left_join(biom_even_rounded, by =  "contrast                                 ") %>%
+  left_join(biom_rich_rounded, by =  "contrast                                 ") 
+
+# replace "/" with vs
+biom_index$`contrast                                 ` <- gsub(" / ", " vs ", biom_index$`contrast                                 ` )
+
+
+biom_index[,-c(3:6,9:12,15:18)] %>%
+  `colnames<-` (c("Contrast", rep(c("ratio", "p.value"), 3))) %>% #null, SE, df, t.ratio removed
+kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
+    caption = "Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+   add_header_above(c(" " = 1, "Diversity index" = 2, "Evenness index" = 2, "Richness index" = 2))  %>%
+  pack_rows("(A) - Rotation system effects", 1, 4) %>%
+  pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
+  pack_rows("(C) - Crop type effects", 10, 13) %>%
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation", threeparttable = TRUE, footnote_as_chunk = TRUE)
+```
+
+
+#### General description of the weed flora{-}   
+
+Overall, 34 weed species were identified during the four years of data collection (Table \@ref(tab:list-sp)). Combined over four years of data, seven weed species, SETFA (*Setaria faberi*), AMATA (*Amaranthus tuberculatus*), CHEAL (*Chenopodium album*), DIGSA (*Digitaria sanguinalis*), ECHCG (*Echinochloa crus-galli*), SETLU (*Setaria glauca*), and TAROF (*Taraxacum officinale*) made up 94.4% of the total weed density and 94.0% of the total weed biomass (Figure \@ref(fig:all-sp-dens-biom)C and D).    
+
+
+```{r list-sp, echo=FALSE}
+list_sp <- read.csv(here("2-Data/Clean/all-sp.csv"))
+names(list_sp) <- c("Bayer", "Sci_name", "Common name", "Life cycle")
+ita_sp <- list(list_sp$Bayer,
+               "Sci_name" = c("$Abutilon~theophrasti$$~$ Medicus", 
+              "$Amaranthus~retrofelxus$$~$ L.",
+              "$Amaranthus~tuberculatus$$~$ (Moq.) Sauer~var.~$rudis$",
+              "$Ambrosia~artemissifolia$$~$ L.",
+              "$Arctium~minus$$~$ (Hill) Bernh.",
+              "$Chenopodium~album$$~$ L.",
+              "$Cirsium~arvense$$~$ (L.) Scop.",
+              "$Cirsium~vulgare$$~$ (Savi) Tenore",
+              "$Euphorbia~humistrata$$~$ Engelm.$~$ex$~$Gray",
+              "$Euphorbia~maculata$$~$ L.",
+              "$Eupatorium~hyssopifolium$$~$ L.",
+              "$Morus~alba$$~$ L.",
+              "$Physalis~subglabrata$$~$ Mackenz. and Bush",
+              "$Plantago~major$$~$ L.",
+              "$Polygonum~pensylvanicum$$~$ L.",
+              "$Polygonum~perfoliatum$$~$ L.",
+              "$Portulaca~oleracea$$~$ L.",
+              "$Solanum~ptycanthum$$~$ Dun.",
+              "$Sonchus~arvensis$$~$ L.",
+              "$Taraxacum~officinale$$~$Weberin$~$Wiggers",
+              "$Elytrigia~repens$$~$ (L.) Nevski",
+              "$Bromus~tectorum$$~$ L.",
+              "$Cenchrus~longispinus$$~$ (Hack.) Fern.",
+              "$Convolvulus~arvensis$$~$ L.",
+              "$Cyperus~esculentus$$~$ L.",
+              "$Dactylis~glomerata$$~$ L.",
+              "$Digitaria~sanguinalis$$~$~(L.)~Scop.",
+              "$Echinochloa~crus-galli$$~$ (L.) Beauv.",
+              "$Eriochloa~villosa$$~$ (Thunb.) Kunth",
+              "$Festuca$$~$ spp.",   
+              "$Panicum~capillare$$~$ L.",
+              "$Panicum~dichotomiflorum$$~$Michx.",
+              "$Setaria~faberi$$~$ Herrm.",
+              "$Setaria~glauca$$~$ (L.) Beauv."),
+              list_sp$`Life cycle`)
+
+
+
+#list_sp_final <- list_sp %>% left_join(ita_sp, by = c("Bayer","Sci_name"))
+
+ita_sp %>%
+    as.data.frame()%>%
+  kable(longtable = FALSE, "latex", linesep = " ", 
+      escape = FALSE,
+      caption = "List of weed species (in alphabetical order) found from 2017 to 2020 field seasons.",
+      col.names = c("Bayer code", "Scientific name", "Life cycle")) %>%
+  pack_rows("(A) - Dicotyledon species", 1,21) %>% 
+  pack_rows("(B) - Monocotyledon species", 21,34)
+```
+
+```{r, include = FALSE}
+## Read in total weed community aboveground mass 
+total_biom_17_20 <- read_csv(here("2-Data/Clean/biom_1720_clean.csv"))
+total_biom <- total_biom_17_20[,-c(1,9:42)]  # remove single aboveground mass 
+total_biom <- total_biom   %<>%
+  mutate_at(c("Block","Crop_ID", "Corn_weed_management", "Year"),
+            funs(factor(.)))
+
+total_biom$Crop_ID <- factor(total_biom$Crop_ID,
+                             levels = c("C2", "S2",
+                                        "C3", "S3", "O3",
+                                        "C4", "S4", "O4", "A4"))
+
+## Read in total weed community stand density mass 
+total_dens_17_20 <- read_csv(here("2-Data/Clean/pldens_1720_clean.csv"))
+total_dens <- total_dens_17_20[,-c(1,9:42)] # remove single species density
+total_dens <- total_dens   %<>%
+  mutate_at(c("Block","Crop_ID", "Corn_weed_management",  "Year"),
+            funs(factor(.)))
+
+total_dens$Crop_ID <- factor(total_dens$Crop_ID, 
+                             levels = c("C2", "S2",
+                                        "C3", "S3", "O3",
+                                        "C4", "S4", "O4", "A4"))
+
+```
+
+
+
+```{r, include=FALSE}
+#+ 0.0005)
+## Did crop identity and corn weed management affect total weed community aboveground mass?  
+
+min( total_biom$Total[ total_biom$Total > 0]) #0.00108
+comm_biom_lmer <- lmer(log(Total+0.00108)  ~ Block + 
+                        Crop_ID * Corn_weed_management + 
+                        (1|Year)  + 
+                        (1|Year:Block) + 
+                        (1|Year:Crop_ID) + 
+                        (1|Year:Corn_weed_management) + 
+                        (1|Year:Crop_ID:Corn_weed_management)  +
+                        (1|Block:Year:Crop_ID) ,
+                   data = total_biom) 
+
+
+min( total_dens$Total[ total_dens$Total > 0]) #0.054
+
+## Did crop identity and corn weed management affect total weed community stand density?  
+comm_dens_lmer <- lmer(log(Total + 0.054)  ~ Block + 
+                        Crop_ID * Corn_weed_management + 
+                        (1|Year)  + 
+                        (1|Year:Block) + 
+                        (1|Year:Crop_ID) + 
+                        (1|Year:Corn_weed_management) + 
+                        (1|Year:Crop_ID:Corn_weed_management) +
+                        (1|Block:Year:Crop_ID) ,
+                   data = total_dens) 
+
+
+## ANOVA tables for the effects of crop identity and corn weed management on total stand density and aboveground mass 
+
+comm_dens_jt <- print(joint_tests(emmeans(comm_dens_lmer,
+                                         c("Crop_ID","Corn_weed_management"))),
+                     export = TRUE)
+# save 
+comm_dens_jt_df <- as.data.frame(comm_dens_jt$summary)
+
+#convert F.ratio column to numeric for rounding later
+comm_dens_jt_df$F.ratio <- as.numeric(comm_dens_jt_df$F.ratio)
+
+
+comm_dens_jt_rounded <- comm_dens_jt_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+
+comm_biom_jt <- print(joint_tests(emmeans(comm_biom_lmer, 
+                                         c("Crop_ID","Corn_weed_management"))),
+                     export = TRUE)
+comm_biom_jt_df <- as.data.frame(comm_biom_jt$summary)
+
+#convert F.ratio column to numeric for rounding later
+comm_biom_jt_df$F.ratio <- as.numeric(comm_biom_jt_df$F.ratio)
+
+
+comm_biom_jt_rounded <- comm_biom_jt_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+```
+
+
+```{r, include=FALSE}
+## Coefficients for customized contrasts
+C2 <- c(1,rep(0,8)); C3 <- c(0,0,1,rep(0,6)); C4 <- c(rep(0,5),1,rep(0,3))
+
+S2 <- c(0, 1,rep(0,7)); S3 <- c(rep(0,3), 1,rep(0,5)); S4 <- c(rep(0,6),1,rep(0,2))
+
+O3 <- c(rep(0,4), 1, rep(0,4)); O4 <- c(rep(0,7),1,0)
+
+A4 <- c(rep(0,8), 1)
+
+##### Did rotation affect density diversity, average over all crop phases within the same rotation?
+
+#### Rotation effects, overall ####
+## 2-year vs (3-year + 4-year)/2
+comm_dens_2yrvs34yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"),
+                                     method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" =
+                                                     (C2+S2)/2 - (C3+S3+O3+C4+S4+O4+A4)/7 )),
+                            export = TRUE)
+
+## 3-year vs 4-year 
+comm_dens_3yrvs4yr = print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE),
+                                           type = "response"),
+                                   method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" =
+                                                   ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+                          export = TRUE) 
+
+## 2-year vs 4-year  
+comm_dens_2yrvs4yr = print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE),
+                                           type = "response"), 
+                                   method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" =
+                                                   ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+                          export = TRUE)
+
+## 2-year vs 3-year  
+comm_dens_2yrvs3yr = print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"), 
+                                   method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = 
+                                                   ((C2+S2)/2) - ((C3+S3+O3)/3) )),
+                          export = TRUE)
+
+#### Rotation effect, by each crop species  
+
+## Corn and soybean (warm season crops average): (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+comm_dens_CS2yr_vs_CS34yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" =
+                                                           ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+                                  export = TRUE)
+
+## Corn and soybean (warm season crops average): (C3+S3)/2 vs. C4+S4)/2
+comm_dens_CS3yr_vs_CS4yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                                  infer = c(FALSE,TRUE), 
+                                                  type = "response"), 
+                                          method = list("[(C3+S3)/2] vs [(C4+S4)/2]" =
+                                                          ((C2+S2)/2) - ((C4+S4)/2))), 
+                                 export = TRUE)
+
+
+##### Did crop phenology affect density diversity, across rotations?
+
+#### 3yr: summer vs. cool season crops
+
+## (C3+S3)/2 vs. O3
+comm_dens_CS3_vs_O3 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                             infer = c(FALSE,TRUE),
+                                             type = "response"),
+                                     method = list("O3 vs [(C3+S3)/2]" = O3 - ((C2+S2)/2))),
+                            export = TRUE)
+
+#### 4yr: summer vs. cool season crops
+## (C4+S4)/2 vs. (O4+A4)/2 
+comm_dens_CS4_vs_OA4 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response"), 
+                                      method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = ((A4+O4)/2) - ((C4+S4)/2))),
+                             export = TRUE)
+
+#### all summer vs. all cool season crops
+comm_dens_summer_vs_cool <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                                  infer = c(FALSE,TRUE), 
+                                                  type = "response"), 
+                                          method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" = 
+                                                          ( ((O3+A4+O4)/3)) - (C2+S2+C3+S3+C4+S4)/6) ),
+                                 export = TRUE)
+
+#### Did rotation affect diversity in density composition for the communities grew in the same crop species?  
+
+
+## Corn: C2 vs (C3+C4)/2  
+comm_dens_C2vs3_4 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"),
+                                   method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )),
+                          export = TRUE)
+## Corn: C3 vs C4 
+comm_dens_C3vs4 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                         infer = c(FALSE,TRUE),
+                                         type = "response",
+                                         at = list(Crop_ID = c( "C3", "C4"))), "pairwise"),
+                        export = TRUE) #not included in the final table
+
+
+
+## Soybean: S2 vs (S3+S4)/2 
+comm_dens_S2vs3_4 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"), 
+                                   method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )),
+                          export = TRUE)
+## Soybean: S3 vs S4
+comm_dens_S3vs4 <-print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE), 
+                                        type = "response",
+                                        at = list(Crop_ID = c( "S3", "S4"))), "pairwise"),
+                       export = TRUE) #not included in the final table
+
+
+# Oat: O3 vs O4
+comm_dens_oat <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
+                                       infer = c(FALSE,TRUE), 
+                                       type = "response",
+                                       at = list(Crop_ID = c("O3", "O4"))), "pairwise"),
+                      export = TRUE)
+
+# oat averaged over 3- and 4-year rotation vs alfalfa  
+comm_dens_OA <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                                      infer = c(FALSE,TRUE), 
+                                      type = "response"), 
+                              method = list("[(O3+O4)/2] vs A4" = ((O3+O4)/2) - A4 )),
+                     export = TRUE)
+
+
+###### Biomass #######
+##### Did rotation affect density diversity, average over all crop phases within the same rotation?
+#### Rotation effects, overall ####
+## 2-year vs (3-year + 4-year)/2
+comm_biom_2yrvs34yr <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"),
+                                     method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = 
+                                                     (C2+S2)/2 - (C3+S3+O3+C4+S4+O4+A4)/7 )),
+                            export = TRUE)
+
+
+## 3-year vs 4-year 
+comm_biom_3yrvs4yr = print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"), 
+                                   method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" =
+                                                   ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
+                          export = TRUE)
+
+## 2-year vs 4-year 
+comm_biom_2yrvs4yr = print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID, 
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"), 
+                                   method = list("[(C2+S2)/2] vs [(C4+S4+O4+A4)/4]" =
+                                                   ((C2+S2)/2) - ((C4+S4+O4+A4)/4) )),
+                          export = TRUE)
+## 2-year vs 3-year 
+comm_biom_2yrvs3yr = print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE),
+                                           type = "response"), 
+                                   method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = 
+                                                   ((C2+S2)/2) - ((C3+S3+O3)/3) )),
+                          export = TRUE)
+
+
+#### Rotation effect, by each crop species  
+
+## Corn and soybean (warm season crops average): (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+
+comm_biom_CS2yr_vs_CS34yr <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID, 
+                                                   infer = c(FALSE,TRUE), 
+                                                   type = "response"),
+                                           method = list("[(C2+S2)/2] vs [(C3+S3+C4+S4)/4]" = 
+                                                           ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
+                                  export = TRUE)
+
+## Corn and soybean (warm season crops average): (C3+S3)/2 vs. C4+S4)/2
+comm_biom_CS3yr_vs_CS4yr <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                                  infer = c(FALSE,TRUE), 
+                                                  type = "response"), 
+                                          method = list("[(C3+S3)/2] vs [(C4+S4)/2]" = 
+                                                          ((C2+S2)/2) - ((C4+S4)/2))),
+                                 export = TRUE)
+
+
+####### Did crop type affect biomass diversity, different crops, averaged across rotations
+comm_biom_CS3_vs_O3 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                             infer = c(FALSE,TRUE), 
+                                             type = "response"), 
+                                     method = list("O3 vs [(C3+S3)/2]" = O3 - ((C2+S2)/2))),
+                            export = TRUE)
+
+#### 4yr: summer vs. cool season crops: (C4+S4)/2 vs. (O4+A4)/2 
+comm_biom_CS4_vs_OA4 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                              infer = c(FALSE,TRUE), 
+                                              type = "response"),
+                                      method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = 
+                                                      ((A4+O4)/2) - ((C4+S4)/2))),
+                             export = TRUE)
+
+#### all summer vs. all cool
+comm_biom_summer_vs_cool <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID, 
+                                                  infer = c(FALSE,TRUE),
+                                                  type = "response"),
+                                          method = list("[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6]" =
+                                                          ( ((O3+A4+O4)/3)) - (C2+S2+C3+S3+C4+S4)/6) ), 
+                                 export = TRUE)
+
+
+#### Rotation effect, by each crop species  
+
+# Corn: C2 vs (C3+C4)/2 
+
+comm_biom_C2vs3_4 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID, 
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"),
+                                   method = list("C2 vs [(C3+C4)/2]" = C2 - ((C3+C4)/2) )), 
+                          export = TRUE)
+
+# Corn: and C3 vs C4
+comm_biom_C3vs4 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                         infer = c(FALSE,TRUE), 
+                                         type = "response", 
+                                         at = list(Crop_ID = c( "C3", "C4"))), "pairwise"),
+                        export = TRUE) #not included in the final table
+
+# Soybean: S2 vs (S3+S4)/2 
+comm_biom_S2vs3_4 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                           infer = c(FALSE,TRUE), 
+                                           type = "response"),
+                                   method = list("S2 vs [(S3+S4)/2]" = S2 - ((S3+S4)/2) )),
+                          export = TRUE)
+
+# Soybean: S3 vs S4
+comm_biom_S3vs4 <-print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE),
+                                        type = "response", 
+                                        at = list(Crop_ID = c( "S3", "S4"))), "pairwise"),
+                       export = TRUE) #not included in the final table
+
+
+# Oat: O3 vs O4
+comm_biom_oat <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID, 
+                                       infer = c(FALSE,TRUE),
+                                       type = "response",
+                                       at = list(Crop_ID = c("O3", "O4"))), "pairwise"),
+                      export = TRUE)
+
+# oat averaged over 3-year and 4-year vs alfalfa  
+comm_biom_OA <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
+                                      infer = c(FALSE,TRUE),
+                                      type = "response"),
+                              method = list("[(O3+O4)/2] vs A4" = ((O3+O4)/2) - A4 )),
+                     export = TRUE)
+```
+
+
+```{r, include=FALSE}
+#### Merge all contrasts about weed community stand density 
+
+comm_dens <- rbind(comm_dens_2yrvs34yr$summary,
+                  comm_dens_3yrvs4yr$summary,
+                  comm_dens_C2vs3_4$summary,
+                  comm_dens_C3vs4$summary,
+                  comm_dens_S2vs3_4$summary,
+                  comm_dens_S3vs4$summary,
+                  comm_dens_oat$summary,
+                  comm_dens_CS2yr_vs_CS34yr$summary,
+                  comm_dens_CS3yr_vs_CS4yr$summary,
+                  comm_dens_summer_vs_cool$summary,
+                  comm_dens_CS3_vs_O3$summary,
+                  comm_dens_CS4_vs_OA4$summary,
+                  comm_dens_OA$summary)
+comm_dens_ct <- as.data.frame(comm_dens)
+
+comm_dens_ct[,c(2:6)] <- sapply(comm_dens_ct[,c(2:6)],as.numeric)
+
+comm_dens_ct_rounded <- comm_dens_ct %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) #%>%
+#  mutate(across(where(is.numeric), as.character)) %>% #remove trailing zeros as_tibble 
+
+#### Merge all contrasts about weed community aboveground mass 
+comm_biom <- rbind(comm_biom_2yrvs34yr$summary,
+                  comm_biom_3yrvs4yr$summary,
+                  comm_biom_C2vs3_4$summary,
+                  comm_biom_C3vs4$summary,
+                  comm_biom_S2vs3_4$summary,
+                  comm_biom_S3vs4$summary,
+                  comm_biom_oat$summary,
+                  comm_biom_CS2yr_vs_CS34yr$summary,
+                  comm_biom_CS3yr_vs_CS4yr$summary,
+                  comm_biom_summer_vs_cool$summary,
+                  comm_biom_CS3_vs_O3$summary,
+                  comm_biom_CS4_vs_OA4$summary,
+                   comm_biom_OA$summary)
+
+
+comm_biom_ct <- as.data.frame(comm_biom)
+
+comm_biom_ct[,c(2:6)] <- sapply(comm_biom_ct[,c(2:6)],as.numeric)
+
+comm_biom_ct_rounded <- comm_biom_ct %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+## Merge community density (left) and aboveground mass (right) by contrast name
+comm_dens_biom_ct_rounded <- comm_dens_ct_rounded %>% 
+  left_join(comm_biom_ct_rounded, by = "contrast                                 ")
+# remove row names 
+rownames(comm_dens_biom_ct_rounded) <- NULL
+
+# switch " / " to " vs ", keep the space around "/" to distinguish with average contrasts
+comm_dens_biom_ct_rounded$`contrast                                 ` <- gsub(" / ", " vs ",
+comm_dens_biom_ct_rounded$`contrast                                 `)
+```
+
+
+```{r, include=FALSE}
+#### Merge contrasts of community density (left) and aboveground mass (right) side by side 
+comm_dens_biom_jt_rounded <- cbind(comm_dens_jt_rounded, comm_biom_jt_rounded)
+
+
+comm_dens_biom_jt_rounded$`model term                  ` <- gsub("_", " ", comm_dens_biom_jt_rounded$`model term                  `)
+comm_dens_biom_jt_rounded$`model term                  ` <- gsub(":", " x ", comm_dens_biom_jt_rounded$`model term                  `)
+# remove row names
+rownames(comm_dens_biom_jt_rounded) <- NULL
+
+comm_dens_biom_jt_rounded <- comm_dens_biom_jt_rounded[,-(6:8)]
+
+# Change "F.ratio" to "F.value" to prevent confusion with contrast ratio.  
+colnames(comm_dens_biom_jt_rounded) <- c("Source of variation", "df1", "df2",rep(c("F.value","p.value"),2))
+
+```
+
+
+
+#### How did rotation, crop species, and corn weed management affect weed community density and growth? {-}   
+
+Crop identity had a significant effect on weed community stand density (p-value < 0.0001) and weed aboveground mass (p-value = 0.0057), but corn weed management and its interaction with crop identity did not have a significant effect on weed community stand density or biomass (p-values > 0.05) (Table \@ref(tab:dens-indices-ct) and \@ref(tab:biom-indices-ct)). Weed total stand density and aboveground mass in each crop identity category, averaged over blocks, years, and corn weed management regimes, are presented in Figure \@ref(fig:all-sp-dens-biom)A and B. Contribution by the dominant species are presented in Figure \@ref(fig:all-sp-dens-biom)C and D. Contrasts for the effects of rotation systems, rotation system within individual crops, and crop types on community stand density and aboveground mass are shown in Table \@ref(tab:dens-biom-jt-ct)C.  
+  
+Weed community density and aboveground mass of the 3-year and 4-year systems averages were comparable to those of the 2-year system (p-values = 0.058 and 0.9451, Table \@ref(tab:dens-biom-jt-ct)B1). The weed density in the 4-year rotation was 2.5 fold greater than in the 3-year rotation (p-value = 0.0368), but the aboveground mass was comparable between the 3-year and 4-year rotations.  
+
+For the individual crops (Table \@ref(tab:dens-biom-jt-ct)B2), increased rotation diversity tended to decrease weed abundance in corn and soybean and increase weed abundance in oat, but these trends were not significant (p-values = 0.6354 and 0.4041 for corn, 0.1834 and 0.0739 for soybean, and 0.3955 and 0.335 for oat). The patchiness of weeds, which was reflected in the high standard error values, might have caused the lack of significance for these inconclusive trends.  
+
+For different crop types (Table \@ref(tab:dens-biom-jt-ct)B3), weed community density and aboveground mass were comparable between the warm season crops (corn and soybean, p-values = 0.2032, 0.3426, 0.065, and 0.1274) and between the cool season crops (oat and alfalfa, p-values = 0.774 and 0.687). Overall, the average weed community density in the cool season crops was 26-fold greater than that in the warm season crops (p-value < 0.0001), and the average weed aboveground mass in cool season crops was 16-fold greater than that in warm season crops (p-value = 0.0001). In the 3-year rotation, the weed stand community stand in oat (O3) was 11.5-fold greater than the average in corn and soybean (C3 and S3) (p-value = 0.0012), but the weed community total aboveground mass was comparable between O3 and the average of the C3 and S3 phases (p-value = 0.1502). In the 4-year rotation, the weed community stand density in the average of oat and alfalfa (O4 and A4) was 36-fold greater than the average of the corn (C4) and soybean (S4) phases (p-value < 0.0001), and the average weed biomass for the O4 and A4 phases was 29-fold greater than for the C4 and S4 phases (p-value < 0.0001).   
+
+
+```{r dens-biom-jt-ct, echo=FALSE}
+# remove SE, df1, null, and t-ratio in the merged (density to the left and aboveground mass to the right) contrast table
+comm_dens_biom_ct_clean <-  comm_dens_biom_ct_rounded[,-c(3:6,9:12)] 
+
+# add blank columns to match ANOVA number of column
+comm_dens_biom_blank_ct <- add_column(comm_dens_biom_ct_clean, 
+                                     blank1 = rep("",13),
+                                     blank2 = rep("",13),
+                                      .after = "contrast                                 ")
+
+# Stack ANOVA tables on top of contrast tables
+comm_dens_biom_jt_ct <- rbind(as.matrix(comm_dens_biom_jt_rounded), as.matrix(comm_dens_biom_blank_ct))
+
+
+rownames(comm_dens_biom_jt_ct) <- NULL
+
+comm_dens_biom_jt_ct %>%
+  kable(longtable = FALSE, 
+      booktabs = TRUE,
+      digits = 2, 
+      linesep = " ",
+      align = "lrrrrrr",
+    caption = "Community density and aboveground mass ANOVA and contrasts. The abbreviations in the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+  add_header_above(c(" " = 3, "Stand density" = 2, "Aboveground mass" = 2)) %>%
+  pack_rows("(A) - ANOVA", 1,3) %>%
+  pack_rows("Contrasts                 ratio  p.value  ratio   p.value", 4, 16)%>%
+  pack_rows("(B1) - Rotation system effects", 4, 5) %>%
+  pack_rows("(B2) - Rotation system effects within individual crops", 6, 10) %>%
+  pack_rows("(B3) - Crop type effects", 11, 16) %>%
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+
+```
+
+
+
+```{r, include=FALSE}
+dens_plot <-  arrow_plot(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                              infer = c(FALSE,TRUE),  type = "response"),
+                      x_label = expression(Weed~stand~density~(plants~m^{"-2"})), title_p = "A") 
+
+biom_plot <-  arrow_plot(emmeans(comm_biom_lmer, ~ Crop_ID,
+                              infer = c(FALSE,TRUE),  type = "response"),
+                      x_label = expression(Weed~aboveground~mass~(g~m^{"-2"})), title_p = "B") 
+
+grid.arrange(dens_plot, biom_plot, nrow = 1)
+
+```
+
+
+```{r, include=FALSE}
+### Read data in again, now with different names from ones in rows 818s
+
+dens_1720 <- read.csv(here("2-Data/Clean/pldens_1720_clean.csv"))
+dens_1720_clean <- dens_1720 %>% replace(is.na(.), 0) %>%
+  mutate(zOTHERS = Total - (AMATA + CHEAL + DIGSA + ECHCG + SETFA + SETLU + TAROF)) %>% #keep top seven species and sum all other species in to zOTHERS
+  dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
+    AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>%
+  mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+
+
+biom_1720 <- read.csv(here("2-Data/Clean/biom_1720_clean.csv"))
+biom_1720_clean <- biom_1720 %>% replace(is.na(.), 0)%>%
+   mutate(zOTHERS = Total - (AMATA + CHEAL + DIGSA + ECHCG + SETFA + SETLU + TAROF)) %>% #keep top seven species and sum all other species in to zOTHERS
+  dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
+                AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>%
+  mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+
+# remove rows that sum to zeros https://www.tutorialspoint.com/how-to-remove-rows-that-contains-all-zeros-in-an-r-data-frame
+#dens_1720_clean <- dens_1720[rowSums(dens_1720[,13:46])>0,] 
+
+dens_1720_clean$Crop <- factor(dens_1720_clean$Crop,
+                               levels = c("corn", "soybean", "oat", "alfalfa"))
+dens_1720_clean$Crop_ID <- factor(dens_1720_clean$Crop_ID, 
+                                  levels = c("C2", "S2",
+                                             "C3", "S3", "O3", 
+                                             "C4", "S4", "O4", "A4"))
+
+#biom_1720_clean <- biom_1720[rowSums(biom_1720[,13:46])>0,] 
+biom_1720_clean$Crop <- factor(biom_1720_clean$Crop,
+                               levels = c("corn", "soybean", "oat", "alfalfa"))
+
+biom_1720_clean$Crop_ID <- factor(biom_1720_clean$Crop_ID,
+                                  levels = c("C2", "S2",
+                                             "C3", "S3", "O3",
+                                             "C4", "S4", "O4", "A4"))
+
+dens_1720_clean %<>% 
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
+            funs(factor(.)))
+
+biom_1720_clean %<>% 
+  mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
+            funs(factor(.)))
+
+# Find minimum non-zero in each matrix, or in the Prop column of the long-format dframe  
+
+# convert wide to long format 
+
+dens_1720_long <- dens_1720_clean %>% 
+  pivot_longer(!c(Crop:Corn_weed_management), 
+               names_to = "Species",
+               values_to =  "Density")
+
+min(dens_1720_long$Density[dens_1720_long$Density>0]) #0.05396072
+
+biom_1720_long <- biom_1720_clean %>% 
+  pivot_longer(!c(Crop:Corn_weed_management),
+               names_to = "Species", 
+               values_to =  "Biomass")
+
+min(biom_1720_long$Biomass[biom_1720_long$Biomass>0]) # 0.0005396072
+```
+
+```{r, include=FALSE}
+
+#https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html 
+#https://stats.stackexchange.com/questions/373194/differences-between-emmeans-and-ggplot2
+
+dens_1720_sum <-  dens_1720_long %>%  
+  group_by(Crop_ID, Corn_weed_management, Species) %>%
+  summarize(sum_Dens = sum(Density), #total biomass across 4 blocks and 4 years
+            mean_Dens = mean(Density), #mean biomass across 4 blocks and 4 years
+            sd_Dens = sd(Density)) %>%
+  ungroup()
+
+biom_1720_sum <-  biom_1720_long %>%  
+  group_by(Crop_ID, Corn_weed_management, Species) %>%
+  summarize(sum_Biom = sum(Biomass), #total biomass across 4 blocks and 4 years
+            mean_Biom = mean(Biomass), #mean biomass across 4 blocks and 4 years
+            sd_Biom = sd(Biomass)) %>%
+  ungroup()
+
+
+sp_dens <- ggplot(data = dens_1720_sum, aes(fill = Species, 
+             x = Crop_ID, y = mean_Dens)) +
+  facet_grid(~Corn_weed_management,
+             labeller = labeller(
+        Corn_weed_management = c("conv" = "Corn weed management: \n conventional", "low" = "Corn weed management: \n low"))) +
+  geom_bar(position="stack", stat = "identity") + 
+  scale_fill_brewer(breaks=c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF", "zOTHERS"),
+                    labels=c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF", "OTHERS"), 
+                    palette = "Dark2") +
+  #   geom_errorbar(data = dens_1720_sum, 
+  #               aes(Crop_ID, ymin = mean_Dens ,
+  #               ymax = mean_Dens + sd_Dens),  
+  #              width=.25,
+               # position=position_dodge(.5),
+  #              inherit.aes = FALSE)  +
+#  facet_grid(~Corn_weed_management) +
+  ylab(expression(Weed~stand~density~(plants~m^{"-2"}))) +
+  xlab("") + 
+  ggtitle("C") +
+   guides(colour = guide_legend(nrow = 1, override.aes = list(size=2))) +
+  theme(legend.position=c(.2,.75),
+        legend.key.height= unit(.2, 'cm'),
+        legend.key.width= unit(.4, 'cm'), 
+        legend.title=element_blank(),
+        axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 11))
+
+           
+sp_biom <- ggplot(data = biom_1720_sum, aes(fill = Species, 
+             x = Crop_ID, y = mean_Biom)) +
+  facet_grid(~Corn_weed_management, 
+             labeller = labeller(
+        Corn_weed_management = c("conv" = "Corn weed management: \n conventional", "low" = "Corn weed management: \n low"))) +
+  geom_bar(position="stack", stat = "identity") + 
+    scale_fill_brewer(breaks=c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF", "zOTHERS"),
+                      labels=c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF", "OTHERS"),
+                      palette = "Dark2") +
+  #  geom_errorbar(data = biom_1720_sum, 
+  #               aes(Crop_ID, ymin = mean_Biom,
+  #               ymax = mean_Biom + sd_Biom), 
+  #              width=.25, 
+                # position=position_dodge(.9),
+  #              inherit.aes = FALSE) +
+  ylab(expression(Weed~aboveground~mass~(g~m^{"-2"}))) +
+  xlab("") + 
+  ggtitle("D") +
+   guides(colour = guide_legend(nrow = 1)) +
+  theme(legend.position="none", 
+        legend.text=element_text(size=1),
+        legend.title=element_blank(),
+        axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 11))
+  
+
+#  https://stackoverflow.com/questions/13050516/how-to-make-dodge-in-geom-bar-agree-with-dodge-in-geom-errorbar-geom-point
+
+
+# grid_arrange_shared_legend(sp_dens, sp_biom,
+#                           ncol = 1,
+#                           nrow = 2,
+#                           position = "bottom",  #"bottom would make  2-row legends
+#                           plot = TRUE) 
+```
+
+```{r all-sp-dens-biom, fig.width=8, fig.height=8, echo=FALSE, fig.cap="In panels A and B: weed community stand density and aboveground mass were averaged over four blocks, four years, and two corn weed management regimes; the black dots are estimated marginal means; the blue bars are 95% confidence intervals; the red arrows reflect the comparisons among means; overlapping arrows indicate non-significant differences. In panels C and D: the contribution of the seven most abundant weed species and the rarer species (species ordered eighth and above grouped in OTHERS) in each crop identity, averaged over four blocks and four years, are ordered alphabetically. The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.) The less abundant weed species which made up 6% of the whole community are grouped in OTHERS. The means displayed on panels A and B were estimated marginal means, calculated based on the analysis model (with `emmip` function) but the means displayed on panels C and D were arithmetic means, calculated from the data so they are slightly different."}
+grid.arrange(dens_plot, biom_plot, sp_dens, sp_biom, 
+             nrow = 2,
+             heights=c(2,3))
+
+```
