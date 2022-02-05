@@ -33,8 +33,16 @@ library(magrittr)
 library(lme4)
 library(kableExtra)
 theme_set(theme_bw())
+<<<<<<< HEAD
 library(ggResidpanel)
 library(gridExtra)
+=======
+source("functions.R") 
+library(ggResidpanel)
+#library(lemon)
+library(gridExtra)
+#RNGkind(sample.kind = "Rounding")
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
 ```
 
 
@@ -456,7 +464,11 @@ seven_pval_round <- seven_pval_clean %>%
 seven_pval_round %>%
   `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
   kbl(longtable = FALSE, booktabs = TRUE, linesep = "", align = 'lrrrrrrrrrrrrrr',
+<<<<<<< HEAD
     caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
+=======
+    caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>% 
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
   add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
   add_header_above(c(" "= 1,  " p-values " = 14)) %>%
     column_spec(8, border_left = FALSE, border_right = TRUE) %>%
@@ -506,7 +518,11 @@ seven_ct_clean %>%
   `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
   kbl(longtable = FALSE, booktabs = TRUE, digits = 2,
       linesep = "", align = 'lrrrrrrrrrrrrrr',
+<<<<<<< HEAD
     caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
+=======
+    caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>% 
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
   add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
   add_header_above(c(" "= 1,  " Contrast ratio " = 14)) %>%
     column_spec(8, border_left = FALSE, border_right = TRUE) %>%

@@ -5,6 +5,10 @@ output:
     toc: false
     number_sections: false
     extra_dependencies: ["float"]
+<<<<<<< HEAD
+=======
+bibliography: ecol.bib
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
 ---
 ```{r,  echo=FALSE, message=FALSE, warning=FALSE}
 #install.packages("here")
@@ -239,11 +243,16 @@ kable(longtable = FALSE, booktabs = TRUE, digits = 2, align = "lrrrrrr",
   pack_rows("(A) - Community diversity", 1, 3) %>%
   pack_rows("(B) - Community evenness", 4, 6) %>%
   pack_rows("(C) - Community richness", 7, 9) %>%
+<<<<<<< HEAD
   footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system in which it occured: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+=======
+  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system to which each belong: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
 
 ```
 
 
+<<<<<<< HEAD
 ```{r index-arrow-p, echo=FALSE, fig.cap= "Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.", fig.width= 8, fig.height=13}
 
 ## Community stand density ecological indices arrow plots
@@ -281,6 +290,45 @@ biom_rich_plot <-  arrow_plot(emmeans(biom_rich.lmer2, ~ Crop_ID,
                                    infer = c(FALSE,TRUE), 
                                    type = "response"), 
                            x_label = "Aboveground mass richness index", 
+=======
+```{r index-arrow-p, echo=FALSE, fig.cap= "Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.", fig.width= 8, fig.height=13}
+
+## Community stand density ecological indices arrow plots
+dens_diversity_plot <-  arrow_p(emmeans(dens_diversity.lmer1, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE),
+                                        type = "response"),
+                                index_p = "Stand diversity index",
+                                title_p = "A")  + xlim(0,4)
+
+dens_even_plot <-  arrow_p(emmeans(dens_even.lmer4, ~ Crop_ID, 
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           index_p = "Stand evenness index", 
+                           title_p = "B") + xlim(0, 0.35)
+
+dens_rich_plot <-  arrow_p(emmeans(dens_rich.lmer2, ~ Crop_ID,
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           index_p = "Stand richness index", title_p = "C")
+
+## Community aboveground mass ecological indices arrow plots
+biom_diversity_plot <-  arrow_p(emmeans(biom_diversity.lmer1, ~ Crop_ID,
+                                        infer = c(FALSE,TRUE), 
+                                        type = "response"),
+                                index_p = "Aboveground mass diversity index",
+                                title_p = "D") + xlim(0,4)
+
+biom_even_plot <-  arrow_p(emmeans(biom_even.lmer4, ~ Crop_ID, 
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           index_p = "Aboveground mass evenness index",
+                           title_p = "E") + xlim(0, 0.35)
+
+biom_rich_plot <-  arrow_p(emmeans(biom_rich.lmer2, ~ Crop_ID, 
+                                   infer = c(FALSE,TRUE), 
+                                   type = "response"), 
+                           index_p = "Aboveground mass richness index", 
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
                            title_p = "F")
 
 ## Combine all the arrow plots into one plane 
@@ -1222,7 +1270,11 @@ biom_index$`contrast                                 ` <- gsub(" / ", " vs ", bi
 biom_index[,-c(3:6,9:12,15:18)] %>%
   `colnames<-` (c("Contrast", rep(c("ratio", "p.value"), 3))) %>% #null, SE, df, t.ratio removed
 kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
+<<<<<<< HEAD
     caption = "Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+=======
+    caption = "Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column (C2, S2, ..., A4) are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
    add_header_above(c(" " = 1, "Diversity index" = 2, "Evenness index" = 2, "Richness index" = 2))  %>%
   pack_rows("(A) - Rotation system effects", 1, 4) %>%
   pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
@@ -1771,6 +1823,7 @@ comm_dens_biom_jt_ct %>%
 
 
 ```{r, include=FALSE}
+<<<<<<< HEAD
 dens_plot <-  arrow_plot(emmeans(comm_dens_lmer, ~ Crop_ID, 
                               infer = c(FALSE,TRUE),  type = "response"),
                       x_label = expression(Weed~stand~density~(plants~m^{"-2"})), title_p = "A") 
@@ -1778,6 +1831,15 @@ dens_plot <-  arrow_plot(emmeans(comm_dens_lmer, ~ Crop_ID,
 biom_plot <-  arrow_plot(emmeans(comm_biom_lmer, ~ Crop_ID,
                               infer = c(FALSE,TRUE),  type = "response"),
                       x_label = expression(Weed~aboveground~mass~(g~m^{"-2"})), title_p = "B") 
+=======
+dens_plot <-  arrow_p(emmeans(comm_dens_lmer, ~ Crop_ID, 
+                              infer = c(FALSE,TRUE),  type = "response"),
+                      index_p = expression(Weed~stand~density~(plants~m^{"-2"})), title_p = "A") 
+
+biom_plot <-  arrow_p(emmeans(comm_biom_lmer, ~ Crop_ID,
+                              infer = c(FALSE,TRUE),  type = "response"),
+                      index_p = expression(Weed~aboveground~mass~(g~m^{"-2"})), title_p = "B") 
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
 
 grid.arrange(dens_plot, biom_plot, nrow = 1)
 

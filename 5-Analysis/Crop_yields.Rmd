@@ -37,7 +37,11 @@ library(nlme)
 library(kableExtra)
 theme_set(theme_bw())
 #library(ggpubr)
+<<<<<<< HEAD
 
+=======
+source("functions.R") 
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
 library(ggResidpanel)
 #library(patchwork)
 library(gridExtra)
@@ -188,7 +192,11 @@ colnames(crop_jt_ct_df) <- c("Source of variation", "df1", "df2","F.value","p.va
 
 crop_jt_ct_df %>%
   kbl(booktabs = TRUE, linesep="",  align = "lrrrrlrr",  #digits = 2,
+<<<<<<< HEAD
     caption = "Contrasts of rotation effect (expressed by Crop identity) on crop yields. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>%
+=======
+    caption = "Contrasts of rotation effect (expressed by Crop identity) on crop yields. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+>>>>>>> fd81336defee112302aadeef9eb15831252ae278
   column_spec(5, border_left = FALSE, border_right = TRUE) %>%
   add_header_above(c("ANOVA" = 5, "Comparison" = 3)) %>%
   pack_rows("(A) - Corn", 1, 3) %>%
