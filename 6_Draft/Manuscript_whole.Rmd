@@ -34,39 +34,30 @@ csl: apa-no-ampersand.csl
 
 # Materials and Methods {-}
 
-<<<<<<< HEAD
+
 ```{r, child = "MandM.Rmd"}
-=======
-```{r, child = "../8-Analysis/MandM2.Rmd"}
->>>>>>> fd81336defee112302aadeef9eb15831252ae278
+
 ```
 
 # Results {-}  
 
-A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with `ggResidpanel` [version 0.3.0 @goodeGgResidpanelPanelsInteractive2019] are available in the Data Repository.  
+A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with `ggResidpanel` version 0.3.0 [@goodeGgResidpanelPanelsInteractive2019] are available in the Data Repository.  
 
-<<<<<<< HEAD
+
 ```{r, child = "../5-Analysis/Crop_yields.Rmd"}
-=======
-```{r, child = "../8-Analysis/Crop_yields.Rmd"}
->>>>>>> fd81336defee112302aadeef9eb15831252ae278
-#, include=FALSE
+
 ```
 
-
-<<<<<<< HEAD
 ```{r, child = "../5-Analysis/Community.Rmd"}
 #, include=FALSE
 ```
 
 ```{r, child = "../5-Analysis/Individual-sp-difference.Rmd"}
-=======
-```{r, child = "../8-Analysis/Community.Rmd"}
-#, include=FALSE
+
 ```
 
-```{r, child = "../8-Analysis/Individual-sp-difference.Rmd"}
->>>>>>> fd81336defee112302aadeef9eb15831252ae278
+```{r, child = "../5-Analysis/Individual-sp-difference.Rmd"}
+
 ```
 
 
