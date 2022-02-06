@@ -136,7 +136,7 @@ crop_df <- as.data.frame(crop_jt)
 
 #### How did rotation system and corn weed management affect crop yields? {-}   
 
-Results of the experiment supported the first hypothesis that "diverse cropping systems, with reduced use of chemical herbicides, would provide weed control equal in effectiveness to the conventional approach in the 2-year rotation". Averaged over four years, soybean was the only crop whose yield was significantly affected by rotation (p-value = 0.0185, Table \@ref(tab:crop-jt-ct)). Soybean yield was 16% higher in the 4-year rotation than in the 2-year rotation (p-value = 0.018). Crop yields in the experiment relative to averages for the state of Iowa and Boone County, where the experiment occurred, are presented in Figure \@ref(fig:crop-bar). Corn weed management regime did not significantly affect crop yields (Table \@ref(tab:crop-jt-ct)).   
+Results of the experiment supported the first hypothesis that "diverse cropping systems, with reduced use of chemical herbicides, would provide weed control equal in effectiveness to the conventional approach in the 2-year rotation". Averaged over four years, soybean was the only crop whose yield was affected by rotation (p-value = 0.0185, Table \@ref(tab:crop-jt-ct)). Soybean yield was 16% higher in the 4-year rotation than in the 2-year rotation (p-value = 0.018). Crop yields in the experiment relative to averages for the state of Iowa and Boone County, where the experiment occurred, are presented in Figure \@ref(fig:crop-bar). Corn weed management regime did not affect crop yields (Table \@ref(tab:crop-jt-ct)).   
 
 ```{r crop-jt-ct, echo=FALSE}
 

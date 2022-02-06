@@ -36,7 +36,6 @@ csl: apa-no-ampersand.csl
 
 
 ```{r, child = "MandM.Rmd"}
-
 ```
 
 # Results {-}  
