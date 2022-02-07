@@ -64,7 +64,7 @@ A lack of any obvious bias in plots of residuals versus predicted values suggest
 
 # Acknowledgements {-}
 
-The authors thank Matt Woods, Mike Fiscus, and the Iowa State University's Agronomy Research Farm crew for field management; Wendy Borja-Diaz, Lydia English, Jessica Juarez-Morales, Samantha Kanselaar, Jessica Nelson, Elizabeth Oys, Ana Poznanski, Andrew Riehl, Angela Soto-Saenz, Mickala Stallman, David Weisberger, and Wyatt Westfall for field and laboratory assistance; Katherine Goode, Audrey McCombs, Philip Dixon and ISU's statistical consulting group for data analysis assistance; Russ Lenth and other Stackoverflow community members for answering HTXN's coding questions; Micheal Owen for reviewing the manuscript; and Overleaf staff for \LaTeX\ assistance in compiling the manuscript.
+The authors thank Matt Woods, Mike Fiscus, and the Iowa State University's Agronomy Research Farm crew for field management; Wendy Borja-Diaz, Lydia English, Jessica Juarez-Morales, Samantha Kanselaar, Jessica Nelson, Elizabeth Oys, Ana Poznanski, Andrew Riehl, Angela Soto-Saenz, Mickala Stallman, David Weisberger, and Wyatt Westfall for field and laboratory assistance; Katherine Goode, Audrey McCombs, Philip Dixon and ISU's statistical consulting group for data analysis assistance; Russ Lenth and other Stackoverflow community members for answering HTXN's coding questions; Micheal Owen for reviewing the manuscript; Overleaf staff for \LaTeX\ assistance in compiling the manuscript; and two anonymous reviewers for their constructive feedback.
 
 
 # References {-}

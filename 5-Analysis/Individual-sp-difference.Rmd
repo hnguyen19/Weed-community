@@ -218,7 +218,7 @@ across(models:p_cont, setNames,  .$Species))
 #### How did rotation, crop species, and corn weed management affect individual weed species abundance?{-}  
 
 The stand density and aboveground mass of the seven most abundant weed species are shown in Figure \@ref(fig:all-sp-dens-biom). The effects of crop identity (i.e., rotation system crossed with crop species), corn weed management, and their interaction on the seven most abundant weeds in the present study are shown in Table \@ref(tab:ind-dens-biom-jt). 
-No interactive effects between crop identity and corn weed management were seen in any of those seven species' density or aboveground mass. The main effects of crop identity and corn weed management on stand density and aboveground mass differed by species.  
+No interactive effects between crop identity and corn weed management were seen in any of those seven species' density or aboveground mass. The main effects of crop identity and corn weed management on stand density and aboveground mass varied by species.  
 
 
 *The hypothesis that "including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean" was partially supported.* Among the seven most abundant weed species, the stand densities were all affected by crop identity, but the aboveground mass was affected by crop identity for only four out of seven species (Table \@ref(tab:ind-dens-biom-jt)).  
@@ -289,7 +289,7 @@ ind_dens_biom_jt_clean %>%
 
 ```
 
-Since increased weed stand density and aboveground mass were not correlated with increased crop yield loss, the magnitude of differences in individual weed density and aboveground mass are not presented here. Significance of differences in individual species density and aboveground mass (p-values) are presented to illustrate community composition shift. Individual species stand density and aboveground mass data were combined over four years and four blocks.     
+Significance of differences in individual species density and aboveground mass (p-values) are presented to illustrate community composition shift. Individual species stand density and aboveground mass data were combined over four years and four blocks. The magnitude of differences in individual weed density and aboveground mass contrasts are shown in Table \@ref(tab:sp-ct).     
 
 Averaged over crop identity, DIGSA and SETFA stand density and aboveground mass were affected by corn weed management (p-values = 0.0189 and 0.0196, Table \@ref(tab:ind-dens-biom-jt)). Averaged over corn weed management regimes, the differences in weed species stand density and aboveground mass were observed more often between crop types (Tables \@ref(tab:sp-pval)B and C, and Tables \@ref(tab:\@ref(tab:sp-ct)B and C)) than for individual crops across rotations (Tables \@ref(tab:sp-pval)A and \@ref(tab:sp-ct)A). The main-plot effects concerning crop identity on individual species responses are elaborated below.  
 
@@ -455,7 +455,7 @@ seven_pval_round %>%
   kbl(longtable = FALSE, booktabs = TRUE, linesep = "", align = 'lrrrrrrrrrrrrrr',
     caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
   add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
-  add_header_above(c(" "= 1,  " p-values " = 14)) %>%
+  add_header_above(c(" "= 1,  " P-values " = 14)) %>%
     column_spec(8, border_left = FALSE, border_right = TRUE) %>%
   pack_rows("(A) - Rotation system effects", 1, 4) %>%
   pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
@@ -505,7 +505,7 @@ seven_ct_clean %>%
       linesep = "", align = 'lrrrrrrrrrrrrrr',
     caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
   add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
-  add_header_above(c(" " = 1, " Contrast ratio " = 14)) %>%
+  add_header_above(c(" " = 1, " Contrast ratios " = 14)) %>%
     column_spec(8, border_left = FALSE, border_right = TRUE) %>%
   pack_rows("(A) - Rotation system effects", 1, 4) %>%
   pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%

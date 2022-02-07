@@ -1,0 +1,266 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\author{}
+\date{\vspace{-2.5em}}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+\begin{document}
+
+Empirical measurements of weed community composition were made from 2017 through 2020 at Iowa State University's Marsden Farm in Boone County, Iowa, USA, (42\(^\circ\) 01'N, 93\(^\circ\) 47'W, 333 m above sea level). All soil types present at the site are Mollisols \citep{chenInfluenceResidueNitrogen2014}. A detailed description of the experiment site and crop management can be found in \citet{liebmanWeedSeedbankDiversity2021} and the field layout and experiment design were provided in \citet{nguyenImpactCroppingSysteminreview}. Briefly, a randomized complete block, split-plot design with four replications were used to study three different crop rotation systems (2-year, 3-year, or 4-year). The crop sequence in each rotation was presented in Tabe 1 of \citet{nguyenImpactCroppingSysteminreview}. The main-plot factor (`crop identity') was represented by crop species and the rotation system in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The split-plot factor, i.e., weed management regime applied in the corn phase (corn weed management), was represented by herbicide level (conventional - broadcast over the whole corn area, or low - banded 38 cm wide on top of corn rows). The reduction of herbicide mass in the low herbicide treatment was supplemented by interrow cultivation. Details concerning crop genotypes and weed management regimes are provided in Table \ref{tab:herb-id}.
+
+\begin{landscape}\begin{table}
+
+\caption{\label{tab:herb-id}Crop variety or hybrid and management from 2017 through 2020}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{2em}|>{\raggedright\arraybackslash}p{8em}|>{\raggedright\arraybackslash}p{14em}|>{\raggedright\arraybackslash}p{14em}|>{\raggedright\arraybackslash}p{14em}|>{\raggedright\arraybackslash}p{14em}}
+\hline
+Year & Activity or input & Low herbicide & Conventional herbicide & Low herbicide & Conventional herbicide\\
+\hline
+\textbf{} & \textbf{} & \textbf{Corn} & \textbf{Corn} & \textbf{Soybean} & \textbf{Soybean}\\
+2017 & Hybrid or variety & Epley E1420 & Epley E1420 & Latham L2758 R2 & Latham L2758 R2\\
+ & Planting date & May 9 & May 9 & May 16 & \\
+ & Interrow cultivation date & Jun. 7 & Jun. 7 & none & none\\
+ & Harvest date & Oct. 19 & Oct. 19 & Oct. 19 & \\
+ & Herbicides applied (kg ai./ha) & tembotrione (0.049) applied May 31, interrow cultivated Jun. 7 & PRE: thiencarbazone methyl (0.037), isoxaflutole (0.093) & PRE: flumioxazin (0.109); POST: glyphosate as potassium salt (1.249), acifluorfen (0.224) & PRE: flumioxazin (0.109); POST: glyphosate as potassium salt (1.249), acifluorfen (0.224)\\
+ & Total (kg a.i./ha) & 0.049 & 0.13 & 1.581 & 1.581\\
+ & Weed sampling date & Sep. 5 and 6 & Sep. 5 and 6 & Sep. 6, 7 and 8 & Sep. 6, 7 and 8\\
+2018 & Hybrid or variety & Epley E1420 & Epley E1420 & Latham L2758 R2 & Latham L2758 R2\\
+ & Planting date & May 8 & May 8 & Jun. 3 & Jun. 3\\
+ & Interrow cultivation date & Jun. 4 & none & none & none\\
+ & Harvest date & Oct. 30 & Oct. 30 & Oct. 29 & Oct. 29\\
+ & Herbicides applied (kg ai./ha) & POST: tembotrione (0.054) & PRE: thiencarbazone methyl (0.037), isoxaflutole (0.092); POST: mesotrione (0.105), nicosulfuron (0.053) & PRE: flumioxazin (0.096); POST: glyphosate as potassium salt (1.540), lactofen (0.140) & PRE: flumioxazin (0.096); POST: glyphosate as potassium salt (1.540), lactofen (0.140)\\
+ & Total (kg a.i./ha) & 0.054 & 0.287 & 1.776 & 1.776\\
+ & Weed sampling date & Sep. 11, 12, and 13 & Sep. 11, 12, and 13 & Sep. 17, 19, 20, and 21 & Sep. 17, 19, 20, and 21\\
+2019 & Hybrid or variety & Epley E1730 & Epley E1730 & Latham 2684 L (Liberty Link) & Latham 2684 L (Liberty Link)\\
+ & Planting date & Jun. 3 & Jun. 3 & Jun. 10 & Jun. 10\\
+ & Interrow cultivation date & none, due to weather adversity & none & none & none\\
+ & Harvest date & Nov. 6 & Nov. 6 & Oct. 18 & Oct. 18\\
+ & Herbicides applied (kg ai./ha) & POST: tembotrione (0.049) & PRE: thiencarbazone methyl (0.037), isoxaflutole (0.092); POST: mesotrione (0.105), nicosulfuron (0.053) & PRE: flumioxazin (0.096); POST: glufosinate ammonium (0.594), clethodim (0.136) & PRE: flumioxazin (0.096); POST: glufosinate ammonium (0.594), clethodim (0.136)\\
+ & Total (kg a.i./ha) & 0.049 & 0.287 & 0.826 & 0.826\\
+ & Weed sampling date & Sep. 17 and 18 & Sep. 17 and 18 & Sep. 30 & Sep. 30\\
+2020 & Hybrid or variety & Epley E1730 & Epley E1730 & Latham 2684 L (Liberty Link) & Latham 2684 L (Liberty Link)\\
+ & Planting date & Apr. 23 & Apr. 23 & May 13 & May 13\\
+ & Interrow cultivation date & Jun.8 & none & none & none\\
+ & Harvest date & Oct. 2 & Oct. 2 & Sep. 23 & Sep. 23\\
+ & Herbicides applied (kg ai./ha) & POST: tembotrione (0.051) & PRE: thiencarbazone methyl (0.037), isoxaflutole (0.092); POST: mesotrione (0.105), nicosulfuron (0.053) & PRE: flumioxazin (0.096); POST: glufosinate ammonium (0.594), clethodim (0.136) & PRE: flumioxazin (0.096); POST: glufosinate ammonium (0.594), clethodim (0.136)\\
+ & Total (kg a.i./ha) & 0.051 & 0.287 & 0.826 & 0.826\\
+ & Weed sampling date & Sep. 14 and 15 & Sep. 14 and 15 & Sep. 16 & Sep. 16\\
+\textbf{} & \textbf{} & \textbf{Oat} & \textbf{Oat} & \textbf{Alfalfa} & \textbf{Alfalfa}\\
+2017 & Hybrid or variety & IN09201 & IN09201 & Leafguard & Leafguard\\
+ & Planting date & Apr. 12 & Apr. 12 & Mar. 29, 2016 & Mar. 29, 2016\\
+ & Stubble clipping & Aug. 7 in O3 and O4 and Sep. 11 in O4 & Aug. 7 in O3 and O4 and Sep. 11 in O4 & Aug. 10, 2016 & Aug. 10, 2016\\
+ & Harvest date & Jul. 17 & Jul. 17 & Jun.6, Jul. 7, Aug. 7, and Sep. 11 & Jun.6, Jul. 7, Aug. 7, and Sep. 11\\
+ & Weed sampling date & Sep. 25, 27, 28 and 29 & Sep. 25, 27, 28 and 29 & Sep. 25, 27, 28 and 29 & Sep. 25, 27, 28 and 29\\
+2018 & Hybrid or variety & IN09201 & IN09201 & Leafguard & Leafguard\\
+ & Planting date & Apr. 24 & Apr. 24 & Apr. 12, 2017 & Apr. 12, 2017\\
+ & Stubble clipping & Sep. 11 & Sep. 11 & Sep. 11, 2017 & Sep. 11, 2017\\
+ & Harvest date & Jul. 20 & Jul. 20 & Jun. 4, Jul. 9, and Sep. 10 & Jun. 4, Jul. 9, and Sep. 10\\
+ & Weed sampling date & Sep. 26, Oct.4, 15, 16, 18, and 19 & Sep. 26, Oct.4, 15, 16, 18, and 19 & Sep. 26, Oct.4, 15, 16, 18, and 19 & Sep. 26, Oct.4, 15, 16, 18, and 19\\
+2019 & Hybrid or variety & IN09201 & IN09201 & Leafguard & Leafguard\\
+ & Planting date & Apr. 16 & Apr. 16 & Apr. 24, 2018 & Apr. 24, 2018\\
+ & Stubble clipping & none & none & none & \vphantom{1} none\\
+ & Harvest date & Jul. 24 and 29 & Sep. 24 and 29 & Jun. 7, Jul. 12, Aug. 26, 2019 & Jun. 7, Jul. 12, Aug. 26, 2019\\
+ & Weed sampling date & Sep. 23, 24, 25, and 26, Oct. 3, 4, 7, and 8 & Sep. 23, 24, 25, and 26, Oct. 3, 4, 7, and 8 & Sep. 23, 24, 25, and 26, Oct. 3, 4, 7, and 8 & Sep. 23, 24, 25, and 26, Oct. 3, 4, 7, and 8\\
+2020 & Hybrid or variety & IN09201 & IN09201 & Leafguard & Leafguard\\
+ & Planting date & Apr. 2, May 7 * & Apr. 2, May 7 * & Apr. 16, 2019 & Apr. 16, 2019\\
+ & Stubble clipping & none & none & none & none\\
+ & Harvest date & Jul. 24 & Jul. 24 & Jun. 2, Jul. 6, and Aug. 17 & Jun. 2, Jul. 6, and Aug. 17\\
+ & Weed sampling date & Sep. 23, 24, and 29, Oct. 2, 6, 7, and 8 & Sep. 23, 24, and 29, Oct. 2, 6, 7, and 8 & Sep. 23, 24, and 29, Oct. 2, 6, 7, and 8 & Sep. 23, 24, and 29, Oct. 2, 6, 7, and 8\\
+\hline
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Note: } 
+\item Corn was planted at 12950 seeds/ha, soybean at 56656 seeds/ha, oat at 80.7 kg/ha, red clover and alfalfa at 19.1 kg/ha. PRE and POST herbicide in corn and soybean refers to pre-emergence and post-emergence, relative to weed emergence. No herbicide was applied in oat, red clover, and alfalfa. 'Belle' (in 2017) or 'Mammoth' (in 2018 - 2020) red clover was intercropped with oat in the 3-year rotation (O3). Alfalfa was intercropped with the oat phase in the 4-year rotation (O4) and was overwintered to the following year as a sole crop (A4). Oat was replanted in 2020 due to poor germination.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\end{landscape}
+
+Volunteer crops from a preceding crop season, such as a volunteer corn plant in a soybean plot or a soybean plant in an oat plot, were excluded from the assessment of weed community composition. Data were collected for individual species aboveground mass and density, community weed biomass and density, and crop yield. Weeds were surveyed four to six weeks before corn and soybean harvests, two to three weeks after oat harvest or the last hay cut of the season.
+The passage of a few weeks between oat and alfalfa harvest and weed surveys allowed physically damaged plants in those crops to grow back to recognizability per an identification guide developed by \citet{uvaWeedsNortheast1997}. Weed aboveground samples were collected from eight quadrats arranged in a 4x2 grid throughout each experimental unit (eu). The sample grid was randomized every year in such a way that quadrats were at least 3 m away from plot borders to avoid any edge effect.
+
+\hypertarget{individual-weed-species-abundance}{%
+\paragraph*{Individual weed species abundance}\label{individual-weed-species-abundance}}
+\addcontentsline{toc}{paragraph}{Individual weed species abundance}
+
+All the same-species plants from each eu were clipped, enumerated, dried, and weighed at \textasciitilde0\% moisture together to make single data points per eu. The total surveyed area was 18.5 m\(^2\)/eu (8 x 2.3 m\(^2\)) in corn and soybean and 2.2 m\(^2\)/eu (8 x 0.25m\(^2\) or 8 x 0.28m\(^2\)) in oat and alfalfa. Plants were identified to species as guided by \citet{uvaWeedsNortheast1997}. Plant counts and dried weigh were converted to plants m\(^{-2}\) and gram m\(^{-2}\).
+
+\hypertarget{weed-community-abundance}{%
+\paragraph*{Weed community abundance}\label{weed-community-abundance}}
+\addcontentsline{toc}{paragraph}{Weed community abundance}
+
+Weights and counts of individual weed species from each eu were tallied for community abundance.
+
+\hypertarget{ecological-indices}{%
+\paragraph*{Ecological indices}\label{ecological-indices}}
+\addcontentsline{toc}{paragraph}{Ecological indices}
+
+Weed aboveground mass reflects species competitiveness and density represents population size. Simpson's diversity, evenness, and richness indices were calculated in terms of stand density and aboveground mass in each eu. We evaluated eighteen weed communities, corresponding to nine crop identities crossed with two weed management regimes in corn.
+
+Let:\\
+\(S\) represent species richness (i.e., the number of species presented),\\
+\(n_i\) represent density of the i\(^{th}\) species (plants m\(^{-2}\)),\\
+\(N\) represent density of all presented species (plants m\(^{-2}\)),\\
+\(b_i\) represent aboveground mass of the i\(^{th}\) species (g m\(^{-2}\)),\\
+\(B\) represent aboveground mass of all species, g m\(^{-2}\), and\\
+\(p_{i_d}\) and \(p_{i_b}\) represent the proportional of density or aboveground biomass of the i\(^{th}\) species.
+
+Community diversity was evaluated with Simpson's index, \(Simpson's\ D = \frac{1}{D} = \frac{1}{\sum p_i^2}\), because it is less sensitive to sample size and is useful to describe evenness \citep{nkoaWeedAbundanceDistribution2015}. Simpson's evenness index was calculated with \(\frac{\frac{1}{D}}{S}\). The \(p_i\) component in Simpson's diversity and evenness indices here was calculated with stand count (\(\frac{n_i}{N}\)) or biomass (\(\frac{b_i}{B}\)). Ideally, only one richness index is needed because it is the number of species presented. However, two ABUTH (\emph{Abutilon theophrasti}) plants that were found in 2019 were too light to register on a scientific scale, resulting in zero weight for the species' aboveground mass. Therefore, the richness index was calculated for both stand and aboveground mass. The evenness index was thus calculated with the relevant richness index with regards to stand count and aboveground mass.
+
+\hypertarget{crop-yields}{%
+\paragraph*{Crop yields}\label{crop-yields}}
+\addcontentsline{toc}{paragraph}{Crop yields}
+
+Six 84-m long rows of corn and soybean (383 m\(^2\)) were harvested from each eu, for oat and alfalfa, whole plots were harvested (two adjacent subplots combined, 1530 m\(^2\)). Yields were adjusted to moisture concentrations of 155 g H\(_2\)O kg\(^{-1}\) for corn, at 130 g H\(_2\)O kg\(^{-1}\) for soybean, at 140 H\(_2\)O kg\(^{-1}\) for oat grain and 150 g H\(_2\)O kg\(^{-1}\) for alfalfa.
+
+\hypertarget{model-fitting}{%
+\paragraph*{Model fitting}\label{model-fitting}}
+\addcontentsline{toc}{paragraph}{Model fitting}
+
+Block, crop identity, weed management regime applied to the corn phase of a rotation (corn weed management), and the interaction of crop identity and corn weed management were considered fixed factors; year and the interaction between year and the fixed factors were considered random factors; and the residual was random by default. Block was treated as a fixed factor to control for the different field conditions across sections and reduce the variance between eu's \citep{dixonShouldBlocksBe2016}.
+
+R version 4.1.2 \citep{rdevelopmentcoreteamLanguageEnvironmentStatistical2021} was used for all the data organization, manipulation, analysis, models diagnosis, and result presentation. Statistical tests were evaluated at an \(\alpha\) = 0.05 level of significance. All the response variables were natural logarithm (ln) transformed to meet homogeneity of variance requirement. Zero values for each response were added the minimum non-zero value before transformation). Type III sums of squared error were calculated with the \texttt{emmeans} package's \texttt{joint\_tests} function to accommodate unbalanced data with interaction \citep[version 1.7.1-1,][]{lenthEmmeansEstimatedMarginal2021}. Results were back-transformed for presentation. Degree of freedom adjustment was done with Satterthwaite's method. P-values adjustment was done with Tukey's method.
+
+Stand diversity, stand evenness, stand richness, aboveground mass diversity, aboveground mass evenness, aboveground mass richness, community aboveground density, community aboveground mass, individual species density, and individual species aboveground mass were analyzed separately with a linear mixed-effects model, using the \texttt{lmer} function in the \texttt{lme4} package \citep[version 1.1-27.1,][]{batesLme4LinearMixedEffects2021} according to the following model.
+
+\begin{align}
+R_{ijklm} = \mu + B_i + C_j + H_k + CH_{jk} + Y_l + BY_{il} + YC_{lj} + YH_{lk} + YCH_{ljk} + BYC_{ijl} + \epsilon_{ijkl}
+\label{eq:index}
+\end{align}
+
+where,
+
+\(R\) is one of the aforementioned responses,\\
+\(\mu\) is the overall mean,\\
+\(B\) is the block,\\
+\(Y\) is the year,\\
+\(C\) is the crop identity,\\
+\(H\) is the corn weed management,\\
+\(CH\) is the interaction between crop identity and corn weed management,\\
+\(BY\) is the block within a year,\\
+\(YC\) is interaction between crop identity and year,\\
+\(YH\) is the interaction between year and corn herbicide,\\
+\(YCH\) is the interaction between year, crop identity, and corn weed management,\\
+\(BYC\) is the interaction between block, year, and crop identity, and\\
+\(\epsilon_{ijklm}\) is the residual.
+
+The crop identity term in the right hand side of the model (Equation \eqref{eq:index}) represents the main-plot effect of the experiment, which comprises of the crop species and the rotation to which it belonged. In this present study, ``cropping system'' is the combination of ``rotation system'' (2-year, 3-year, and 4-year) and herbicide regime in corn (low or conventional); and crop type represents growing condition, so corn and soybean were grouped as warm season crops, whereas oat and alfalfa were grouped as cool season crops. With this model, we tested the following sets of hypotheses:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  Weed community stand diversity, community stand evenness, community stand richness, community aboveground mass diversity, community aboveground mass evenness, community aboveground mass richness, community aboveground density, and community aboveground mass increased as cropping system diversity increased.
+\item
+  Weed community stand diversity, community stand evenness, community stand richness, community aboveground mass diversity, community aboveground mass evenness, community aboveground mass richness, community aboveground density, and community aboveground mass in the same crop species differed between cropping system .
+\item
+  Weed community stand diversity, community stand evenness, community stand richness, community aboveground mass diversity, aboveground mass evenness, community aboveground mass richness, community aboveground density, and community aboveground mass in the same crop species differed between different crop types within the a given cropping system.
+\item
+  Individual density and aboveground mass of the seven most abundant species differed between rotations in the same crop species, differed across rotations, and differed between crop type within a given cropping system.
+\end{enumerate}
+
+The first set of hypotheses was tested by contrasting the responses in the 2-year rotation with those in the average of the 3-year and 4-year rotations and the responses in the 3-year rotation with those in the 4-year rotation. The second set of hypotheses was tested by contrasting the responses in the same crop species within different rotations. The third set of hypotheses was tested by contrasting the average responses in the warm season crops across rotations, in the cool season crops across rotations, in the warm season versus cool season crops within the same rotation, and between the warm season crops and the cool season crop(s) averaged over rotations. The same sets of contrasts used to evaluate weed community ecological indices, weed community aboveground mass, and weed community stand density were applied to data concerning the seven most abundant weed species. The fourth set of hypotheses was tested by contrasting individual weed species density and aboveground mass a) in the 2-year rotation versus the average of 3-year and 4-year rotations and in the 3-year versus 4-year rotation, b) in the same crop species or type across rotations, c) in different crop types within the same rotation, and d) in different crop types averaged over rotations.
+
+A different set of linear mixed-effects model was used to analyze corn, soybean, and oat yields \citep[\texttt{lme4} version 1.1-27.1,][]{batesLme4LinearMixedEffects2021}:
+
+\begin{align}
+R_{ijkm} = \mu + B_i + C_j + H_k + CH_{jk} + Y_l + BY_{il} + YC_{lj} + YH_{lk}  + YRH_{lij} + BYC_{ilj} + \epsilon_{ijkl}
+\label{eq:yield}
+\end{align}
+
+where,
+
+\(R\) is the individual crop yield, and\\
+all the terms in the right hand side of the model are as defined in Equation \eqref{eq:index}.
+
+As each crop species was fitted with a model, the crop identity represents the rotation effect only. With this model (Equation \eqref{eq:yield}), we tested the hypotheses that the yield of the same crop species (corn, soybean, and oat) did not differ between rotations. Crop yields were then contrasted between rotations to examine the magnitude of any significant difference.
+
+  \bibliography{ecol.bib}
+
+\end{document}
