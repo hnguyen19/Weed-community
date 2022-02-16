@@ -217,23 +217,18 @@ across(models:p_cont, setNames,  .$Species))
 
 #### How did rotation, crop species, and corn weed management affect individual weed species abundance?{-}  
 
-The stand density and aboveground mass of the seven most abundant weed species are shown in Figure \@ref(fig:all-sp-dens-biom). The effects of crop identity (i.e., rotation system crossed with crop species), corn weed management, and their interaction on the seven most abundant weeds in the present study are shown in Table \@ref(tab:ind-dens-biom-jt). 
-No interactive effects between crop identity and corn weed management were seen in any of those seven species' density or aboveground mass. The main effects of crop identity and corn weed management on stand density and aboveground mass varied by species.  
+*The hypothesis that "including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean" was partially supported.* Crop identity affected individual density of seven most abundant weed species but corn weed management affected that of two weed species only, i.e., DIGSA and SETFA (p = 0.0189 and p = 0.0196, resepectively; Table \@ref(tab:ind-dens-biom-jt). Among those seven weed species, the aboveground mass of four (CHEAL, DIGSA, SETFA, and TAROF) were affected by crop identity, but none was affected by corn weed management (Table \@ref(tab:ind-dens-biom-jt). The magnitude of difference in stand density and aboveground mass were the most pronounced between crop types (Table \@ref(tab:indiv-dens-biom-ct)). The main-plot effects concerning crop identity on individual species responses are elaborated below.  
 
-
-*The hypothesis that "including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean" was partially supported.* Among the seven most abundant weed species, the stand densities were all affected by crop identity, but the aboveground mass was affected by crop identity for only four out of seven species (Table \@ref(tab:ind-dens-biom-jt)).  
 
 ```{r ind-dens-biom-jt, echo=FALSE}
 #separate by density and biomass because of large table 
 
-ind_dens_jt <- rbind(#dens_result_t$jts2_clean$ABUTH,
-  dens_result_t$jts2_clean$AMATA,
+ind_dens_jt <- rbind(dens_result_t$jts2_clean$AMATA,
                      dens_result_t$jts2_clean$CHEAL,
                      dens_result_t$jts2_clean$DIGSA,
                      dens_result_t$jts2_clean$ECHCG,
                      dens_result_t$jts2_clean$SETFA,
                      dens_result_t$jts2_clean$SETLU,
-                     #dens_result_t$jts2_clean$SOLPT,
                      dens_result_t$jts2_clean$TAROF, 
   dens_result_t$jts2_clean$zOTHERS) 
 ind_dens_df <- as.data.frame(ind_dens_jt)
@@ -241,8 +236,7 @@ ind_dens_df <- as.data.frame(ind_dens_jt)
 
 ind_dens_df$F.ratio <- as.numeric(ind_dens_df$F.ratio)
 
-ind_biom_jt <- rbind(#biom_result_t$jts2_clean$ABUTH,
-                     biom_result_t$jts2_clean$AMATA,
+ind_biom_jt <- rbind(biom_result_t$jts2_clean$AMATA,
       biom_result_t$jts2_clean$CHEAL,
       biom_result_t$jts2_clean$DIGSA,
       biom_result_t$jts2_clean$ECHCG,
@@ -265,13 +259,13 @@ ind_dens_biom_jt$`model term                  ` <- gsub(":", " x ", ind_dens_bio
 rownames(ind_dens_biom_jt) <- NULL
 
 ind_dens_biom_jt_clean <- ind_dens_biom_jt[,-c(6,7,8)] 
-colnames(ind_dens_biom_jt_clean) <- c("Source of variation", "df1", "df2", rep(c("F.value","p.value"),2))
+colnames(ind_dens_biom_jt_clean) <- c("Source of variation", "df1", "df2", rep(c("F","p"),2))
 
 ind_dens_biom_jt_clean %>%
   kbl(booktabs = TRUE, 
       digits = 2,
       linesep = " ", longtable = FALSE, align = "lrrrrrr",
-    caption = "Treatment effects on the abundance of the most population and vigorous weed species, listed alphabetically. All the other weeds species were grouped into OTHERS") %>% 
+    caption = "Treatment effects on the stand density and aboveground mass of the seven most abundant weed species, listed alphabetically. All the other weeds species were grouped into OTHERS.") %>% 
   add_header_above(c(" " = 3, "Stand density" = 2, "Aboveground mass" = 2)) %>% 
   pack_rows("(A) - AMATA", 1, 3) %>%
   pack_rows("(B) - CHEAL", 4, 6) %>% 
@@ -285,30 +279,25 @@ ind_dens_biom_jt_clean %>%
                 border_right = TRUE) %>%
   kable_styling(latex_options = c("scale_down")) %>%
   footnote(general = "Corn weed management: low herbicide or conventional. C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
-
-
 ```
 
-Significance of differences in individual species density and aboveground mass (p-values) are presented to illustrate community composition shift. Individual species stand density and aboveground mass data were combined over four years and four blocks. The magnitude of differences in individual weed density and aboveground mass contrasts are shown in Table \@ref(tab:sp-ct).     
-
-Averaged over crop identity, DIGSA and SETFA stand density and aboveground mass were affected by corn weed management (p-values = 0.0189 and 0.0196, Table \@ref(tab:ind-dens-biom-jt)). Averaged over corn weed management regimes, the differences in weed species stand density and aboveground mass were observed more often between crop types (Tables \@ref(tab:sp-pval)B and C, and Tables \@ref(tab:\@ref(tab:sp-ct)B and C)) than for individual crops across rotations (Tables \@ref(tab:sp-pval)A and \@ref(tab:sp-ct)A). The main-plot effects concerning crop identity on individual species responses are elaborated below.  
-
-*The cool season crops were responsible for AMATA stand density differences, but those differences were not strong enough to be apparent between rotation averages.* *AMATA stand density and aboveground mass were comparable among all rotation systems averaged over crop phases (p-values > 0.05), among rotations for the same crop species (p-values > 0.05), and within the same crop type across rotations (p-values > 0.05).* Averaged over the same crop types (warm season or cool season), AMATA stand density was different in cool season versus warm season crops (p-value = 0.0001), but AMATA aboveground mass was comparable (p-value = 0.0906) in cool season and warm season crops. Within the same rotation, AMATA stand density was greater in the cool season than in the warm season crops (p-values 0.0143, and 0.0003), but AMATA aboveground mass was comparable in these crop environments (p-values = 0.2355, and 0.0493).  
+*The cool-season crops were responsible for AMATA stand density differences, but those differences were not strong enough to be apparent between rotation averages.* AMATA stand density and aboveground mass were comparable among all rotation systems averaged over crop phases (p-values > 0.05), among rotations for the same crop species (p-values > 0.05), and within the same crop type across rotations (p-values > 0.05). Averaged over the same crop types (warm-season or cool-season), AMATA stand density in cool-season was 12.25-fold greater than that in warm-season crops (p = 0.0001), but AMATA aboveground mass was comparable in cool-season and warm-season crops (p = 0.0906). Within the same rotation, AMATA stand density was 11-fold (p = 0.0143) and 23-fold (p = 0.0003) greater in the cool-season than in the warm-season crops overall averages, but AMATA aboveground mass was comparable in these crop environments (p = 0.2355 and p = 0.0493, respectively).  
 
 
-*The cool season crops, especially oat were responsible for CHEAL stand density and aboveground mass differences between rotation averages. CHEAL stand density and aboveground mass were 11-fold (p-value = 0.0001) and 96-fold (p-value = 0.0001) greater in oat than in alfalfa.* CHEAL stand density and aboveground mass were  different between the 2-year rotation and the average of the 3-year and 4-year rotations, but comparable between the 3-year and 4-year rotations (p-values = 0.9195 and 0.6114). CHEAL stand density and aboveground mass were comparable across rotations for the same crop species (p-values > 0.05) and within the warm season crops (p-values > 0.05), but different across crop types overall (p-values < 0.0001), between the warm season and cool season crops of the same rotation (p-values = 0.0001), and within the cool season crops (oat versus alfalfa).   
-
-*The cool season crops, especially alfalfa were responsible for DIGSA stand density and aboveground mass differences between rotation averages. DIGSA stand density and aboveground mass were 14-fold (p-value = 0.0001) and 33-fold (p-value = 0.0001) greater in alfalfa than in oat.* DIGSA stand density was different between the 2-year rotation and the average of the 3-year and 4-year rotations (p-value = 0.0072) and between the 3-year and 4-year rotation (p-value < 0.0001). DIGSA aboveground mass was comparable between the 2-year and the average of the 3-year and 4-year rotations (p-value = 0.1098), but  different between the 3-year and 4-year rotations (p-value = 0.0001). DIGSA stand density and aboveground mass were comparable across rotations for the same crop species (p-values > 0.05), except for oat (p-values = 0.0062 and 0.0032). Within the 3-year rotation, DIGSA stand density was comparable among crop phases (p-value = 0.0603), but DIGSA aboveground mass was  different between oat and the average of corn and soybean phases (p-value < 0.0001). DIGSA stand density and aboveground mass were  different across crop types overall, between the warm season and cool season crops of the 4-year rotation (p-values = 0.0001), and within the cool season crops (oat versus alfalfa) (p-values < 0.0001).   
+*The cool-season crops, especially oat were responsible for CHEAL stand density and aboveground mass differences between rotation averages.* CHEAL stand density and aboveground mass were 4-fold (p = 0.008) and 5-fold (p = 0.199) greater in the average of the 3-year and 4-year rotations than in the 2-year rotation, but comparable between the 3-year and 4-year rotations (p = 0.9195 and p = 0.6114, respectively). CHEAL stand density and aboveground mass were comparable between rotations for the same crop species (p-values > 0.05) and within the warm-season crops (p-values > 0.05). CHEAL stand density and aboveground mass were 38-fold (p < 0.0001) and 204-fold (p < 0.0001) greater in the cool-season crops than in the warm-season crops overall averages; 67-fold (p < 0.0001) and 571-fold (p < 0.0001) greater in the cool-season crop than in the warm-season crops average of the 3-year rotation; and 37-fold (p < 0.0001) and 232-fold (p < 0.0001) greater in the cool-season crop than in the warm-season crops average of the 4-year rotation. CHEAL stand density and aboveground mass were 11-fold (p = 0.0001) and 96-fold (p = 0.0001) greater in oat than in alfalfa. 
 
 
-*ECHCG responses generally were similar to those of AMATA.* ECHCG stand density and aboveground mass were comparable between all rotation averages (p-values > 0.05), across rotations for the same crop species (p-values > 0.05), within the same crop type across rotations (p-values > 0.05), and within the 3-year rotation (p-values > 0.05). Averaged over the same crop types, ECHCG stand density and aboveground mass were different in cool season versus warm season crops (p-value = 0.0003 and 0.0012). Within the 4-year rotation, ECHCG stand density and aboveground mass were greater in the cool season than in the warm season crops (p-values 0.0014, and 0.0031).   
+*The cool-season crops, especially alfalfa were responsible for DIGSA stand density and aboveground mass differences between rotation averages.* DIGSA stand density in the average of the 3-year and 4-year rotations was two-fold greater than in the 2-year rotation (p = 0.0072) and 5-fold greater in the 4-year rotation than in the 3-year rotation (p < 0.0001). DIGSA aboveground mass was comparable between the 2-year and the average of the 3-year and 4-year rotations (p = 0.1098), but 14-fold greater in the 4-year than in the 3-year rotations (p = 0.0001). DIGSA stand density and aboveground mass were comparable between rotations for the same crop species (p-values > 0.05), except for oat (p = 0.0062 and p = 0.0032). DIGSA stand density and aboveground mass were 10-fold and 27-fold greater in the cool-season crop averages than in the warm-season crops averages, 20-fold (p = 0.0001) and 103-fold (p = 0.0001) greater in the cool-season crops than in the warm-season crops of the 4-year rotation, but comparable between cool-season and warm-season crops of the 3-year rotation (p = 0.0603 and p = 0.3924, respectively). DIGSA stand density and aboveground mass were 14-fold (p = 0.0001) and 33-fold (p = 0.0001) greater in alfalfa than in oat.   
 
 
-*The cool season crops were responsible for SETFA stand density and aboveground mass differences, but those differences were not strong enough be apparent between rotation averages.* SETFA stand density and aboveground mass were comparable across all rotation averages (p-values > 0.05), across rotations for the same crop species (p-values > 0.05), within the warm season crops across rotations (p-values > 0.05), and within the cool season crops (p-values > 0.05). Averaged over the same crop types, SETFA stand density and aboveground mass were different in cool season versus warm season crops (p-value < 0.0001 and p-value = 0.0008). Within the same rotation, SETFA stand density and aboveground mass were greater in the cool season than in the warm season crops (p-values = 0.001, 0.018, 0.0001, and 0.0045).  
+*ECHCG responses generally were similar to those of AMATA.* ECHCG stand density and aboveground mass were comparable between all rotation averages (p-values > 0.05), between rotations for the same crop species (p-values > 0.05), within the same crop type between rotations (p-values > 0.05), and within the 3-year rotation (p-values > 0.05). Averaged over the same crop types, ECHCG stand density and aboveground mass were 4-fold (p = 0.0003) and 10-fold (p = 0.0012) greater in the cool-season than in the warm-season crops. Within the 4-year rotation, ECHCG stand density and aboveground mass were 5-fold (p = 0.0014) and 18-fold (p = 0.0031) greater in the cool-season than in the warm-season crops.   
 
-SETLU stand density and aboveground mass were comparable in most pairs of comparison (p-values > 0.05), with the exception in the warm season versus cool season density (p-value = 0.0404).  
 
-*The cool season crops, especially oat were responsible for TAROF stand density and aboveground mass differences across rotation averages. TAROF stand density and aboveground mass were 6-fold (p-value < 0.0001) and 20-fold (p-value = 0.0001) greater in oat than in alfalfa.* TAROF stand density and aboveground mass were  different in the 2-year versus the average of the 3-year and 4-year rotations, and between the 3-year and 4-year rotations (p-values < 0.0001). TAROF stand density and aboveground mass were comparable among the warm season crops across rotations and within the same crops across rotations (p-values > 0.05), except in oat (p-values < 0.0001). TAROF stand density and aboveground mass were different across crop types overall (p-values < 0.0001), across crop types within the same rotations (p-values = 0.0001, 0.0002 and < 0.0001), and between oat versus alfalfa (p-values $\leq$ 0.0001).  
+*The cool-season crops were responsible for SETFA stand density and aboveground mass differences, but those differences were not strong enough be apparent between rotation averages.* SETFA stand density and aboveground mass were comparable between all rotation averages (p-values > 0.05), between rotations for the same crop species (p-values > 0.05), within the warm-season crops between rotations (p-values > 0.05), and within the cool-season crops (p-values > 0.05). Averaged over the same crop types, SETFA stand density and aboveground mass were 10-fold (p < 0.0001) and 15-fold (p = 0.0008) greater in the cool-season than in the warm-season crops. Within the same rotation, SETFA stand density and aboveground mass were 11-fold to 23-fold greater in the cool-season than in the warm-season crops (Table \@ref(tab:indiv-dens-biom-ct)).  
+
+SETLU stand density and aboveground mass were comparable in most pairs of comparison (p-values > 0.05), except that SETLU stand density was 2.5-fold greater in the cool-season crops average than in the warm-season crops average(p = 0.0404).  
+
+*The cool-season crops, especially oat were responsible for TAROF stand density and aboveground mass differences between rotation averages.* TAROF stand density and aboveground mass in the 3-year and 4-year rotations average were 4-fold (p < 0.0001) and 14-fold (p < 0.0001) greater than those in the 2-year rotation. TAROF stand density and aboveground mass in the 3-year rotation were and 5-fold  (p < 0.0001) and 20-fold (p < 0.0001) greater than those in the 4-year rotation. TAROF stand density and aboveground mass were comparable among the warm-season crops between rotations and within the same crops between rotations (p-values > 0.05), except in oat (p < 0.0001). TAROF stand density and aboveground mass were 24-fold (p < 0.001) and 390-fold (p < 0.0001) greater in cool-season than in warm-season crop averages, 4-fold (p = 0.0001) and 20-fold (p = 0.0002) greater in oat than in corn and soybean averages in the 3-year rotation, and 54-fold (p < 0.0001) and 1483-fold (p < 0.0001) greater in the cool-season crops than in the warm-season crops in the 4-year rotation. TAROF stand density and aboveground mass were 6-fold (p < 0.0001) and 20-fold (p = 0.0001) greater in oat than in alfalfa.
 
 
 ```{r, include=FALSE}
@@ -321,10 +310,28 @@ dens_ct_list_df <- map(dens_ct , as.data.frame) # same as lapply(dens_ct, as.dat
 
 
 dens_ct_df <- lapply(dens_ct_list_df, 
-                     as.data.frame, stringsAsFactors = TRUE) %>%
+                     as.data.frame, stringsAsFactors = FALSE) %>%
   rbindlist(fill = FALSE) #combine everything into a large df
+```
+
+```{r, include=FALSE}
+# Keep contrast ratio and p-values in density 
+dens_ct_df_clean <- dens_ct_df %>%
+  select(-contains(c(".SE", ".df", ".null", ".t.ratio", "OTHER")))  %>%
+  select(-contains(c("CHEAL.contrast", "DIGSA.contrast", "ECHCG.contrast", "SETFA.contrast","SETLU.contrast", "TAROF.contrast")))
 
 
+dens_ct_df_rounded <- dens_ct_df_clean %>%
+  mutate_at(c(2,4,6,8,10,12,14), ~ sprintf('%.2f', .)) %>% #all ratios 2 digits
+  mutate_at(c(3,5,7,9,11,13,15), ~ sprintf('%.4f', .)) %>% #all p-values at 4 digits
+  mutate(across(0.0000, ~ as.character)) %>% 
+  mutate_if(is.character, str_replace_all,
+            pattern = '0.0000', 
+            replacement = '<.0001')
+```
+
+
+```{r, include=FALSE}
 ## select string starts with "biom_
 biom_ct <- biom_result_t %>% select(contains("biom_")) #extract the contrasts only
 
@@ -337,182 +344,63 @@ biom_ct_df <- lapply(biom_ct_list_df,
   rbindlist(fill = FALSE) #combine everything into a large df
 ```
 
-```{r, include = FALSE}
-## Filter contrast tables by weed species names with `select(contains("Bayer code"))`
-
-AMATA_dens_ct <- dens_ct_df %>% select(contains("AMATA"))
-AMATA_biom_ct <- biom_ct_df %>% select(contains("AMATA"))
-
-AMATA_ct <- AMATA_dens_ct %>% full_join(AMATA_biom_ct, by = "AMATA.contrast")
-rownames(AMATA_ct) <- NULL
-names(AMATA_ct)[1] <- "Contrast"
-
-CHEAL_dens_ct <- dens_ct_df %>% select(contains("CHEAL"))
-CHEAL_biom_ct <- biom_ct_df %>% select(contains("CHEAL"))
-
-CHEAL_ct <- CHEAL_dens_ct %>% full_join(CHEAL_biom_ct, by = "CHEAL.contrast")
-rownames(CHEAL_ct) <- NULL
-names(CHEAL_ct)[1] <- "Contrast"
-
-DIGSA_dens_ct <- dens_ct_df%>%select(contains("DIGSA"))
-DIGSA_biom_ct <- biom_ct_df%>%select(contains("DIGSA"))
-
-DIGSA_ct <- DIGSA_dens_ct %>% full_join(DIGSA_biom_ct, by = "DIGSA.contrast")
-rownames(DIGSA_ct) <- NULL
-names(DIGSA_ct)[1] <- "Contrast"
-
-ECHCG_dens_ct <- dens_ct_df%>%select(contains("ECHCG"))
-ECHCG_biom_ct <- biom_ct_df%>%select(contains("ECHCG"))
-
-ECHCG_ct <- ECHCG_dens_ct %>% full_join(ECHCG_biom_ct, by = "ECHCG.contrast")
-rownames(ECHCG_ct) <- NULL
-names(ECHCG_ct)[1] <- "Contrast"
 
 
-SETFA_dens_ct <- dens_ct_df %>% select(contains("SETFA"))
-SETFA_biom_ct <- biom_ct_df %>% select(contains("SETFA"))
+```{r, include=FALSE}
+# Keep contrast ratio and p-values in density 
+biom_ct_df_clean <- biom_ct_df %>%
+  select(-contains(c(".SE", ".df", ".null", ".t.ratio", "OTHER")))  %>%
+  select(-contains(c("CHEAL.contrast", "DIGSA.contrast", "ECHCG.contrast", "SETFA.contrast","SETLU.contrast", "TAROF.contrast")))
 
-SETFA_ct <- SETFA_dens_ct %>% full_join( SETFA_biom_ct, by = "SETFA.contrast")
-rownames(SETFA_ct) <- NULL
-names(SETFA_ct)[1] <- "Contrast"
 
-SETLU_dens_ct <- dens_ct_df %>% select(contains("SETLU"))
-SETLU_biom_ct <- biom_ct_df %>% select(contains("SETLU"))
-
-SETLU_ct <- SETLU_dens_ct %>% full_join(SETLU_biom_ct, by = "SETLU.contrast")
-rownames(SETLU_ct) <- NULL
-names(SETLU_ct)[1] <- "Contrast"
-
-TAROF_dens_ct <- dens_ct_df %>% select(contains("TAROF"))
-TAROF_biom_ct <- biom_ct_df %>% select(contains("TAROF"))
-
-TAROF_ct <- TAROF_dens_ct %>% full_join(TAROF_biom_ct, by = "TAROF.contrast")
-rownames(TAROF_ct) <- NULL
-names(TAROF_ct)[1] <- "Contrast"
-
-zOTHERS_dens_ct <- dens_ct_df %>% select(contains("zOTHERS"))
-zOTHERS_biom_ct <- biom_ct_df %>% select(contains("zOTHERS"))
-
-zOTHERS_ct <- zOTHERS_dens_ct %>% full_join(zOTHERS_biom_ct, by = "zOTHERS.contrast")
-rownames(zOTHERS_ct) <- NULL
-names(zOTHERS_ct)[1] <- "Contrast"
-
-## Merge all p-value of individual weed species density columns together
-
-seven_pval_dens <-  list(AMATA_ct,
-                     CHEAL_ct,
-                     DIGSA_ct, 
-                     ECHCG_ct,
-                     SETFA_ct,
-                     SETLU_ct,
-                     TAROF_ct) %>%
-                #     zOTHERS_ct)%>% 
-  reduce(left_join, by = "Contrast") %>%
-  select(Contrast, contains("value.x")) 
-
-## Merge all p-value of individual weed species aboveground mass columns together
-seven_pval_biom <-  list(AMATA_ct,
-                     CHEAL_ct,
-                     DIGSA_ct, 
-                     ECHCG_ct,
-                     SETFA_ct,
-                     SETLU_ct,
-                     TAROF_ct) %>%
-             #        zOTHERS_ct) %>% 
-  reduce(left_join, by = "Contrast") %>%
-  select(Contrast, contains("value.y"))
-
-## Merge 2 p-value tables 
-seven_pval <- full_join(seven_pval_dens, seven_pval_biom, by = "Contrast")
+biom_ct_df_rounded <- biom_ct_df_clean %>%
+  mutate_at(c(2,4,6,8,10,12,14), ~ sprintf('%.2f', .)) %>% #all ratios 2 digits
+  mutate_at(c(3,5,7,9,11,13,15), ~ sprintf('%.4f', .)) %>% #all p-values at 4 digits
+  mutate(across(0.0000, ~ as.character)) %>% 
+  mutate_if(is.character, str_replace_all,
+            pattern = '0.0000', 
+            replacement = '<.0001')
 ```
 
 
+```{r, include=FALSE}
+## stack density and aboveground mass, keep the rows with the most representative contrasts only 
 
+dens_ct_condensed <- dens_ct_df_rounded[c(1,2,
+                     5,6,
+                     9,12,
+                     13, 16, 17,
+                     18:21),]
 
-```{r sp-pval, echo=FALSE}
-## Clean p-value table
-seven_pval_clean <- seven_pval[c(1,2, 
-                                 5,6,
-                                 9,12, 
-                                 13, 16, 17,
-                                 18:21),]
+biom_ct_condensed <- biom_ct_df_rounded[c(1,2,
+                     5,6,
+                     9,12,
+                     13, 16, 17,
+                     18:21),]
 
-seven_pval_clean$Contrast <- gsub("", "", seven_pval_clean$Contrast)
-seven_pval_clean$Contrast <- gsub("low ", "", seven_pval_clean$Contrast)
+dens_biom_ct_condensed <- rbind(dens_ct_condensed, biom_ct_condensed )
 
-seven_pval_round <- seven_pval_clean %>% 
-  mutate(across(where(is.numeric), ~ sprintf("%.4f", .))) %>% #keep 4 decimal places
-  mutate(across(0.0000, ~ as.character)) %>% 
-  mutate_if(is.numeric, str_replace_all,
-            pattern = '0.0000', 
-            replacement = '<.0001') %>%
-    mutate_all(function(x) gsub("0.0000", "<.0001",x))
+```
 
-
-
-seven_pval_round %>%
-  `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
-  kbl(longtable = FALSE, booktabs = TRUE, linesep = "", align = 'lrrrrrrrrrrrrrr',
-    caption = "Significance of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
-  add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
-  add_header_above(c(" "= 1,  " P-values " = 14)) %>%
-    column_spec(8, border_left = FALSE, border_right = TRUE) %>%
-  pack_rows("(A) - Rotation system effects", 1, 4) %>%
-  pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
-  pack_rows("(C) - Crop type effects", 10, 13) %>%
+```{r indiv-dens-biom-ct, echo=FALSE}
+dens_biom_ct_condensed  %>%
+  `colnames<-` (c("Contrast of the main-plot effect", rep(c("ratio", "p"), 7))) %>%
+    kbl(longtable = FALSE, booktabs = TRUE, linesep = "", align = 'lrrrrrrrrrrrrrr',
+    caption = "Contrast of stand density and aboveground mass of the seven most abundant weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>% 
+  add_header_above(c(" " = 1, "AMATA" = 2, "CHEAL" = 2, "DIGSA" = 2, "ECHCG" = 2, "SETFA" = 2, "SETLU" = 2, "TAROF" = 2)) %>% 
+    column_spec(c(3,5,7,9,11,13), border_left = FALSE, border_right = TRUE) %>%
+   pack_rows("(A) - Stand density", 1, 13) %>%
+  pack_rows("(A1) - Rotation system effects", 1, 4) %>%
+  pack_rows("(A2) - Rotation system effects within individual crops", 5, 9) %>%
+  pack_rows("(A3) - Crop type effects", 10, 13) %>%
+  pack_rows("(B) - Aboveground mass", 14, 26) %>%
+  pack_rows("(B1) - Rotation system effects", 14, 17) %>%
+  pack_rows("(B2) - Rotation system effects within individual crops", 18, 22) %>%
+  pack_rows("(B3) - Crop type effects", 23, 26) %>%
   kable_styling(latex_options = "scale_down") %>%
   landscape() %>%
   footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 
-```
-
-```{r sp-ct, echo=FALSE}
-seven_ct_dens <-  list(AMATA_ct,
-                     CHEAL_ct,
-                     DIGSA_ct, 
-                     ECHCG_ct,
-                     SETFA_ct,
-                     SETLU_ct,
-                     TAROF_ct) %>% 
-  reduce(left_join, by = "Contrast") %>%
-  select(Contrast, contains(".ratio"), -contains("t.ratio"), -contains("ratio.y"))
-  
-seven_ct_biom <-  list(AMATA_ct,
-                     CHEAL_ct,
-                     DIGSA_ct, 
-                     ECHCG_ct,
-                     SETFA_ct,
-                     SETLU_ct,
-                     TAROF_ct) %>% 
-  reduce(left_join, by = "Contrast") %>%
-  select(Contrast, contains(".ratio"), -contains("t.ratio"), -contains("ratio.x"))
-
-seven_ct <- full_join(seven_ct_dens, seven_ct_biom, by = "Contrast")
-
-seven_ct_clean <- seven_ct[c(1,2, 
-                                 5,6,
-                                 9,12, 
-                                 13, 16, 17,
-                                 18:21),]
-
-
-seven_ct_clean$Contrast <- gsub("conv ", "", seven_ct_clean$Contrast)
-seven_ct_clean$Contrast <- gsub("low ", "", seven_ct_clean$Contrast)
-
-seven_ct_clean %>%
-  `colnames<-` (c("Contrast of the main-plot effect", rep(c("AMATA", "CHEAL", "DIGSA", "ECHCG", "SETFA", "SETLU", "TAROF"), 2))) %>%
-  kbl(longtable = FALSE, booktabs = TRUE, digits = 2,
-      linesep = "", align = 'lrrrrrrrrrrrrrr',
-    caption = "Means of difference in abundance of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>% 
-  add_header_above(c(" " = 1, "Stand density" = 7, "Aboveground mass" = 7)) %>% 
-  add_header_above(c(" " = 1, " Contrast ratios " = 14)) %>%
-    column_spec(8, border_left = FALSE, border_right = TRUE) %>%
-  pack_rows("(A) - Rotation system effects", 1, 4) %>%
-  pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
-  pack_rows("(C) - Crop type effects", 10, 13) %>%
-  kable_styling(latex_options = "scale_down") %>%
-  landscape() %>%
-  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3: soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 ```
 
 

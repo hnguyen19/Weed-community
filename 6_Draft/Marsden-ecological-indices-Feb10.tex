@@ -88,6 +88,7 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
+\setlength{\LTcapwidth}{\textwidth}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -128,13 +129,16 @@ Empirical measurements of weed community composition were made from 2017 through
 \item Corn was planted at 12950 seeds/ha, soybean at 56656 seeds/ha, oat at 80.7 kg/ha, red clover and alfalfa at 19.1 kg/ha. PRE and POST herbicide in corn and soybean refers to pre-emergence and post-emergence, relative to weed emergence. No herbicide was applied in oat, red clover, and alfalfa. 'Belle' (in 2017) or 'Mammoth' (in 2018 - 2020) red clover was intercropped with oat in the 3-year rotation (O3). Alfalfa was intercropped with the oat phase in the 4-year rotation (O4) and was overwintered to the following year as a sole crop (A4). Oat was replanted in 2020 due to poor germination.
 \end{TableNotes}
 \begin{longtable}[t]{>{\raggedright\arraybackslash}p{2em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{14em}>{\raggedright\arraybackslash}p{14em}>{\raggedright\arraybackslash}p{14em}>{\raggedright\arraybackslash}p{14em}}
-\caption{\label{tab:herb-id}Crop variety or hybrid and management 2017 - 2020}\\
+\caption{\label{tab:herb-id}Crop variety or hybrid and management from 2017 through 2020 field seasons}\\
 \toprule
+\centering
 Year & Activity or input & Low herbicide & Conventional herbicide & Low herbicide & Conventional herbicide\\
 \midrule
 \endfirsthead
-\caption[]{\label{tab:herb-id}Crop variety or hybrid and management 2017 - 2020 \textit{(continued)}}\\
+\caption[]{\label{tab:herb-id}Crop variety or hybrid and management from 2017 through 2020 field seasons
+\textit{(continued)}}\\
 \toprule
+\centering
 Year & Activity or input & Low herbicide & Conventional herbicide & Low herbicide & Conventional herbicide\\
 \midrule
 \endhead
@@ -301,7 +305,7 @@ R_{ijkm} = \mu + B_i + C_j + H_k + CH_{jk} + Y_l + BY_{il} + YC_{lj} + YH_{lk}  
 where,
 
 \(R\) is the individual crop yield, and\\
-all the terms in the right hand side of the model are as defined in Equation \eqref{eq:index}.
+all the terms in the right-hand side of the model are as defined in Equation \eqref{eq:index}.
 
 As each crop species was fitted with a model, the crop identity represents the rotation effect only. With this model (Equation \eqref{eq:yield}), we tested the hypothesis that the yield of the same crop species (corn, soybean, and oat) did not differ between rotations. Crop yields were then contrasted between rotations to examine the magnitude of any significant difference.
 
@@ -309,7 +313,9 @@ As each crop species was fitted with a model, the crop identity represents the r
 \section*{Results}\label{results}}
 \addcontentsline{toc}{section}{Results}
 
-A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with \texttt{ggResidpanel} \citep[version 0.3.0,][]{goodeGgResidpanelPanelsInteractive2019} are available in the Data Repository.
+A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with \texttt{ggResidpanel} \citep[version 0.3.0,][]{goodeGgResidpanelPanelsInteractive2019} are available in
+\href{https://github.com/hnguyen19/Weed-community/blob/master/7-Extra/AppendixA-model-diagnosis.pdf}{Model Diagnosis}.
+
 
 \hypertarget{how-did-rotation-system-and-corn-weed-management-affect-crop-yields}{%
 \paragraph*{How did rotation system and corn weed management affect crop yields?}\label{how-did-rotation-system-and-corn-weed-management-affect-crop-yields}}
@@ -317,7 +323,7 @@ A lack of any obvious bias in plots of residuals versus predicted values suggest
 
 Results of the experiment indicated that crop diversification and reduced use of herbicides were not associated with lower crop yields (Table \ref{tab:crop-jt-ct}). Averaged over four years, soybean was the only crop whose yield was affected by rotation (p = 0.0191, Table \ref{tab:crop-jt-ct}). Soybean yield was 16\% higher in the 4-year rotation than in the 2-year rotation (p = 0.0181). Crop yields in the experiment were as high or higher than the averages for the state of Iowa and Boone County (Figure \ref{fig:crop-bar}).
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:crop-jt-ct}Contrasts of rotation effect (expressed by Crop ID) on crop yields. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
 \centering
@@ -330,17 +336,17 @@ Source of variation & df1 & df2 & F & p & contrast & ratio & p\\
 \midrule
 \addlinespace[0.3em]
 \multicolumn{8}{l}{\textbf{(A) - Corn}}\\
-\hspace{1em}Crop ID & 2 & 6 & 3.190 & 0.1138 & C2 vs C3 & 0.938 & 0.1882\\
-\hspace{1em}Corn weed management & 1 & 3 & 0.324 & 0.6088 & C2 vs C4 & 0.929 & 0.1278\\
-\hspace{1em}Crop ID x Corn weed management & 2 & 6 & 2.205 & 0.1914 & C3 vs C4 & 0.990 & 0.9507\\
+\hspace{1em}Crop ID & 2 & 6 & 3.19 & 0.1138 & C2 vs C3 & 0.94 & 0.1882\\
+\hspace{1em}Corn weed management & 1 & 3 & 0.32 & 0.6088 & C2 vs C4 & 0.93 & 0.1278\\
+\hspace{1em}Crop ID x Corn weed management & 2 & 6 & 2.20 & 0.1914 & C3 vs C4 & 0.99 & 0.9507\\
 \addlinespace[0.3em]
 \multicolumn{8}{l}{\textbf{(B) - Soybean}}\\
-\hspace{1em}Crop ID & 2 & 6 & 8.224 & 0.0191 & S2 vs S3 & 0.959 & 0.5499\\
-\hspace{1em}Corn weed management & 1 & 3 & 0.178 & 0.7018 & S2 vs S4 & 0.862 & 0.0181\\
-\hspace{1em}Crop ID x Corn weed management & 2 & 6 & 0.623 & 0.5677 & S3 vs S4 & 0.898 & 0.0670\\
+\hspace{1em}Crop ID & 2 & 6 & 8.22 & 0.0191 & S2 vs S3 & 0.96 & 0.5499\\
+\hspace{1em}Corn weed management & 1 & 3 & 0.18 & 0.7018 & S2 vs S4 & 0.86 & 0.0181\\
+\hspace{1em}Crop ID x Corn weed management & 2 & 6 & 0.62 & 0.5677 & S3 vs S4 & 0.90 & 0.0670\\
 \addlinespace[0.3em]
 \multicolumn{8}{l}{\textbf{(C) - Oat}}\\
-\hspace{1em}Crop ID & 1 & 2 & 1.138 & 0.3979 & O3 vs O4 & 0.913 & 0.3979\\
+\hspace{1em}Crop ID & 1 & 2 & 1.14 & 0.3979 & O3 vs O4 & 0.91 & 0.3979\\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[para]
@@ -350,9 +356,9 @@ Source of variation & df1 & df2 & F & p & contrast & ratio & p\\
 \end{threeparttable}
 \end{table}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics{Manuscript_whole_files/figure-latex/crop-bar-1.png}
+\includegraphics{crop-bar-1.png}
 \caption{\label{fig:crop-bar}Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha\(^-1\)) in the experiment plots. The error bars show the 95\% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.}
 \end{figure}
 
@@ -360,9 +366,9 @@ Source of variation & df1 & df2 & F & p & contrast & ratio & p\\
 \paragraph*{How did rotation system, crop species, and corn weed management affect community ecological indices?}\label{how-did-rotation-system-crop-species-and-corn-weed-management-affect-community-ecological-indices}}
 \addcontentsline{toc}{paragraph}{How did rotation system, crop species, and corn weed management affect community ecological indices?}
 
-Crop identity (i.e., rotation system x crop phase combination) affected weed community stand density evenness (p = 0.0064) and richness (p = 0.0123, Table \ref{tab:all-index-jt}C) and aboveground mass diversity (p = 0.0007, Table \ref{tab:all-index-jt}A), evenness (p = 0.0003, Table \ref{tab:all-index-jt}B), and richness (p =0.013). For all the differences in ecological indices, crop types were more influential than rotations, with larger differences found between crop types than between rotations (Figure \ref{fig:index-arrow-p}, Tables \ref{tab:dens-indices-ct} and \ref{tab:biom-indices-ct}. .
+Crop identity (i.e., rotation system x crop phase combination) affected weed community stand density evenness (p = 0.0064) and richness (p = 0.0123, Table \ref{tab:all-index-jt}C) and aboveground mass diversity (p = 0.0007, Table \ref{tab:all-index-jt}A), evenness (p = 0.0003, Table \ref{tab:all-index-jt}B), and richness (p =0.013). For all the differences in ecological indices, crop types were more influential than rotations, with larger differences found between crop types than between rotations (Figure \ref{fig:index-arrow-p}, Tables \ref{tab:dens-indices-ct} and \ref{tab:biom-indices-ct}).
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:all-index-jt}ANOVAs of crop identity, corn weed management, and their interactive effects on weed community ecological indices}
 \centering
@@ -397,9 +403,9 @@ Source of variation & df1 & df2 & F & p & F & p\\
 \end{threeparttable}
 \end{table}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics{Manuscript_whole_files/figure-latex/index-arrow-p-1.png}
+\includegraphics[width=.68\linewidth]{index-arrow-p-1.png}
 \caption{\label{fig:index-arrow-p}Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95\% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.}
 \end{figure}
 
@@ -421,7 +427,7 @@ Averaged over crop phases within the same rotation (Table \ref{tab:dens-indices-
 
 The same patterns of difference and similarity of weed community richness index calculated with aboveground mass was observed (Table \ref{tab:biom-indices-ct}).
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:dens-indices-ct}Weed stand density ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
 \centering
@@ -460,7 +466,7 @@ Contrast & ratio & p & ratio & p & ratio & p\\
 \end{threeparttable}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:biom-indices-ct}Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
 \centering
@@ -505,7 +511,7 @@ Contrast & ratio & p & ratio & p & ratio & p\\
 
 Overall, 34 weed species were identified during the four years of data collection (Table \ref{tab:list-sp}). Seven weed species, SETFA (\emph{Setaria faberi}), AMATA (\emph{Amaranthus tuberculatus}), CHEAL (\emph{Chenopodium album}), DIGSA (\emph{Digitaria sanguinalis}), ECHCG (\emph{Echinochloa crus-galli}), SETLU (\emph{Setaria glauca}), and TAROF (\emph{Taraxacum officinale}) made up 94.4\% of the total weed density and 94.0\% of the total weed biomass (Figure \ref{fig:all-sp-dens-biom}C and D).
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:list-sp}List of weed species (in alphabetical order) found from 2017 through 2020 field seasons.}
 \centering
@@ -557,7 +563,7 @@ Bayer code & Scientific name & Life cycle\\
  
 \multicolumn{3}{l}{\textbf{(B) - Monocotyledon species}}\\
 \hline
-\hspace{1em}\hspace{1em}AGRRE & $Elytrigia~repens$$~$ (L.) Nevski & rhizomatous perennial\\
+\hspace{1em}AGRRE & $Elytrigia~repens$$~$ (L.) Nevski & rhizomatous perennial\\
  
 \hspace{1em}BROTE & $Bromus~tectorum$$~$ L. & summer or winter annual\\
  
@@ -598,9 +604,9 @@ Weed community density and aboveground mass of the 3-year and 4-year systems ave
 
 For the individual crops (Table \ref{tab:dens-biom-jt-ct}B2), increased rotation diversity tended to decrease weed density and aboveground mass in corn and soybean and increase weed abundance in oat, but these changes were not significant (p = 0.6354 and p = 0.4041 for corn, p = 0.1834 and p = 0.0739 for soybean, and p = 0.3955 and p = 0.335 for oat). The patchiness of weeds, which was reflected in the high standard error values, might have caused the lack of significance for these inconclusive trends.
 
-For different crop types, weed community density and aboveground mass were comparable between the warm-season crops (corn and soybean) and between the cool-season crops (oat and alfalfa) (Table \ref{tab:dens-biom-jt-ct}B3). Overall, the average weed community density in the cool-season crops was 26-fold greater than that in the warm-season crops (p \textless{} 0.0001), and the average weed community aboveground mass in cool-season crops was 16-fold greater than that in warm-season crops (p = 0.0001). In the 3-year rotation, the weed stand community stand in oat (O3) was 11.5-fold greater than the average in corn and soybean (C3 and S3) (p = 0.0012), but the weed community aboveground mass was comparable between O3 and the average of the C3 and S3 phases (p = 0.1502). In the 4-year rotation, the weed community stand density in the average of oat and alfalfa (O4 and A4) was 36-fold greater than the average of the corn (C4) and soybean (S4) phases (p \textless{} 0.0001), and the average weed biomass for the O4 and A4 phases was 29-fold greater than for the C4 and S4 phases (p \textless{} 0.0001).
+For different crop types, weed community density and aboveground mass were comparable between the warm-season crops (corn and soybean) and between the cool-season crops (oat and alfalfa) (Table \ref{tab:dens-biom-jt-ct}B3). Overall, the average weed community density in the cool-season crops was 26-fold greater than that in the warm-season crops (p \textless{} 0.0001), and the average weed community aboveground mass in cool-season crops was 16-fold greater than that in warm-season crops (p = 0.0001). In the 3-year rotation, the weed stand community stand in oat (O3) was 11.5-fold greater than the average in corn and soybean (C3 and S3) (p = 0.0012), but the weed community aboveground mass was comparable between O3 and the average of the C3 and S3 phases (p = 0.1502). In the 4-year rotation, the weed community stand density in the average of oat and alfalfa (O4 and A4) was 36-fold greater than the average of the corn (C4) and soybean (S4) phases (p \textless{} 0.0001), and the average weed biomass for the O4 and A4 phases was 29-fold greater than that for the C4 and S4 phases (p \textless{} 0.0001).
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:dens-biom-jt-ct}Community density and aboveground mass ANOVA and contrasts. The abbreviations in the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
 \centering
@@ -620,7 +626,8 @@ Source of variation & df1 & df2 & F & p & F & p\\
 \hspace{1em}Crop ID x Corn weed management & 8 & 24 & 1.66 & 0.1613 & 0.99 & 0.4660\\
  
 \addlinespace[0.3em]
-\multicolumn{7}{l}{\textbf{Contrasts                 ratio  p  ratio   p}}\\
+Contrasts  & & &               ratio & p & ratio  & p\\
+\midrule
 \addlinespace[0.3em]
 \multicolumn{7}{l}{\textbf{(B1) - Rotation system effects}}\\
 \hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7] &  &  & 0.42 & 0.0580 & 0.96 & 0.9451\\
@@ -661,19 +668,19 @@ Source of variation & df1 & df2 & F & p & F & p\\
 \end{threeparttable}
 \end{table}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics{Manuscript_whole_files/figure-latex/all-sp-dens-biom-1.png}
+\includegraphics{all-sp-dens-biom-1.png}
 \caption{\label{fig:all-sp-dens-biom}In panels A and B: weed community stand density and aboveground mass were averaged over four blocks, four years, and two corn weed management regimes; the black dots are estimated marginal means; the blue bars are 95\% confidence intervals; the red arrows reflect the comparisons among means; overlapping arrows indicate non-significant differences. In panels C and D: the contribution of the seven most abundant weed species and the rarer species (species ordered eighth and above grouped in OTHERS) in each crop identity, averaged over four blocks and four years, are ordered alphabetically. The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.) The less abundant weed species which made up 6\% of the whole community are grouped in OTHERS. The means displayed on panels A and B were estimated marginal means, calculated based on the analysis model (with \texttt{emmip} function) but the means displayed on panels C and D were arithmetic means, calculated from the data so they are slightly different.}
 \end{figure}
 
 \hypertarget{how-did-rotation-crop-species-and-corn-weed-management-affect-individual-weed-species-abundance}{%
 \paragraph*{How did rotation, crop species, and corn weed management affect individual weed species abundance?}\label{how-did-rotation-crop-species-and-corn-weed-management-affect-individual-weed-species-abundance}}
-\addcontentsline{toc}{paragraph}{How did rotation, crop species, and corn weed management affect individual weed species abundance?}
+\addcontentsline{toc}{paragraph}{How did rotation, crop species, and corn weed management affect individual weed species abundance?}  
 
-\emph{The hypothesis that ``including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean'' was partially supported.} Crop identity affected individual density of seven most abundant weed species but corn weed management affected that of two weed species only, i.e., DIGSA and SETFA (p = 0.0189 and p = 0.0196, resepectively; Table \ref{tab:ind-dens-biom-jt}. Among those seven weed species, the aboveground mass of four (CHEAL, DIGSA, SETFA, and TAROF) were affected by crop identity, but none was affected by corn weed management (Table \ref{tab:ind-dens-biom-jt}. The magnitude of difference in stand density and aboveground mass were the most pronounced between crop types (Table \ref{tab:indiv-dens-biom-ct}). The main-plot effects concerning crop identity on individual species responses are elaborated below.
+\emph{The hypothesis that ``including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean'' was partially supported.} Crop identity affected individual density of seven most abundant weed species but corn weed management affected that of two weed species only, i.e., DIGSA and SETFA (p = 0.0189 and p = 0.0196, resepectively; Table \ref{tab:ind-dens-biom-jt}. Among those seven weed species, the aboveground mass of four (CHEAL, DIGSA, SETFA, and TAROF) were affected by crop identity, but none was affected by corn weed management (Table \ref{tab:ind-dens-biom-jt}). The magnitude of difference in stand density and aboveground mass were the most pronounced between crop types (Table \ref{tab:indiv-dens-biom-ct}). The main-plot effects concerning crop identity on individual species responses are elaborated below.
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:ind-dens-biom-jt}Treatment effects on the stand density and aboveground mass of the seven most abundant weed species, listed alphabetically. All the other weeds species were grouped into OTHERS.}
 \centering
@@ -771,7 +778,7 @@ SETLU stand density and aboveground mass were comparable in most pairs of compar
 
 \emph{The cool-season crops, especially oat were responsible for TAROF stand density and aboveground mass differences between rotation averages.} TAROF stand density and aboveground mass in the 3-year and 4-year rotations average were 4-fold (p \textless{} 0.0001) and 14-fold (p \textless{} 0.0001) greater than those in the 2-year rotation. TAROF stand density and aboveground mass in the 3-year rotation were and 5-fold (p \textless{} 0.0001) and 20-fold (p \textless{} 0.0001) greater than those in the 4-year rotation. TAROF stand density and aboveground mass were comparable among the warm-season crops between rotations and within the same crops between rotations (p-values \textgreater{} 0.05), except in oat (p \textless{} 0.0001). TAROF stand density and aboveground mass were 24-fold (p \textless{} 0.001) and 390-fold (p \textless{} 0.0001) greater in cool-season than in warm-season crop averages, 4-fold (p = 0.0001) and 20-fold (p = 0.0002) greater in oat than in corn and soybean averages in the 3-year rotation, and 54-fold (p \textless{} 0.0001) and 1483-fold (p \textless{} 0.0001) greater in the cool-season crops than in the warm-season crops in the 4-year rotation. TAROF stand density and aboveground mass were 6-fold (p \textless{} 0.0001) and 20-fold (p = 0.0001) greater in oat than in alfalfa.
 
-\begin{landscape}\begin{table}
+\begin{landscape}\begin{table}[H]
 
 \caption{\label{tab:indiv-dens-biom-ct}Contrast of stand density and aboveground mass of the seven most abundant weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
 \centering

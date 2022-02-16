@@ -5,7 +5,7 @@ output:
     toc: false
     number_sections: false
     extra_dependencies: ["float"]
-bibliography: ecol.bib
+#bibliography: ecol.bib
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -107,7 +107,7 @@ alf.lmer <- lmer(Yield ~ Block + (1|Year),
 
 
 ```{r , include=FALSE}
-## ANOVA tables for the effects of crop idenity and corn weed management on crop yields
+## ANOVA tables for the effects of crop identity and corn weed management on crop yields
 
 corn_jt <- print(joint_tests(emmeans(corn.lmer,
                                      c("Crop_ID", "Corn_weed_management"))), 
@@ -125,18 +125,22 @@ crop_jt <- rbind(corn_jt$summary,
   
 rownames(crop_jt) <- NULL
 
-colnames(crop_jt) <- c("Model term", "df1", "df2","F.ratio","p.value")
+
+
+#colnames(crop_jt) <- c("Model term", "df1", "df2","F","p")
 
 ## Merge 3 ANOVA tables  
 crop_df <- as.data.frame(crop_jt)
+#make sure that the F.value is numeric
 
+crop_df$F.ratio <- as.numeric(crop_df$F.ratio)
 ```
 
 
 
 #### How did rotation system and corn weed management affect crop yields? {-}   
 
-Results of the experiment supported the first hypothesis that "diverse cropping systems, with reduced use of chemical herbicides, would provide weed control equal in effectiveness to the conventional approach in the 2-year rotation". Averaged over four years, soybean was the only crop whose yield was affected by rotation (p-value = 0.0185, Table \@ref(tab:crop-jt-ct)). Soybean yield was 16% higher in the 4-year rotation than in the 2-year rotation (p-value = 0.018). Crop yields in the experiment relative to averages for the state of Iowa and Boone County, where the experiment occurred, are presented in Figure \@ref(fig:crop-bar). Corn weed management regime did not affect crop yields (Table \@ref(tab:crop-jt-ct)).   
+Results of the experiment indicated that crop diversification and reduced use of herbicides were not associated with lower crop yields (Table \@ref(tab:crop-jt-ct)). Averaged over four years, soybean was the only crop whose yield was affected by rotation (p = 0.0191, Table \@ref(tab:crop-jt-ct)). Soybean yield was 16% higher in the 4-year rotation than in the 2-year rotation (p = 0.0181). Crop yields in the experiment were as high or higher than the averages for the state of Iowa and Boone County (Figure \@ref(fig:crop-bar)). 
 
 ```{r crop-jt-ct, echo=FALSE}
 
@@ -169,29 +173,33 @@ oat_ct <- print(contrast(emmeans(oat.lmer, ~ Crop_ID,
 crop_ct <- rbind(corn_ct$summary, soy_ct$summary, oat_ct$summary)
 crop_ct_df <- as.data.frame(crop_ct)
 
+#make sure that the contrast ratio is numeric
+crop_ct_df$ratio <- as.numeric(crop_ct_df$ratio)
+
+
 crop_ct_df$contrast <- gsub("/", "vs", crop_ct_df$contrast )
 
-crop_jt_ct <- cbind(crop_jt, crop_ct_df[,-c(3:6)])
+crop_jt_ct <- cbind(crop_df, crop_ct_df[,-c(3:6)])
 
 rownames(crop_jt_ct) <- NULL
 
 crop_jt_ct_df <- as.data.frame(crop_jt_ct)
  
-crop_jt_ct_df$`Model term` <- gsub("_", " ", crop_jt_ct_df$`Model term`)
-crop_jt_ct_df$`Model term` <- gsub(":", " x ", crop_jt_ct_df$`Model term`)
+crop_jt_ct_df$`model term                  ` <- gsub("_", " ", crop_jt_ct_df$`model term                  `)
+crop_jt_ct_df$`model term                  ` <- gsub(":", " x ", crop_jt_ct_df$`model term                  `)
 
-colnames(crop_jt_ct_df) <- c("Source of variation", "df1", "df2","F.value","p.value", "contrast", "ratio", "p.value")
+colnames(crop_jt_ct_df) <- c("Source of variation", "df1", "df2","F","p", "contrast", "ratio", "p")
 
 
 crop_jt_ct_df %>%
-  kbl(booktabs = TRUE, linesep="",  align = "lrrrrlrr", 
-    caption = "Contrasts of rotation effect (expressed by Crop identity) on crop yields. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured.") %>%
+  kbl(booktabs = TRUE, linesep="",  align = "lrrrrlrr", digits = 2,
+    caption = "Contrasts of rotation effect (expressed by Crop ID) on crop yields. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>%
   column_spec(5, border_left = FALSE, border_right = TRUE) %>%
   add_header_above(c("ANOVA" = 5, "Comparison" = 3)) %>%
   pack_rows("(A) - Corn", 1, 3) %>%
   pack_rows("(B) - Soybean", 4, 6) %>%
   pack_rows("(C) - Oat", 7, 7) %>%
-  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system to which each belong: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system in which it occurred: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 ```
 
 
@@ -278,7 +286,7 @@ crops.emmip.IA$Commodity <- factor(crops.emmip.IA$Commodity,
                                                   "alfalfa hay"))
 ```
 
-```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.", echo=FALSE, fig.width=8, fig.height=4}
+```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.", echo=FALSE, fig.width=8, fig.height=6}
 
 ggplot(crops.emmip.IA , aes(x = Crop_ID, y = yvar, fill = Rotation))+ 
   geom_bar(stat = "identity") +
@@ -290,6 +298,6 @@ ggplot(crops.emmip.IA , aes(x = Crop_ID, y = yvar, fill = Rotation))+
   ylab("Crop yield (Mg/ha)") +
   xlab("Crop identity") +
   labs(linetype = "Yield") +
-  theme(legend.position="bottom")
+  theme(legend.position="bottom") 
 ```
 

@@ -1,14 +1,14 @@
 ﻿Year,Activity or input,Low herbicide,Conventional herbicide ,Low herbicide,Conventional herbicide 
 ,,Corn,Corn,Soybean,Soybean
 2017,Hybrid or variety,Epley E1420,Epley E1420,Latham L2758 R2,Latham L2758 R2
-,Planting date,May 9,May 9,May 16,
+,Planting date,9-May,9-May,16-May,
 ,Interrow cultivation date,Jun. 7,Jun. 7,none,none
 ,Harvest date,Oct. 19,Oct. 19,Oct. 19,
-,Herbicides applied (kg ai./ha),"tembotrione (0.049) applied May 31, interrow cultivated Jun. 7","PRE: thiencarbazone methyl (0.037), isoxaflutole (0.093) ","PRE: flumioxazin (0.109); POST: glyphosate as potassium salt (1.249), acifluorfen (0.224)","PRE: flumioxazin (0.109); POST: glyphosate as potassium salt (1.249), acifluorfen (0.224)"
+,Herbicides applied (kg ai./ha),"POST: tembotrione (0.049) applied May 31, interrow cultivated Jun. 7","PRE: thiencarbazone methyl (0.037), isoxaflutole (0.093) ","PRE: flumioxazin (0.109); POST: glyphosate as potassium salt (1.249), acifluorfen (0.224)","PRE: flumioxazin (0.109); POST: glyphosate as potassium salt (1.249), acifluorfen (0.224)"
 ,Total (kg a.i./ha),0.049,0.13,1.581,1.581
 ,Weed sampling date,Sep. 5 and 6,Sep. 5 and 6,"Sep. 6, 7 and 8","Sep. 6, 7 and 8"
 2018,Hybrid or variety,Epley E1420,Epley E1420,Latham L2758 R2,Latham L2758 R2
-,Planting date,May 8,May 8,Jun. 3,Jun. 3
+,Planting date,8-May,8-May,Jun. 3,Jun. 3
 ,Interrow cultivation date,Jun. 4,none,none,none
 ,Harvest date,Oct. 30,Oct. 30,Oct. 29,Oct. 29
 ,Herbicides applied (kg ai./ha),POST: tembotrione (0.054),"PRE: thiencarbazone methyl (0.037), isoxaflutole (0.092); POST: mesotrione (0.105), nicosulfuron (0.053) ","PRE: flumioxazin (0.096); POST: glyphosate as potassium salt (1.540), lactofen (0.140)","PRE: flumioxazin (0.096); POST: glyphosate as potassium salt (1.540), lactofen (0.140)"
@@ -22,7 +22,7 @@
 ,Total (kg a.i./ha),0.049,0.287,0.826,0.826
 ,Weed sampling date,Sep. 17 and 18,Sep. 17 and 18,Sep. 30,Sep. 30
 2020,Hybrid or variety,Epley E1730,Epley E1730,Latham 2684 L (Liberty Link),Latham 2684 L (Liberty Link)
-,Planting date,Apr. 23,Apr. 23,May 13,May 13
+,Planting date,Apr. 23,Apr. 23,13-May,13-May
 ,Interrow cultivation date,Jun.8,none,none,none
 ,Harvest date,Oct. 2,Oct. 2,Sep. 23,Sep. 23
 ,Herbicides applied (kg ai./ha),POST: tembotrione (0.051),"PRE: thiencarbazone methyl (0.037), isoxaflutole (0.092); POST: mesotrione (0.105), nicosulfuron (0.053) ","PRE: flumioxazin (0.096); POST: glufosinate ammonium (0.594), clethodim (0.136)","PRE: flumioxazin (0.096); POST: glufosinate ammonium (0.594), clethodim (0.136)"

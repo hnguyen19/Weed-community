@@ -1,24 +1,12 @@
 ---
 title: "Weed community composition in simple and more diverse cropping systems"
-header-includes:
-   - \usepackage{lineno}
-   - \linenumbers
 output:
-  bookdown::pdf_document2: 
-    keep_tex: yes
-    toc: false
-    number_sections: false
-    extra_dependencies: ["float"]
+  bookdown::html_document2:
+    citation_package: natbib
     latex_engine: lualatex
     citation_package: natbib
 bibliography: ecol.bib
 natbiboptions: round
-biblatexoptions:
-  - sortcites = true
-  - sorting = nyt
-  - backend = biber
-  - maxcitenames = 2
-csl: apa-no-ampersand.csl
 ---
 
 # Abstract {-}
@@ -40,7 +28,7 @@ csl: apa-no-ampersand.csl
 
 # Results {-}  
 
-A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with `ggResidpanel` [version 0.3.0, @goodeGgResidpanelPanelsInteractive2019] are available the Supplementary Material.  
+A lack of any obvious bias in plots of residuals versus predicted values suggested that the analysis models fit the data well. Diagnosis plots made with `ggResidpanel` [version 0.3.0, @goodeGgResidpanelPanelsInteractive2019] are available in <https://github.com/hnguyen19/Weed-community/blob/master/7-Extra/AppendixA-model-diagnosis.pdf> 
 
 
 ```{r, child = "../5-Analysis/Crop_yields.Rmd"}
@@ -66,8 +54,5 @@ A lack of any obvious bias in plots of residuals versus predicted values suggest
 
 The authors thank Matt Woods, Mike Fiscus, and the Iowa State University's Agronomy Research Farm crew for field management; Wendy Borja-Diaz, Lydia English, Jessica Juarez-Morales, Samantha Kanselaar, Jessica Nelson, Elizabeth Oys, Ana Poznanski, Andrew Riehl, Angela Soto-Saenz, Mickala Stallman, David Weisberger, and Wyatt Westfall for field and laboratory assistance; Katherine Goode, Audrey McCombs, Philip Dixon and ISU's statistical consulting group for data analysis assistance; Russ Lenth and other Stackoverflow community members for answering HTXN's coding questions; Micheal Owen for reviewing the manuscript; Overleaf staff for \LaTeX\ assistance in compiling the manuscript; and two anonymous reviewers for their constructive feedback.
 
-# Supplementary Material {-}  
-
-The Supplementary Material for this article can be found online at: 10.25380/iastate.19111376 
 
 # References {-}

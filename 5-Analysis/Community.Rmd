@@ -51,7 +51,9 @@ dens_ind_1720 %<>%
             funs(factor(.)))
 
 dens_ind_1720$Crop_ID <- factor(dens_ind_1720$Crop_ID,
-                                levels = c("C2", "S2", "C3", "S3", "O3", "C4", "S4", "O4", "A4"))
+                                levels = c("C2", "S2", 
+                                           "C3", "S3", "O3",
+                                           "C4", "S4", "O4", "A4"))
 
 dens_ind_1720$Crop <- factor(dens_ind_1720$Crop,
                              levels = c("corn", "soybean", "oat", "alfalfa"))
@@ -225,7 +227,7 @@ biom_index_jt_rounded <- biom_index_jt_df %>%
 
 #### How did rotation system, crop species, and corn weed management affect community ecological indices? {-}  
 
-Crop identity (i.e., rotation system x crop phase combination) affected weed community aboveground mass diversity (p-value = 0.0007, Table \@ref(tab:all-index-jt)A), evenness (p-value = 0.0003, Table \@ref(tab:all-index-jt)B), and richness (p-values = 0.013); and stand density evenness (p-value = 0.0064) and richness (p-value = 0.0123, Table \@ref(tab:all-index-jt)C). The ecological indices in each crop phrase, averaged over blocks, years and corn weed management are shown in Figure \@ref(fig:index-arrow-p). The results of contrasts for the effects of rotation systems, rotation system within individual crops, and crop types on community ecological indices are shown in Tables \@ref(tab:dens-indices-ct) and \@ref(tab:biom-indices-ct). For all the differences in ecological indices, crop types were more influential than rotations, with larger differences found across crop types than across rotations.   
+Crop identity (i.e., rotation system x crop phase combination) affected weed community stand density evenness (p = 0.0064) and richness (p = 0.0123, Table \@ref(tab:all-index-jt)C) and aboveground mass diversity (p = 0.0007, Table \@ref(tab:all-index-jt)A), evenness (p = 0.0003, Table \@ref(tab:all-index-jt)B), and richness (p =0.013). For all the differences in ecological indices, crop types were more influential than rotations, with larger differences found between crop types than between rotations (Figure \@ref(fig:index-arrow-p), Tables \@ref(tab:dens-indices-ct) and \@ref(tab:biom-indices-ct). .   
 
 ```{r all-index-jt, echo=FALSE}
 all_index_jt <-  cbind(dens_index_jt_rounded, biom_index_jt_rounded)  
@@ -236,7 +238,7 @@ all_index_jt$`model term                  ` <- gsub("_", " ", all_index_jt$`mode
 all_index_jt$`model term                  ` <- gsub(":", " x ", all_index_jt$`model term                  `)
 
 all_index_jt[,-c(6:8)] %>%
-  `colnames<-` (c("Source of variation", "df1", "df2", rep(c("F.value","p.value"),2))) %>%
+  `colnames<-` (c("Source of variation", "df1", "df2", rep(c("F","p"),2))) %>%
 kable(longtable = FALSE, booktabs = TRUE, digits = 2, align = "lrrrrrr",
     caption = "ANOVAs of crop identity, corn weed management, and their interactive effects on weed community ecological indices") %>%
   add_header_above(c(" " = 3, "Stand density" = 2, "Aboveground mass" = 2)) %>%
@@ -244,12 +246,12 @@ kable(longtable = FALSE, booktabs = TRUE, digits = 2, align = "lrrrrrr",
   pack_rows("(A) - Community diversity", 1, 3) %>%
   pack_rows("(B) - Community evenness", 4, 6) %>%
   pack_rows("(C) - Community richness", 7, 9) %>%
-  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system in which it occured: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+  footnote(general = "Corn weed management: low herbicide or conventional. Crop ID: crop species and the cropping system in which it occurred: C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 ```
 
 
 
-```{r index-arrow-p, echo=FALSE, fig.cap= "Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occured (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.", fig.width= 8, fig.height=13}
+```{r index-arrow-p, echo=FALSE, fig.cap= "Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.", fig.width= 8, fig.height=13}
 
 ## Community stand density ecological indices arrow plots
 dens_diversity_plot <-  arrow_plot(emmeans(dens_diversity.lmer1, ~ Crop_ID,
@@ -300,24 +302,24 @@ grid.arrange(dens_diversity_plot,
 
 _In general, the hypothesis that "weed communities in the more diverse cropping systems are more diverse" was supported._   
 
-Averaged over crop phases within each rotation system (Table \@ref(tab:dens-indices-ct)A), the weed community stand diversity index for the 3-year and 4-year rotation systems was comparable with that in the 2-year rotation (p-values = 0.0535 and 0.1575). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed stand density diversity index was comparable among rotations (p-values > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed community stand density diversity index was different between the average for the cool season crops (O3, O4, and A4) and the average for the warm season crops (C2, S2, C3, S3, C4, and S4) (p-value = 0.0145), but similar between the warm season and cool season crops in the same rotations (p-values = 0.4666 and 0.0987). The weed stand density diversity index was similar between oat and alfalfa (p-value = 0.7762). 
+Averaged over crop phases within each rotation system (Table \@ref(tab:dens-indices-ct)A), the weed community stand diversity index for the 3-year and 4-year rotation systems was comparable with that in the 2-year rotation (p = 0.0535 and p = 0.1575, respectively). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed stand density diversity index was comparable among rotations (p > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed community stand density diversity index in the average for the cool-season crops (O3, O4, and A4) was 1.2-fold greater than that in the average for the warm-season crops (C2, S2, C3, S3, C4, and S4) (p = 0.0145), but similar between the warm-season and cool-season crops in the same rotations (p = 0.4666 and p = 0.0987, respectively). The weed stand density diversity index was similar between oat and alfalfa (p = 0.7762). 
 
-Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass diversity index was different between the 2-year rotation and the average of the 3-year and 4-year rotations (p-value = 0.0148), and between the 3-year and 4-year rotations (p-value = 0.0209). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass diversity index was similar between rotations (p-values = 0.4217 and 0.2426). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community aboveground mass diversity index was comparable across rotations, except for oat (p-value = 0.0351). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed community aboveground mass diversity index was different between the cool season crops and warm season crops averages (p-values < 0.0001) and between the cool season and warm season crops within the same rotation (p-values = 0.034 and 0.0037). The weed community aboveground mass diversity index was comparable between oat and alfalfa (p-value = 0.2583).  
+Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass diversity index was different between the 2-year rotation and the average of the 3-year and 4-year rotations (p = 0.0148), and between the 3-year and 4-year rotations (p = 0.0209). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass diversity index was similar between rotations (p = 0.4217 and p = 0.2426, respectively). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community aboveground mass diversity index was comparable between rotations, except for oat (p = 0.0351). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed community aboveground mass diversity index in the cool-season crops average was 1.3-fold greater than that in the warm-season crops averages, overall (p < 0.0001), and was 1.23-fold and 1.27-fold greater in the cool-season than that in the warm-season crops in the 3-year (p = 0.034) and 4-year rotation (p = 0.0037), respectively. The weed community aboveground mass diversity index was comparable between oat and alfalfa (p = 0.2583).  
 
 
 _The hypothesis that "weed communities in the more diverse cropping systems are more even" was partially supported (Figure \@ref(fig:index-arrow-p)B and E)._ However, a lower community evenness index can occur because the presence of rarer species decreases the overall evenness index [@stirlingEmpiricalRelationshipsSpecies2001]. More details to support this concept are presented later (Figure \@ref(fig:all-sp-dens-biom)C and D).    
 
 
-Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed community stand density evenness index was different between the 2-year rotation and the average of the 3-year and 4-year rotations (p-value = 0.006), but comparable between the 3-year and 4-year rotations (p-value = 0.2802). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed community stand density evenness index was comparable between rotations (p-values = 0.1539 and 0.5031). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community stand density evenness index was comparable between rotations (p-values > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed community stand density evenness index was different between the cool season crops average and the warm season crops average (p-value = 0.0002) and between the cool season and warm season crop in the 4-year rotation (p-value = 0.0012), but similar between the warm season and cool season crops in the 3-year rotation (p-values = 0.4418). The weed community stand density evenness index was comparable between oat and alfalfa (p-value = 0.8986).  
+Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed community stand density evenness index in the 2-year rotation was 1.6-fold greater than that in the average of the 3-year and 4-year rotations (p = 0.006), but comparable between the 3-year and 4-year rotations (p = 0.2802). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed community stand density evenness index was comparable between rotations (p = 0.1539 and p = 0.5031, respectively). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community stand density evenness index was comparable between rotations (p > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed community stand density evenness index in the cool-season crops average was half of that in the warm-season crops average (p = 0.0002) and half of that in the cool-season and warm-season crop in the 4-year rotation (p = 0.0012), but similar between the warm-season and cool-season crops in the 3-year rotation (p = 0.4418). The weed community stand density evenness index was comparable between oat and alfalfa (p = 0.8986).  
 
-Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass evenness index was different between the 2-year rotation and the average of 3-year and 4-year rotations (p-value = 0.0012), but similar between the 3-year and 4-year rotations (p-value = 0.0802). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), weed community aboveground mass evenness index was comparable between rotations (p-values = 0.1081 and 0.8682). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community aboveground mass evenness index was comparable across rotations (p-values > 0.05), except for oat (p-value = 0.0189). For different crop types (Table \@ref(tab:biom-indices-ct)C), the weed community aboveground mass evenness index was different between the cool season crops average and the warm season crops average (p-value < 0.0001) and between the cool season and warm season crops in the 4-year rotation (p-value = 0.0002), but comparable between the warm season and cool season crops in the 3-year rotation (p-values = 0.141). The weed community aboveground mass evenness index was comparable between oat and alfalfa (p-value = 0.5911).  
+Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass evenness index in the 2-year rotation was 1.65-fold greater than that in the average of 3-year and 4-year rotations (p = 0.0012), but similar between the 3-year and 4-year rotations (p = 0.0802). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), weed community aboveground mass evenness index was comparable between rotations (p = 0.1081 and p = 0.8682, respectively). For the individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community aboveground mass evenness index was comparable between rotations (p > 0.05), except for oat (p = 0.0189). The weed community aboveground mass evenness index in the warm-season crops average was twice that of the cool-season crops average (p < 0.0001). The weed community aboveground mass evenness index in the warm-season crops was twice that of the cool-season crops in the 4-year rotation (p = 0.0002), but comparable between between the warm-season and cool-season crops in the 3-year rotation (p = 0.141), and between oat and alfalfa (p = 0.5911).   
+
 
 _The hypothesis that "the weed communities in the more diverse cropping systems are more species-rich" was supported._ 
 
-Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed community stand density richness index was comparable in the 2-year rotation and in the average of the 3-year and 4-year rotations (p-values = 0.1819), but different between the 3-year and 4-year rotation (p-value = 0.0257). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), weed community aboveground mass richness index was comparable between the 2-year rotation and the 3-year and 4-year rotations average (p-value = 0.7996) and between the 3-year and 4-year rotations (p-value = 0.3469). For individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community stand density richness index was comparable between rotations (p-values > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed stand density richness index was different between the cool season crops average and the warm season crops average (p-value = 0.0003) and between the cool season and warm season crops in the 4-year rotation (p-value = 0.0034), but comparable between the warm season and cool season crops in the 3-year rotation (p-values = 0.0725). The weed stand density richness index was comparable between oat and alfalfa (p-value = 0.9499). 
+Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), the weed community stand density richness index was comparable in the 2-year rotation and in the average of the 3-year and 4-year rotations (p = 0.1819), but the stand density richness index in the 3-year was 0.77 that of the 4-year rotation (p = 0.0257). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:dens-indices-ct)A), weed community aboveground mass richness index was comparable between the 2-year rotation and the 3-year and 4-year rotations average (p = 0.7996) and between the 3-year and 4-year rotations (p = 0.3469). For individual crops (Table \@ref(tab:dens-indices-ct)B), the weed community stand density richness index was comparable between rotations (p > 0.05). For different crop types (Table \@ref(tab:dens-indices-ct)C), the weed stand density richness index in the cool-season crops average was 1.33-fold greater that of the warm-season crops average (p = 0.0003). Within the 4-year rotation, the weed stand density richness index in the cool-season was 1.58-fold greater than that in the warm-season crops (p = 0.0034). The weed stand density richness was comparable between the warm-season and cool-season crops in the 3-year rotation (p = 0.0725) and between oat and alfalfa (p = 0.9499).   
 
-
-Averaged over crop phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed community aboveground mass richness index was comparable in the 2-year rotation and in the average of the 3-year and 4-year rotations (p-values = 0.1967), but different between the 3-year and 4-year rotations (p-value = 0.0309). Averaged over the corn and soybean phases within the same rotation (Table \@ref(tab:biom-indices-ct)A), the weed aboveground mass richness index was comparable between the 2-year rotation and the 3-year and 4-year rotations average (p-value = 0.7694) and between the 3-year and 4-year rotations (p-value = 0.393). For the same crop types, (Table \@ref(tab:biom-indices-ct)B), the weed community aboveground mass richness index was comparable across rotations (p-values > 0.05). For different crop types (Table \@ref(tab:biom-indices-ct)C), the weed community aboveground richness index was different between the cool season and warm season crop averages (p-value = 0.0003) and between the cool season and warm season crops in the 4-year rotation (p-value = 0.0766), but comparable between the cool season and warm season crops in the 3-year rotation (p-value = 0.0766). The weed community aboveground mass richness index was comparable between oat and alfalfa (p-value = 0.9506).    
+The same patterns of difference and similarity of weed community richness index calculated with aboveground mass was observed (Table \@ref(tab:biom-indices-ct)).  
 
 ```{r, include=FALSE}
 ## Coefficients for customized contrasts 
@@ -379,14 +381,14 @@ dens_diversity_CS3yr_vs_CS4yr <- print(contrast(emmeans(dens_diversity.lmer1, ~ 
 
 ##### Did crop species affect density diversity, across rotations?
 
-#### 3yr: summer vs. cool season crops: (C3+S3)/2 vs. O3
+#### 3yr: summer vs. cool-season crops: (C3+S3)/2 vs. O3
 dens_diversity_CS3_vs_O3 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
                                                    infer = c(FALSE,TRUE), 
                                                    type = "response"),
                                            method = list("O3 vs [(C3+S3)/2]" = O3 - (C3+S3)/2)),
                                   export = TRUE)
 
-#### 4yr: summer vs. cool season crops: (C4+S4)/2 vs. (O4+A4)/2 
+#### 4yr: summer vs. cool-season crops: (C4+S4)/2 vs. (O4+A4)/2 
 dens_diversity_CS4_vs_OA4 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID,
                                                     infer = c(FALSE,TRUE),
                                                     type = "response"), 
@@ -394,7 +396,7 @@ dens_diversity_CS4_vs_OA4 <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop
                                                             ((A4+O4)/2) - ((C4+S4)/2))), 
                                    export = TRUE)
 
-#### all summer vs. all cool season crops: 
+#### all summer vs. all cool-season crops: 
 dens_diversity_summer_vs_cool <- print(contrast(emmeans(dens_diversity.lmer1, ~ Crop_ID, 
                                                         infer = c(FALSE,TRUE),
                                                         type = "response"),
@@ -506,7 +508,7 @@ biom_diversity_CS3_vs_O3 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_
                                            method = list("O3 vs [(C3+S3)/2]" = O3 - (C3+S3)/2)),
                                   export = TRUE)
 
-#### 4yr: summer vs. cool season crops
+#### 4yr: summer vs. cool-season crops
 ## (C4+S4)/2 vs. (O4+A4)/2 
 biom_diversity_CS4_vs_OA4 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
                                                     infer = c(FALSE,TRUE),  
@@ -515,7 +517,7 @@ biom_diversity_CS4_vs_OA4 <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop
                                                             ((A4+O4)/2) - ((C4+S4)/2))),
                                    export = TRUE)
 
-#### all summer vs. all cool season crops 
+#### all summer vs. all cool-season crops 
 biom_diversity_summer_vs_cool <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID, 
                                                         infer = c(FALSE,TRUE), 
                                                         type = "response"),
@@ -1201,9 +1203,9 @@ dens_index$`contrast                                 ` <- gsub(" / ", " vs ", de
   
 
 dens_index[,-c(3:6,9:12,15:18)] %>%  
-  `colnames<-` (c("Contrast", rep(c("ratio", "p.value"), 3))) %>% #null, SE, df, t.ratio removed
+  `colnames<-` (c("Contrast", rep(c("ratio", "p"), 3))) %>% #null, SE, df, t.ratio removed
 kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
-    caption = "Weed stand density ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+    caption = "Weed stand density ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>%
    add_header_above(c(" " = 1, "Diversity index" = 2, "Evenness index" = 2, "Richness index" = 2))  %>%
   pack_rows("(A) - Rotation system effects", 1, 4) %>%
   pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
@@ -1223,20 +1225,21 @@ biom_index$`contrast                                 ` <- gsub(" / ", " vs ", bi
 
 
 biom_index[,-c(3:6,9:12,15:18)] %>%
-  `colnames<-` (c("Contrast", rep(c("ratio", "p.value"), 3))) %>% #null, SE, df, t.ratio removed
+  `colnames<-` (c("Contrast", rep(c("ratio", "p"), 3))) %>% #null, SE, df, t.ratio removed
 kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
-    caption = "Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+    caption = "Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>%
    add_header_above(c(" " = 1, "Diversity index" = 2, "Evenness index" = 2, "Richness index" = 2))  %>%
   pack_rows("(A) - Rotation system effects", 1, 4) %>%
   pack_rows("(B) - Rotation system effects within individual crops", 5, 9) %>%
   pack_rows("(C) - Crop type effects", 10, 13) %>%
-  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation", threeparttable = TRUE, footnote_as_chunk = TRUE)
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation",
+           threeparttable = TRUE, footnote_as_chunk = TRUE)
 ```
 
 
 #### General description of the weed flora{-}   
 
-Overall, 34 weed species were identified during the four years of data collection (Table \@ref(tab:list-sp)). Combined over four years of data, seven weed species, SETFA (*Setaria faberi*), AMATA (*Amaranthus tuberculatus*), CHEAL (*Chenopodium album*), DIGSA (*Digitaria sanguinalis*), ECHCG (*Echinochloa crus-galli*), SETLU (*Setaria glauca*), and TAROF (*Taraxacum officinale*) made up 94.4% of the total weed density and 94.0% of the total weed biomass (Figure \@ref(fig:all-sp-dens-biom)C and D).    
+Overall, 34 weed species were identified during the four years of data collection (Table \@ref(tab:list-sp)). Seven weed species, SETFA (*Setaria faberi*), AMATA (*Amaranthus tuberculatus*), CHEAL (*Chenopodium album*), DIGSA (*Digitaria sanguinalis*), ECHCG (*Echinochloa crus-galli*), SETLU (*Setaria glauca*), and TAROF (*Taraxacum officinale*) made up 94.4% of the total weed density and 94.0% of the total weed biomass (Figure \@ref(fig:all-sp-dens-biom)C and D).    
 
 
 ```{r list-sp, echo=FALSE}
@@ -1278,8 +1281,6 @@ ita_sp <- list(list_sp$Bayer,
               "$Setaria~faberi$$~$ Herrm.",
               "$Setaria~glauca$$~$ (L.) Beauv."),
               list_sp$`Life cycle`)
-
-
 
 #list_sp_final <- list_sp %>% left_join(ita_sp, by = c("Bayer","Sci_name"))
 
@@ -1430,7 +1431,7 @@ comm_dens_2yrvs3yr = print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
 
 #### Rotation effect, by each crop species  
 
-## Corn and soybean (warm season crops average): (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+## Corn and soybean (warm-season crops average): (C2+S2)/2 vs. (C3+S3+C4+S4)/4
 comm_dens_CS2yr_vs_CS34yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
                                                    infer = c(FALSE,TRUE), 
                                                    type = "response"),
@@ -1438,7 +1439,7 @@ comm_dens_CS2yr_vs_CS34yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
                                                            ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
                                   export = TRUE)
 
-## Corn and soybean (warm season crops average): (C3+S3)/2 vs. C4+S4)/2
+## Corn and soybean (warm-season crops average): (C3+S3)/2 vs. C4+S4)/2
 comm_dens_CS3yr_vs_CS4yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
                                                   infer = c(FALSE,TRUE), 
                                                   type = "response"), 
@@ -1449,7 +1450,7 @@ comm_dens_CS3yr_vs_CS4yr <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
 
 ##### Did crop phenology affect density diversity, across rotations?
 
-#### 3yr: summer vs. cool season crops
+#### 3yr: summer vs. cool-season crops
 
 ## (C3+S3)/2 vs. O3
 comm_dens_CS3_vs_O3 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
@@ -1458,7 +1459,7 @@ comm_dens_CS3_vs_O3 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
                                      method = list("O3 vs [(C3+S3)/2]" = O3 - ((C2+S2)/2))),
                             export = TRUE)
 
-#### 4yr: summer vs. cool season crops
+#### 4yr: summer vs. cool-season crops
 ## (C4+S4)/2 vs. (O4+A4)/2 
 comm_dens_CS4_vs_OA4 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
                                               infer = c(FALSE,TRUE), 
@@ -1466,7 +1467,7 @@ comm_dens_CS4_vs_OA4 <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID,
                                       method = list("[(O4+A4)/2] vs [(C4+S4)/2]" = ((A4+O4)/2) - ((C4+S4)/2))),
                              export = TRUE)
 
-#### all summer vs. all cool season crops
+#### all summer vs. all cool-season crops
 comm_dens_summer_vs_cool <- print(contrast(emmeans(comm_dens_lmer, ~ Crop_ID, 
                                                   infer = c(FALSE,TRUE), 
                                                   type = "response"), 
@@ -1559,7 +1560,7 @@ comm_biom_2yrvs3yr = print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
 
 #### Rotation effect, by each crop species  
 
-## Corn and soybean (warm season crops average): (C2+S2)/2 vs. (C3+S3+C4+S4)/4
+## Corn and soybean (warm-season crops average): (C2+S2)/2 vs. (C3+S3+C4+S4)/4
 
 comm_biom_CS2yr_vs_CS34yr <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID, 
                                                    infer = c(FALSE,TRUE), 
@@ -1568,7 +1569,7 @@ comm_biom_CS2yr_vs_CS34yr <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
                                                            ((C2+S2)/2) - ((C3+S3+C4+S4)/4))),
                                   export = TRUE)
 
-## Corn and soybean (warm season crops average): (C3+S3)/2 vs. C4+S4)/2
+## Corn and soybean (warm-season crops average): (C3+S3)/2 vs. C4+S4)/2
 comm_biom_CS3yr_vs_CS4yr <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
                                                   infer = c(FALSE,TRUE), 
                                                   type = "response"), 
@@ -1584,7 +1585,7 @@ comm_biom_CS3_vs_O3 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
                                      method = list("O3 vs [(C3+S3)/2]" = O3 - ((C2+S2)/2))),
                             export = TRUE)
 
-#### 4yr: summer vs. cool season crops: (C4+S4)/2 vs. (O4+A4)/2 
+#### 4yr: summer vs. cool-season crops: (C4+S4)/2 vs. (O4+A4)/2 
 comm_biom_CS4_vs_OA4 <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
                                               infer = c(FALSE,TRUE), 
                                               type = "response"),
@@ -1720,8 +1721,8 @@ rownames(comm_dens_biom_jt_rounded) <- NULL
 
 comm_dens_biom_jt_rounded <- comm_dens_biom_jt_rounded[,-(6:8)]
 
-# Change "F.ratio" to "F.value" to prevent confusion with contrast ratio.  
-colnames(comm_dens_biom_jt_rounded) <- c("Source of variation", "df1", "df2",rep(c("F.value","p.value"),2))
+# Change "F.ratio" to "F" to prevent confusion with contrast ratio.  
+colnames(comm_dens_biom_jt_rounded) <- c("Source of variation", "df1", "df2",rep(c("F","p"),2))
 
 ```
 
@@ -1729,13 +1730,13 @@ colnames(comm_dens_biom_jt_rounded) <- c("Source of variation", "df1", "df2",rep
 
 #### How did rotation, crop species, and corn weed management affect weed community density and growth? {-}   
 
-Crop identity had a significant effect on weed community stand density (p-value < 0.0001) and weed community aboveground mass (p-value = 0.0057), but corn weed management and its interaction with crop identity did not have a significant effect on weed community stand density or biomass (p-values > 0.05) (Table \@ref(tab:dens-indices-ct) and \@ref(tab:biom-indices-ct)). Weed community stand density and aboveground mass in each crop identity category, averaged over blocks, years, and corn weed management regimes, are presented in Figure \@ref(fig:all-sp-dens-biom)A and B. Contribution by the dominant species are presented in Figure \@ref(fig:all-sp-dens-biom)C and D. Contrasts for the effects of rotation systems, rotation system within individual crops, and crop types on community stand density and aboveground mass are shown in Table \@ref(tab:dens-biom-jt-ct)C.  
+Crop identity affected weed community stand density (p < 0.0001) and weed community aboveground mass (p = 0.0057), but corn weed management and its interaction with crop identity did not affect weed community stand density or biomass (p-values > 0.05) (Tables \@ref(tab:dens-indices-ct) and \@ref(tab:biom-indices-ct)). Weed community stand density and aboveground mass in each crop identity category, averaged over blocks, years, and corn weed management regimes, are presented in Figure \@ref(fig:all-sp-dens-biom)A and B. Contributions by the dominant species are presented in Figure \@ref(fig:all-sp-dens-biom)C and D. Contrasts for the effects of rotation systems, rotation system within individual crops, and crop types on community stand density and aboveground mass are shown in Table \@ref(tab:dens-biom-jt-ct)C.  
   
-Weed community density and aboveground mass of the 3-year and 4-year systems averages were comparable to those of the 2-year system (p-values = 0.058 and 0.9451, Table \@ref(tab:dens-biom-jt-ct)B1). The weed community density in the 4-year rotation was 2.5 fold greater than in the 3-year rotation (p-value = 0.0368), but the community aboveground mass was comparable between the 3-year and 4-year rotations.  
+Weed community density and aboveground mass of the 3-year and 4-year systems averages were comparable to those of the 2-year system (p = 0.058 and p = 0.9451, respectively; Table \@ref(tab:dens-biom-jt-ct)B1). The weed community density in the 4-year rotation was 2.5-fold greater than that in the 3-year rotation (p = 0.0368), but the community aboveground mass was comparable between the 3-year and 4-year rotations.  
 
-For the individual crops (Table \@ref(tab:dens-biom-jt-ct)B2), increased rotation diversity tended to decrease weed abundance in corn and soybean and increase weed abundance in oat, but these trends were not significant (p-values = 0.6354 and 0.4041 for corn, 0.1834 and 0.0739 for soybean, and 0.3955 and 0.335 for oat). The patchiness of weeds, which was reflected in the high standard error values, might have caused the lack of significance for these inconclusive trends.  
+For the individual crops (Table \@ref(tab:dens-biom-jt-ct)B2), increased rotation diversity tended to decrease weed density and aboveground mass in corn and soybean and increase weed abundance in oat, but these changes were not significant (p = 0.6354 and p = 0.4041 for corn, p = 0.1834 and p = 0.0739 for soybean, and p = 0.3955 and p = 0.335 for oat). The patchiness of weeds, which was reflected in the high standard error values, might have caused the lack of significance for these inconclusive trends.  
 
-For different crop types (Table \@ref(tab:dens-biom-jt-ct)B3), weed community density and aboveground mass were comparable between the warm season crops (corn and soybean, p-values = 0.2032, 0.3426, 0.065, and 0.1274) and between the cool season crops (oat and alfalfa, p-values = 0.774 and 0.687). Overall, the average weed community density in the cool season crops was 26-fold greater than that in the warm season crops (p-value < 0.0001), and the average weed community aboveground mass in cool season crops was 16-fold greater than that in warm season crops (p-value = 0.0001). In the 3-year rotation, the weed stand community stand in oat (O3) was 11.5-fold greater than the average in corn and soybean (C3 and S3) (p-value = 0.0012), but the weed community aboveground mass was comparable between O3 and the average of the C3 and S3 phases (p-value = 0.1502). In the 4-year rotation, the weed community stand density in the average of oat and alfalfa (O4 and A4) was 36-fold greater than the average of the corn (C4) and soybean (S4) phases (p-value < 0.0001), and the average weed biomass for the O4 and A4 phases was 29-fold greater than for the C4 and S4 phases (p-value < 0.0001).   
+For different crop types, weed community density and aboveground mass were comparable between the warm-season crops (corn and soybean) and between the cool-season crops (oat and alfalfa) (Table \@ref(tab:dens-biom-jt-ct)B3). Overall, the average weed community density in the cool-season crops was 26-fold greater than that in the warm-season crops (p < 0.0001), and the average weed community aboveground mass in cool-season crops was 16-fold greater than that in warm-season crops (p = 0.0001). In the 3-year rotation, the weed stand community stand in oat (O3) was 11.5-fold greater than the average in corn and soybean (C3 and S3) (p = 0.0012), but the weed community aboveground mass was comparable between O3 and the average of the C3 and S3 phases (p = 0.1502). In the 4-year rotation, the weed community stand density in the average of oat and alfalfa (O4 and A4) was 36-fold greater than the average of the corn (C4) and soybean (S4) phases (p < 0.0001), and the average weed biomass for the O4 and A4 phases was 29-fold greater than for the C4 and S4 phases (p < 0.0001).   
 
 
 ```{r dens-biom-jt-ct, echo=FALSE}
@@ -1760,14 +1761,14 @@ comm_dens_biom_jt_ct %>%
       digits = 2, 
       linesep = " ",
       align = "lrrrrrr",
-    caption = "Community density and aboveground mass ANOVA and contrasts. The abbreviations in the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged.") %>%
+    caption = "Community density and aboveground mass ANOVA and contrasts. The abbreviations in the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>%
   add_header_above(c(" " = 3, "Stand density" = 2, "Aboveground mass" = 2)) %>%
   pack_rows("(A) - ANOVA", 1,3) %>%
-  pack_rows("Contrasts                 ratio  p.value  ratio   p.value", 4, 16)%>%
+  pack_rows("Contrasts                 ratio  p  ratio   p", 4, 16)%>%
   pack_rows("(B1) - Rotation system effects", 4, 5) %>%
   pack_rows("(B2) - Rotation system effects within individual crops", 6, 10) %>%
   pack_rows("(B3) - Crop type effects", 11, 16) %>%
-  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, and O4 - oat in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
+  footnote(general = "C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 
 ```
 
@@ -1930,7 +1931,7 @@ sp_biom <- ggplot(data = biom_1720_sum, aes(fill = Species,
 
 ```
 
-```{r all-sp-dens-biom, fig.width=8, fig.height=8, echo=FALSE, fig.cap="In panels A and B: weed community stand density and aboveground mass were averaged over four blocks, four years, and two corn weed management regimes; the black dots are estimated marginal means; the blue bars are 95% confidence intervals; the red arrows reflect the comparisons among means; overlapping arrows indicate non-significant differences. In panels C and D: the contribution of the seven most abundant weed species and the rarer species (species ordered eighth and above grouped in OTHERS) in each crop identity, averaged over four blocks and four years, are ordered alphabetically. The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation to which the crops belonged (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.) The less abundant weed species which made up 6% of the whole community are grouped in OTHERS. The means displayed on panels A and B were estimated marginal means, calculated based on the analysis model (with `emmip` function) but the means displayed on panels C and D were arithmetic means, calculated from the data so they are slightly different."}
+```{r all-sp-dens-biom, fig.width=8, fig.height=8, echo=FALSE, fig.cap="In panels A and B: weed community stand density and aboveground mass were averaged over four blocks, four years, and two corn weed management regimes; the black dots are estimated marginal means; the blue bars are 95% confidence intervals; the red arrows reflect the comparisons among means; overlapping arrows indicate non-significant differences. In panels C and D: the contribution of the seven most abundant weed species and the rarer species (species ordered eighth and above grouped in OTHERS) in each crop identity, averaged over four blocks and four years, are ordered alphabetically. The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.) The less abundant weed species which made up 6% of the whole community are grouped in OTHERS. The means displayed on panels A and B were estimated marginal means, calculated based on the analysis model (with `emmip` function) but the means displayed on panels C and D were arithmetic means, calculated from the data so they are slightly different."}
 grid.arrange(dens_plot, biom_plot, sp_dens, sp_biom, 
              nrow = 2,
              heights=c(2,3))
