@@ -180,7 +180,7 @@ biom_result_t <- biom_1720_long %>%
   mutate(jts = map(models, joint_tests), #ANOVA table, with Block effect
          diag_plots = map(models, resid_panel),  #diagnosis plot
     jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary), #ANOVA table, with Block effect with clean format
-         means = map2(data, models,~ emmeans(.y, ~ Crop_ID | Corn_weed_management,data=.x, type = "response")), #estimated mean density of each weed species in each crop ID, separated by corn weed management
+         means = map2(data, models,~ emmeans(.y, ~ Crop_ID | Corn_weed_management,data=.x, type = "response")), #estimated mean density of each weed species in each crop ID, separated by corn weed management, for arrow_plot
         means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")), # EM means, for ANOVA table, averaged over block
     jts2 = map(means2, joint_tests), #ANOVA table, averaged over block 
     jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary), #ANOVA table, averaged over block in clean format

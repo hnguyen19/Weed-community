@@ -1,0 +1,20 @@
+---
+output: 
+  bookdown::word_document2: 
+    toc: false
+    number_sections: false
+bibliography: ecol.bib
+csl: apa-no-ampersand.csl
+---
+
+Weed aboveground communities in three cropping systems suitable for the Midwestern USA were studied from 2017 through 2020 to examine how crop diversification and the intensity of herbicide use affected weed community diversity, stand density, and aboveground mass. A baseline 2-year cropping system with corn (*Zea mays* L.) and soybean (*Glycine max* (L.) Merr.) grown in alternate years was diversified with cool-season crops, namely oat (*Avena sativa* L.), red clover (*Trifolium pratense* L.), and alfalfa (*Medicago sativa* L.) in 3-year and 4-year systems. Herbicide was not applied in the cool-season crops. This study was pursued to address the current gap of information concerning weed community density and aboveground mass responses to the filtering effects of different crop and weed management programs [@ryanManagementFiltersSpecies2010; @friedTrajectoriesWeedCommunities2012].
+
+Changing weed management regime from broadcast to banded application and interrow cultivation in corn and omitting herbicide in cool-season crops of the 3-year and 4-year rotations resulted in an overall reduction of herbicide a.i mass. The reduction in the mass of herbicide active ingredients was associated with increases in weed stand density, aboveground mass, and community diversity. Increased weed abundance (Figure 1) under herbicide mass reduction (Table 1) was not associated with crop yield loss (Figure 2). In the cool-season crops phases of the 3-year and 4-year rotations (oat, red clover, alfalfa), weed emergence was increased but weed growth was not, as compared with the warm-season crop (corn and soybean) environments. 
+
+The dominance of aggressive weed species such as common waterhemp (*Amaranthus tuberculatus* (Moq ex DC) J.D. Sauer) and common lambsquarter (*Chenopodium album* L.) tended to be greater in corn and soybean phases of the rotations than in oat, red clover, and alfalfa.
+
+Weed seedbank density could be used as a sustainability indicator [@storkeyWhatGoodWeed2018; @liebmanWeedSeedbankDiversity2021]. By monitoring aboveground weed communities, a track record of species aggressiveness and collective response to management is available, and thus, it could be easier to control risks of weed resurgence and outbreak. Coupling knowledge of aboveground weed communities with that of weed seedbank composition and abundance would further improve our ability to predict and manage weed communities [@forcellaWeedSeedbanksCorn1992; @menalledWeedAbovegroundSeedbank2001; @forcellaDebitingSeedbankPriorities2003; @davisWeedSeedbankCommunity2005]. 
+
+The corresponding publication can be found at: <https://www.frontiersin.org/articles/10.3389/fagro.2022.848548>
+The data can be found at: <<https://doi.org/10.25380/iastate.19111376>
+The code for data analysis can be found at: <https://doi.org/10.5281/zenodo.5980943>
