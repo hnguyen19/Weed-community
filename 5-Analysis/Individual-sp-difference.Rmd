@@ -112,7 +112,7 @@ dens_1720_long <- dens_1720_clean %>%
 min(dens_1720_long$Density[dens_1720_long$Density>0]) #0.05396072
 
 dens_result_t <- dens_1720_long %>%
-  group_by(Species) %>% 
+  group_by(Species) %>% # to fit a linear model for each species
   nest() %>%
   mutate(models=map(data,~lmer(log(Density + 0.05396072) ~ Block 
                                + Crop_ID + 
@@ -127,15 +127,15 @@ dens_result_t <- dens_1720_long %>%
                      data =.x))) %>%
   ungroup %>%
   mutate(diag_plots = map(models, resid_panel),
-    jts = map(models, joint_tests),
-    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary),
-         means = map2(data, models,~emmeans(.y, ~ Crop_ID|Corn_weed_management,data=.x, type = "response")),
-        means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")),
-    means_crop = map2(data, models,~emmeans(.y,  "Crop_ID",data=.x, type = "response")),
-    means_herb = map2(data, models,~emmeans(.y,  "Corn_weed_management",data=.x, type = "response")),
-     jts2 = map(means2, joint_tests),
-    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary),
-     arrow_plots = map(means, plot, comparison = TRUE, xlab=expression(plantsm^{"-2"}), ylab = "Crop ID"), 
+    jts = map(models, joint_tests), #ANOVA table, with Block effect
+    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary), #ANOVA tables with Block effect in clean format
+         means = map2(data, models,~emmeans(.y, ~ Crop_ID|Corn_weed_management,data=.x, type = "response")), #estimated mean density of each weed species in each crop ID, separated by corn weed management
+        means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")), # EM means, for ANOVA table, averaged over block
+    means_crop = map2(data, models,~emmeans(.y,  "Crop_ID",data=.x, type = "response")), #EM means averaged by Crop id
+    means_herb = map2(data, models,~emmeans(.y,  "Corn_weed_management",data=.x, type = "response")), #EM means averaged by corn weed mgt
+     jts2 = map(means2, joint_tests), #ANOVA table, averaged over block
+    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary), #ANOVA table, averaged over block in clean format
+     arrow_plots = map(means, plot, comparison = TRUE, xlab=expression(plantsm^{"-2"}), ylab = "Crop ID"), #visualize EM means of stand density
 
 dens_2yrvs34yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = ((C2+S2)/2) - ((C3+S3+O3+C4+S4+O4+A4)/7) )),
 dens_3yrvs4yr = map(means_crop, contrast, method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
@@ -169,7 +169,7 @@ biom_1720_long <- biom_1720_clean %>%
 min(biom_1720_long$Biomass[biom_1720_long$Biomass>0]) # 0.0005396072
 
 biom_result_t <- biom_1720_long %>%
-  group_by(Species) %>% 
+  group_by(Species) %>% # to fit a linear model for each species
   nest() %>%
   mutate(models=map(data,~lmer(log(Biomass + 0.0005396072) ~ Block +
                                  Crop_ID*Corn_weed_management + 
@@ -177,17 +177,16 @@ biom_result_t <- biom_1720_long %>%
                        (1|Year:Crop_ID) + (1|Year:Corn_weed_management) + 
                        (1|Year:Crop_ID:Corn_weed_management)  + (1|Block:Year:Crop_ID),data =.x))) %>%
   ungroup %>%
-  mutate(jts = map(models, joint_tests),
-         diag_plots = map(models, resid_panel), 
-         jts = map(models, joint_tests), 
-    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary),
-         means = map2(data, models,~ emmeans(.y, ~ Crop_ID | Corn_weed_management,data=.x, type = "response")),
-        means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")),
-    jts2 = map(means2, joint_tests),
-    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary),
-        means_crop = map2(data, models,~emmeans(.y,  "Crop_ID",data=.x, type = "response")),
-    means_herb = map2(data, models,~emmeans(.y,  "Corn_weed_management",data=.x, type = "response")),
-    arrow_plots = map(means, plot, comparison = TRUE, xlab=expression(gm^{"-2"}), ylab = "Crop ID"),
+  mutate(jts = map(models, joint_tests), #ANOVA table, with Block effect
+         diag_plots = map(models, resid_panel),  #diagnosis plot
+    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary), #ANOVA table, with Block effect with clean format
+         means = map2(data, models,~ emmeans(.y, ~ Crop_ID | Corn_weed_management,data=.x, type = "response")), #estimated mean density of each weed species in each crop ID, separated by corn weed management
+        means2 = map2(data, models,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")), # EM means, for ANOVA table, averaged over block
+    jts2 = map(means2, joint_tests), #ANOVA table, averaged over block 
+    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary), #ANOVA table, averaged over block in clean format
+        means_crop = map2(data, models,~emmeans(.y,  "Crop_ID",data=.x, type = "response")), # EM means of weed aboveground mass in Crop ID, averaged over herbicide
+    means_herb = map2(data, models,~emmeans(.y,  "Corn_weed_management",data=.x, type = "response")),  # EM means of weed aboveground mass in herbicide, averaged over crop ID
+    arrow_plots = map(means, plot, comparison = TRUE, xlab=expression(gm^{"-2"}), ylab = "Crop ID"),  #visualize EM means of aboveground mass
 biom_2yrvs34yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7]" = ((C2+S2)/2) - ((C3+S3+O3+C4+S4+O4+A4)/7) )),
 biom_3yrvs4yr = map(means_crop, contrast, method = list("[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4]" = ((C3+S3+O3)/3) - ((C4+S4+O4+A4)/4) )),
 biom_2yrvs3yr = map(means_crop, contrast, method = list("[(C2+S2)/2] vs [(C3+S3+O3)/3]" = ((C2+S2)/2) -  ((C3+S3+O3)/3) )),
