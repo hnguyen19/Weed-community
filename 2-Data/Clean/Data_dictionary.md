@@ -1,6 +1,9 @@
-The clean and raw data and code are available in this repository. The clean data set is also available at Iowa State University's DataShare.
+The clean and raw data and code are available in this repository. The data set is also available at Iowa State University's DataShare via <10.25380/iastate.19111376>.
 
-Each experimental unit (eu) data is recorded in one row. Variable explaination in each data sheet is provided below:
+
+### Clean:  
+
+Each experimental unit (eu) data is recorded in one row. Variable explanation in each data sheet is provided below:
 
 #### General variables (column names) that exist in all the data sheets
 
@@ -21,8 +24,9 @@ Each experimental unit (eu) data is recorded in one row. Variable explaination i
 + Moisture: Moisture at dried state
 + Standard_moisture: Standard moisture requirement for a specific commodity
 + Standardized_yield_MgpHa: Standardized yield in Mg per hectare
-+ bu_p_acre: Yield in bushel per acre
-*In alfalfa_1720_clean only:*
++ bu_p_acre: Yield in bushel per acre  
+
+*In alfalfa_1720_clean only:*  
 + Bale_lbs: Bale weight, in pound
 + Fresh_lb_p_ac: yield in pound per acre, fresh
 + Fresh_ton_p_ac: yield in ton per acre, fresh
@@ -38,13 +42,17 @@ Each experimental unit (eu) data is recorded in one row. Variable explaination i
 + Value: Yield in bushel per acre
 + Yield_Mg_p_ha: Yield in Mg per hectare
 
-#### biom_1720_clean.csv and pldens_1720_clean.csv (continued from the general variables list)
-+ from SETFA to ARFMI: Bayer codes for weed species names  
-+ Total: Whole-community aboveground mass or plant density
+#### biom_1720_clean.csv and and pldens_1720_clean.csv (continued from the general variables list)
++ from DIGSA to ARFMI: Bayer codes for weed species names  
++ Total: Whole-community aboveground mass or whole-community plant density
 
 #### biom_indices_1720_clean.csv and pldens_indices_1720_clean.csv (continued from the general variables list)
 + sample area (m^2): Sampled area per experimental unit
-+ Diversity: Simpson's diversity index, calculated with either individual species aboveoground mass or density
++ Diversity: Simpson's diversity index, calculated with either individual species aboveground mass or density
 + Dominance: Simpson's dominance index
 + Richness: Number of species 
-+ Evenness: Simpson's evenness index, calculated with either individual species aboveoground mass or density
++ Evenness: Simpson's evenness index, calculated with either individual species aboveground mass or density
+
+### Raw:  
+
+#### 
