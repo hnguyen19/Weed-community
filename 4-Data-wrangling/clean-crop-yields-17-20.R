@@ -14,15 +14,15 @@ library(tidyverse)
 library(dplyr)
 library(stringr)
 
-## Raw data sheets 
-corn <-  read_csv("./2-Data/Raw/Yields/corn_17_20.csv")
-soy <-  read_csv("./2-Data/Raw/Yields/soybean_17_20.csv")
+## Raw data sheets for Marsden yields
+corn <-  read_csv("./2-Data/Raw/Yields/corn_17_20.csv", show_col_types = FALSE)
+soy <-  read_csv("./2-Data/Raw/Yields/soybean_17_20.csv", show_col_types = FALSE)
 
-oat_straw <- read_csv("./2-Data/Raw/Yields/oatstraw_17_20.csv")
+oat_straw <- read_csv("./2-Data/Raw/Yields/oatstraw_17_20.csv", show_col_types = FALSE)
 
-oat_grain <- read_csv("./2-Data/Raw/Yields/oat_17_20.csv")
+oat_grain <- read_csv("./2-Data/Raw/Yields/oat_17_20.csv", show_col_types = FALSE)
 
-alfalfa <- read_csv("./2-Data/Raw/Yields/alfalfa_17_20.csv")
+alfalfa <- read_csv("./2-Data/Raw/Yields/alfalfa_17_20.csv", show_col_types = FALSE)
 
 
 ## Combine all crops to add Crop name and Block number
@@ -64,7 +64,7 @@ oat_straw_clean <- oat_clean%>%filter(Crop=="oat straw") %>% keep(~!all(is.na(.)
 #write.csv(oat_grain_clean , "./2-Data/Clean/oat_g_1720_clean.csv", row.names =  FALSE)
 #write.csv(oat_str, "./2-Data/Clean/oat_str_1720_clean.csv", row.names =  FALSE)
 
-## Iowa numbers 
+## Iowa yields 
 
 
 #oat and alfalfa  #<https://quickstats.nass.usda.gov/results/3D206F23-8AAF-3737-9033-1D81A2208FB9>

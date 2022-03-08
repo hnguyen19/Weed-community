@@ -14,6 +14,7 @@ library(data.table)
 library(readr)
 library(magrittr)
 library(readxl)
+library(daff)
 #options(digits = 5)
 
 
@@ -51,7 +52,7 @@ library(readxl)
 
 #abg stands for aboveground
 
-abg_17 <- read_excel("./2-Data/Raw/Aboveground/biom_17.xlsx",
+abg_17 <- read_excel("./2-Data/Raw/Weed-aboveground/biom_17.xlsx",
                      col_types = c("date", "numeric", "text",  "text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric", "numeric", "numeric",   "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"), na=".") #72 x 81, the last column is sampled area in m2
 
 abg_17_ordered <- arrange(abg_17, Plot,Side)
@@ -69,7 +70,7 @@ abg_17.data_m <- data.matrix(abg_17.data)  #sum(abg_17.data_m) matched sum(abg_1
 identical(colSums(abg_17.data_m),colSums(abg_17.data)) #TRUE
 
 
-abg_18 <- read_excel("./2-Data/Raw/Aboveground/biom_18.xlsx", 
+abg_18 <- read_excel("./2-Data/Raw/Weed-aboveground/biom_18.xlsx", 
                      col_types = c("date", "numeric", "text", "text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",   "numeric", "numeric", "numeric"), na = ".") #72 x 85 , the last column is sampled area in m2
 
 abg_18_ordered <- arrange(abg_18, Plot,Side)
@@ -86,7 +87,7 @@ abg_18.data_m <- data.matrix(abg_18.data)  #72 x 54
 
 identical(colSums(abg_18.data_m), colSums(abg_18.data)) #true, all columns are in place
 
-abg_19 <- read_excel("./2-Data/Raw/Aboveground/biom_19.xlsx", col_types = c("date",  "numeric", "text", "text", "text", "text", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric"), na = ".") #72 x 85 the last column is sampled area in m2
+abg_19 <- read_excel("./2-Data/Raw/Weed-aboveground/biom_19.xlsx", col_types = c("date",  "numeric", "text", "text", "text", "text", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric"), na = ".") #72 x 85 the last column is sampled area in m2
 
 abg_19_ordered <- arrange(abg_19, Plot,Side)
 
@@ -96,7 +97,7 @@ abg_19.data <- abg_19_ordered[,-c(1:6,85)][,colSums(abg_19_ordered[,-c(1:6,85)])
 abg_19.data_m <- data.matrix(abg_19.data)
 colSums(abg_19.data_m) == 0
 
-abg_20 <- read_excel("./2-Data/Raw/Aboveground/biom_20.xlsx", col_types = c("date",  "numeric", "text", "text", "text", "text",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric","numeric", "numeric"), na = ".") # 72x x 89,  the last column is sampled area in m2
+abg_20 <- read_excel("./2-Data/Raw/Weed-aboveground/biom_20.xlsx", col_types = c("date",  "numeric", "text", "text", "text", "text",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric", "numeric", "numeric", "numeric",  "numeric","numeric", "numeric"), na = ".") # 72x x 89,  the last column is sampled area in m2
 
 abg_20_ordered <- arrange(abg_20, Plot,Side)
 
@@ -105,16 +106,16 @@ abg_20.data <- abg_20_ordered[,-c(1:6, 89)][,colSums(abg_20_ordered[,-c(1:6, 89)
 abg_20.data_m <- data.matrix(abg_20.data)
 
 #save biomass to one sheet
-abg_17_biom <- abg_17.data_m[ ,rep(c(F,T),22) ]
-abg_18_biom <- abg_18.data_m[ ,rep(c(F,T),27) ]
-abg_19_biom <- abg_19.data_m[ ,rep(c(F,T),19) ]
-abg_20_biom <- abg_20.data_m[ ,rep(c(F,T),24) ]
+abg_17_biom <- abg_17.data_m[ ,rep(c(FALSE,TRUE),22) ]
+abg_18_biom <- abg_18.data_m[ ,rep(c(FALSE,TRUE),27) ]
+abg_19_biom <- abg_19.data_m[ ,rep(c(FALSE,TRUE),19) ]
+abg_20_biom <- abg_20.data_m[ ,rep(c(FALSE,TRUE),24) ]
 
 #save counts to another sheet
-abg_17_nopl <- abg_17.data_m[ ,rep(c(T,F),22) ]
-abg_18_nopl <- abg_18.data_m[ ,rep(c(T,F),27) ]
-abg_19_nopl <- abg_19.data_m[ ,rep(c(T,F),19) ]
-abg_20_nopl <- abg_20.data_m[ ,rep(c(T,F),24) ]
+abg_17_nopl <- abg_17.data_m[ ,rep(c(TRUE, FALSE),22) ]
+abg_18_nopl <- abg_18.data_m[ ,rep(c(TRUE, FALSE),27) ]
+abg_19_nopl <- abg_19.data_m[ ,rep(c(TRUE, FALSE),19) ]
+abg_20_nopl <- abg_20.data_m[ ,rep(c(TRUE, FALSE),24) ]
 
 ## test if data columns match id columns
 
@@ -238,28 +239,28 @@ biom_20.env <- abg_20.env %>%
 #############################################################
 # replace non-zero with 1 to check for discrepancy between biomass and number of plant columns
 # This zero vs non-zero trick checks Richness 
-library(daff)
+
 biom_17_TF <- abg_17.data %>%
   mutate_if(is.numeric, ~1 * (. != 0))
 colnames(biom_17_TF) <- strtrim(colnames(biom_17_TF),5)
-biom_17_TF_odd <- biom_17_TF[ ,rep(c(T,F),22) ]
-biom_17_TF_even <- biom_17_TF[ ,rep(c(F,T),22) ]
+biom_17_TF_odd <- biom_17_TF[ ,rep(c(TRUE, FALSE),22) ]
+biom_17_TF_even <- biom_17_TF[ ,rep(c(FALSE,TRUE),22) ]
 sum(biom_17_TF_odd - biom_17_TF_even) # no  discrepancy
 render_diff(diff_data(biom_17_TF_odd , biom_17_TF_even))
 
 biom_18_TF <- abg_18.data %>%
   mutate_if(is.numeric, ~1 * (. != 0))
 colnames(biom_18_TF) <- strtrim(colnames(biom_18_TF),5)
-biom_18_TF_odd <- biom_18_TF[ ,rep(c(T,F),27) ]
-biom_18_TF_even <- biom_18_TF[ ,rep(c(F,T),27) ]
+biom_18_TF_odd <- biom_18_TF[ ,rep(c(TRUE, FALSE),27) ]
+biom_18_TF_even <- biom_18_TF[ ,rep(c(FALSE,TRUE),27) ]
 render_diff(diff_data(biom_18_TF_odd, biom_18_TF_even)) # no  discrepancy 
 
 
 biom_19_TF <- abg_19.data %>%
   mutate_if(is.numeric, ~1 * (. != 0))
 colnames(biom_19_TF) <- strtrim(colnames(biom_19_TF),5)
-biom_19_TF_odd <- biom_19_TF[ ,rep(c(T,F),19) ]
-biom_19_TF_even <- biom_19_TF[ ,rep(c(F,T),19) ] 
+biom_19_TF_odd <- biom_19_TF[ ,rep(c(TRUE, FALSE),19) ]
+biom_19_TF_even <- biom_19_TF[ ,rep(c(FALSE,TRUE),19) ] 
 
 render_diff(diff_data(data_ref = biom_19_TF_odd, 
                       data = biom_19_TF_even)) #row 15, ABUTH, 2 plants but they did not register on the scale so 0 in weight
@@ -268,8 +269,8 @@ render_diff(diff_data(data_ref = biom_19_TF_odd,
 biom_20_TF <- abg_20.data %>%
   mutate_if(is.numeric, ~1 * (. != 0))
 colnames(biom_20_TF) <- strtrim(colnames(biom_20_TF),5)
-biom_20_TF_odd <- biom_20_TF[ ,rep(c(T,F),24) ]
-biom_20_TF_even <- biom_20_TF[ ,rep(c(F,T),24) ]
+biom_20_TF_odd <- biom_20_TF[ ,rep(c(TRUE, FALSE),24) ]
+biom_20_TF_even <- biom_20_TF[ ,rep(c(FALSE,TRUE),24) ]
 
 
 render_diff(diff_data(data_ref = biom_20_TF_odd,
@@ -281,7 +282,7 @@ setdiff(biom_20_TF_odd , biom_20_TF_even) # no discrepancy
 #############################################################
 # Richness will be calculated with number of plant data set because of ABUTH in the 2019 data set.
 
-#Test the Richness, Dominance, Simpson diversity and Simpson evenness on the 2020 data
+# Test the calculation of Richness, Dominance, Simpson diversity and Simpson evenness indices on the 2020 data
 biom_20 <- cbind(biom_20.env , abg_20_biom); nopl_20 <- cbind(biom_20.env , abg_20_nopl)
 
 #nopl_20$Richness <- rowSums(nopl_20[,-c(1:11, 35)]!=0) #matched excel countif function's result
