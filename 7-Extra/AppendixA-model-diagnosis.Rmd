@@ -19,6 +19,7 @@ library(lme4)
 library(magrittr)
 library(ggResidpanel)
 library(patchwork)
+library(magick)
 knitr::opts_chunk$set(message = FALSE, 
                       error = FALSE, 
                       warning = FALSE, 
