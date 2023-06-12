@@ -99,7 +99,7 @@ R version 4.1.2 [@rdevelopmentcoreteamLanguageEnvironmentStatistical2021] was us
 Stand diversity, stand evenness, stand richness, aboveground mass diversity, aboveground mass evenness, aboveground mass richness, community aboveground density, community aboveground mass, individual species density, and individual species aboveground mass were analyzed separately with a linear mixed-effects model, using the `lmer` function in the `lme4` package [version 1.1-27.1,  @batesLme4LinearMixedEffects2021] according to the following model.  
 
 \begin{align}
-R_{ijklm} = \mu + B_i + C_j + H_k + CH_{jk} + Y_l + BY_{il} + YC_{lj} + YH_{lk} + YCH_{ljk} + BYC_{ijl} + \epsilon_{ijkl}
+R_{ijkl} = \mu + B_i + C_j + H_k + CH_{jk} + Y_l + BY_{il} + YC_{lj} + YH_{lk} + YCH_{ljk} + BYC_{ijl} + \epsilon_{ijkl}
 \label{eq:index}
 \end{align}  
 
@@ -117,7 +117,7 @@ $YC$ is interaction between crop identity and year,
 $YH$ is the interaction between year and corn herbicide,  
 $YCH$ is the interaction between year, crop identity, and corn weed management,  
 $BYC$ is the interaction between block, year, and crop identity, and   
-$\epsilon_{ijklm}$ is the residual.   
+$\epsilon_{ijkl}$ is the residual.   
 
 The crop identity term in the right-hand side of the model (Equation \@ref(eq:index)) represents the main-plot effect of the experiment, which comprises of the crop species and the rotation to which it belonged. In this present study, "cropping system" is the combination of "rotation system" (2-year, 3-year, and 4-year) and herbicide regime in corn (low or conventional); and crop type represents growing condition, so corn and soybean were grouped as warm-season crops, whereas oat and alfalfa were grouped as cool-season crops. With this model, we tested the following three sets of hypotheses for treatment effects on weed community stand diversity, community stand evenness, community stand richness, community aboveground mass diversity, community aboveground mass evenness, community aboveground mass richness, community aboveground density, and community aboveground mass:  
 
