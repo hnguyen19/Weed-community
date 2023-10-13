@@ -66,7 +66,16 @@ oat_straw_clean <- oat_clean%>%filter(Crop=="oat straw") %>% keep(~!all(is.na(.)
 
 ## Iowa yields 
 
+## 2023 data download
+url.2023 <- "https://quickstats.nass.usda.gov/results/FCF34597-D7F7-31A8-9149-89426C2784BF"
+write.table(url.2023, file = here("2-Data/Raw/url.txt"), row.names = FALSE, col.names = FALSE, quote = FALSE)
 
+all_yield.2023 <- read.table(here("2-Data/Raw/url.txt"), stringsAsFactors = FALSE)
+
+## Alfalfa hay yield is still not available
+"https://quickstats.nass.usda.gov/results/7F21D1A2-30AD-37F7-9B09-CA45AF76EAF5" 
+
+### 2020 data download 
 #oat and alfalfa  #<https://quickstats.nass.usda.gov/results/3D206F23-8AAF-3737-9033-1D81A2208FB9>
 OA_yield <- read.csv(here("2-Data/Raw/Yields/IA_OAyield.csv"), header  = TRUE)
 #corn, soybean, oat  #<https://quickstats.nass.usda.gov/results/6467D646-F314-33B3-B14D-A73D84313E80>
