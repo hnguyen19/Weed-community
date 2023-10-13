@@ -256,14 +256,14 @@ IA_yield <- read.csv("../2-Data/Clean/IA_yield_clean.csv")
 ##Iowa average, need update when 2020 corn, 2019 and 2020 hay, 2019 oat, and 2020 soy yields are  available 
 IA_avg_yield <- IA_yield %>% 
   group_by(Commodity) %>%
-  summarise(IA_avg = mean(Yield_Mg_p_ha),
-            IA_sd = sd(Yield_Mg_p_ha))
+  summarise(IA_avg_Bu = mean(Value),
+            IA_sd_Bu = sd(Value))
 
 Boone_yield <- IA_yield %>%
   filter(County == "Boone") %>%
   group_by(Commodity) %>%
-  summarise(Boone_avg = mean(Yield_Mg_p_ha),
-            Boone_sd = sd(Yield_Mg_p_ha))
+  summarise(Boone_avg_Bu = mean(Value),
+            Boone_sd_Bu = sd(Value))
 
 ```
 
