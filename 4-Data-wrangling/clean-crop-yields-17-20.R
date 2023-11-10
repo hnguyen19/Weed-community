@@ -58,9 +58,9 @@ oat_grain_clean <- oat_clean%>%filter(Crop=="oat grain") %>% keep(~!all(is.na(.)
 
 oat_straw_clean <- oat_clean%>%filter(Crop=="oat straw") %>% keep(~!all(is.na(.))) # Oat straw yield was not included in the manuscript
 
-#write.csv(corn, "./2-Data/Clean/corn_1720_clean.csv", row.names =  FALSE)
-#write.csv(soy, "./2-Data/Clean/soybean_1720_clean.csv", row.names =  FALSE)
-#write.csv(alfalfa, "./2-Data/Clean/alfalfa_1720_clean.csv", row.names =  FALSE)
+#write.csv(corn_clean, "./2-Data/Clean/corn_1720_clean.csv", row.names =  FALSE)
+#write.csv(soy_clean, "./2-Data/Clean/soybean_1720_clean.csv", row.names =  FALSE)
+#write.csv(alfalfa_clean, "./2-Data/Clean/alfalfa_1720_clean.csv", row.names =  FALSE)
 #write.csv(oat_grain_clean , "./2-Data/Clean/oat_g_1720_clean.csv", row.names =  FALSE)
 #write.csv(oat_str, "./2-Data/Clean/oat_str_1720_clean.csv", row.names =  FALSE)
 
