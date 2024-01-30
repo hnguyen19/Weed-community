@@ -28,14 +28,29 @@ alfalfa <- read_csv("./2-Data/Raw/Yields/alfalfa_17_20.csv", show_col_types = FA
 ## Combine all crops to add Crop name and Block number
 crops <- rbindlist(list(corn,soy,oat_straw,oat_grain,alfalfa), fill = TRUE)
 
+crops_no_oat_straw %>% rbindlist(list(corn,soy, oat_grain,alfalfa), fill = TRUE)
+
 crops <- crops %>% mutate(Crop = ifelse(startsWith(Crop_ID,"S"),"soybean",
                                         ifelse(startsWith(Crop_ID,"O"),"oat",
                                                ifelse(startsWith(Crop_ID,"C"),"corn","alfalfa"))),
                           Block = ifelse(Plot %in% c(11:19),"1",
                                          ifelse(Plot %in% c(21:29),"2",
-                                                ifelse(Plot %in% c(31:39),"3", "4")))) 
+                                                ifelse(Plot %in% c(31:39),"3", "4"))))
 
-## Save each crop yield sheet as a file for crop yield analysis model 
+
+## 2024 version
+corn_clean <- corn %>%
+  mutate(Zero_moisture_yield_MgpHa = Standardized_yield_MgpHa * (1 - Standard_moistrure),
+         Zero_moisture_yield_bu_ac = Standardized_yield_bu_ac * (1 - Standard_moistrure))
+
+soy_clean <- soy %>%
+  mutate(Zero_moisture_yield_MgpHa = Standardized_yield_MgpHa * (1 - Standard_moistrure),
+         Zero_moisture_yield_bu_ac = Standardized_yield_bu_ac * (1 - Standard_moistrure))
+
+
+
+
+## 2022 version: Save each crop yield sheet as a file for crop yield analysis model 
 
 corn_clean <- crops%>%filter(Crop_ID %in% c("C2","C3","C4"))%>%
   keep(~!all(is.na(.)))
