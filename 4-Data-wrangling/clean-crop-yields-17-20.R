@@ -40,12 +40,12 @@ crops <- crops %>% mutate(Crop = ifelse(startsWith(Crop_ID,"S"),"soybean",
 
 ## 2024 version
 corn_clean <- corn %>%
-  mutate(Zero_moisture_yield_MgpHa = Standardized_yield_MgpHa * (1 - Standard_moistrure),
-         Zero_moisture_yield_bu_ac = Standardized_yield_bu_ac * (1 - Standard_moistrure))
+  mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (100 - Standard_moistrure))/100,
+         Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (100 - Standard_moistrure))/100)
 
 soy_clean <- soy %>%
-  mutate(Zero_moisture_yield_MgpHa = Standardized_yield_MgpHa * (1 - Standard_moistrure),
-         Zero_moisture_yield_bu_ac = Standardized_yield_bu_ac * (1 - Standard_moistrure))
+  mutate(Zero_moisture_yield_MgpHa = Standardized_yield_MgpHa * (100 - Standard_moistrure))/100,
+         Zero_moisture_yield_bu_ac = Standardized_yield_bu_ac * (100 - Standard_moistrure))/100)
 
 
 
