@@ -45,22 +45,22 @@ library(ggpubr)
  
 
 ```{r, echo=FALSE}
-corn <- read_csv("../2-Data/Clean/corn_1720_clean.csv")
+corn <- read_csv("../2-Data/Clean/M.corn_1720_clean.csv")
 corn  %<>%
   mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
             funs(factor(.)))
 
-soy <-  read_csv("../2-Data/Clean/soybean_1720_clean.csv")
+soy <-  read_csv("../2-Data/Clean/M.soybean_1720_clean.csv")
 soy  %<>% 
   mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
             funs(factor(.)))
 
-oat <- read_csv("../2-Data/Clean/oat_g_1720_clean.csv")
+oat <- read_csv("../2-Data/Clean/M.oat_g_1720_clean.csv")
 oat  %<>%  
   mutate_at(c("Block","Crop_ID", "Year"),
             funs(factor(.)))
 
-alfalfa <- read_csv("../2-Data/Clean/alfalfa_1720_clean.csv")
+alfalfa <- read_csv("../2-Data/Clean/M.alfalfa_1720_clean.csv")
 alfalfa %<>%  
   mutate_at(c("Block", "Year"),
                         funs(factor(.)))
@@ -68,39 +68,75 @@ alfalfa %<>%
 
 
 ```{r, include=FALSE}
-corn.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block +
+corn.lmer.si <- lmer(log(log(`Yield (Mg/ha @ 0%)`)) ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) ,
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
   data=corn)
 
-soy.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block +  Crop_ID*Corn_weed_management + 
+
+corn.lmer <- lmer(log(log(`Yield (ton/acre @ 0%)`)) ~ Block +
+                    Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID),
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
+  data=corn)
+
+soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
   data=soy)
 
-oat.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block + 
+soy.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
+  data=soy)
+
+oat.lmer.si <- lmer(log(`Mg/ha at 0% moisture`) ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
-                   (1|Year:Crop_ID) + 
-                   (1|Block:Year:Crop_ID),
+                   (1|Year:Crop_ID),
+#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
+  data=oat)
+
+oat.lmer <- lmer(log(`ton/acre at 0% moisture`) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID),
+#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
   data=oat)
 
 ## summing all the cuts within one year 
 alf_sum <- alfalfa %>%
   group_by(Year, Block) %>%
-  summarize(Yield = sum(Dry_MgpHa)) 
+  summarize(Yield.Mg.ha = sum(`Yield (Mg/ha @ 0% moisture)`),
+            Yield.ton.ac = sum(`Yield (ton/acre @ 0% moisture)`)) 
 
-alf.lmer <- lmer(Yield ~ Block + (1|Year),
+alf.lmer.si <- lmer(Yield.Mg.ha ~ Block + (1|Year),
+  data=alf_sum)
+
+alf.lmer.si <- lmer(Yield.ton.ac ~ Block + (1|Year),
   data=alf_sum)
 ```
 

@@ -1,0 +1,419 @@
+---
+title: "Clean crop yields"
+date: '`r Sys.Date()`'
+output: 
+  bookdown::html_document2:
+    toc: false
+    fig_caption: yes
+    keep_md: true
+    self_contained: true
+    number_sections: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(emmeans)
+library(here)
+library(readr)
+library(readxl)
+library(data.table)
+library(tidyverse)
+library(dplyr)
+library(stringr)
+```
+
+## Update to the previous version
+
+This script is a more streamlined version of `clean-crop-yields-17-20.R`. Data was loaded directly from the shared Box folder and curated extensively in R instead of copying and pasting desirable rows and columns. That practice resulted in an error that the standardized crop yields, to industry level moisture, at the experiment site was compared to the 0% moisture published by USDA NASS. This error is corrected here and will reflect in `Crop-yields.Rmd`.
+
+## Conversion factor
+From <https://www.ers.usda.gov/webdocs/publications/41880/33132_ah697_002.pdf>
+
+Corn, 1 bushel = 56 pounds
+Oats, 1 bushel = 32 pounds
+Soybean, 1 bushel = 60 pounds
+1 metric ton = 2,204.622 pounds
+1 U.S. (short) ton = 2,000 pounds
+
+
+## Raw data processing by crop
+
+All dataframes starting with "M" indicate the yield at Marsden.
+
+### Corn
+
+#### 2017
+```{r}
+M.corn.yield.17 <- read_excel("../2-Data/Raw/Yields/Marsden 2017 Corn-Soybean Yields.xlsx", sheet = "Corn", skip = 4, na = c("", "NA", "N/a")) 
+
+M.corn.yield.17.clean <- M.corn.yield.17 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+  mutate(Year = "2017")
+```
+
+#### 2018
+```{r}
+M.corn.yield.18 <- read_excel("../2-Data/Raw/Yields/Marsden 2018 Corn-Soybean Yields.xlsx", sheet = "Corn", skip = 4, na = c("", "NA", "N/a")) 
+
+M.corn.yield.18.clean <- M.corn.yield.18 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.)))  %>% # remove blank columns
+  mutate(Year = "2018")
+```
+
+#### 2019
+
+```{r}
+M.corn.yield.19 <- read_excel("../2-Data/Raw/Yields/Marsden 2019 Corn-Soybean Yields.xlsx", sheet = "Corn", skip = 4, na = c("", "NA", "N/a")) 
+
+M.corn.yield.19.clean <- M.corn.yield.19 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.)))  %>% # remove blank columns
+  mutate(Year = "2019")
+```
+
+#### 2020
+
+```{r}
+M.corn.yield.20 <- read_excel("../2-Data/Raw/Yields/Marsden 2020 Corn-Soybean Yields.xlsx", sheet = "Corn", skip = 4, na = c("", "NA", "N/a")) 
+
+M.corn.yield.20.clean <- M.corn.yield.20 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+  select(!c(Block, ...5))  %>% # remove block and east/west designation
+  mutate(Year = "2020")
+```
+
+#### All corn together
+
+```{r}
+M.corn <- rbindlist(list(M.corn.yield.17.clean,
+                    M.corn.yield.18.clean,
+                    M.corn.yield.19.clean,
+                    M.corn.yield.20.clean)) %>%
+  fill(Plot, Rotation, .direction = "down") %>%
+  mutate(Treatment = tolower(Treatment)) %>%
+  rename(Corn_weed_management = Treatment,
+         Crop_ID = Rotation) %>%
+   mutate(across(`Harvested Weight (lbs.)` : `Yield (Mg/ha @ 15.5%)`, ~as.numeric(as.character(.)))) %>%
+  mutate(Crop = "corn",
+         `Yield (ton/acre @ 15.5%)` = `Yield (lb/acre @ 15.5%)`/2000,
+         `Yield (Mg/ha @ 0%)` = `Yield (Mg/ha @ 15.5%)`/1.13,
+         `Yield (ton/acre @ 0%)` = `Yield (ton/acre @ 15.5%)`/1.155,
+         Corn_weed_management = ifelse(Corn_weed_management == "low", "low", "conventional"),
+         Block = ifelse(Plot %in% c(11:19), "1",
+                        ifelse(Plot %in% c(21:29), "2",
+                               ifelse(Plot %in% c(31:39), "3", "4"))))
+```  
+
+#### Model 
+
+##### Marsden
+
+```{r}
+corn.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +
+                    Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
+  data=M.corn,
+                       control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4)))
+```
+
+
+```{r}
+corn.lmer.si <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +
+                    Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
+  data=M.corn,
+                       control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4)))
+```
+
+
+### Soybean
+
+#### 2017
+```{r}
+M.soy.yield.17 <- read_excel("../2-Data/Raw/Yields/Marsden 2017 Corn-Soybean Yields.xlsx", sheet = "Soybean", skip = 6, na = c("", "NA", "N/a")) 
+
+M.soy.yield.17.clean <- M.soy.yield.17 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+  mutate(Year = "2017")
+```
+
+#### 2018
+```{r}
+M.soy.yield.18 <- read_excel("../2-Data/Raw/Yields/Marsden 2018 Corn-Soybean Yields.xlsx", sheet = "Soybean", skip = 6, na = c("", "NA", "N/a")) 
+
+M.soy.yield.18.clean <- M.soy.yield.18 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+    mutate(Year = "2018")
+```
+
+#### 2019
+
+```{r}
+M.soy.yield.19 <- read_excel("../2-Data/Raw/Yields/Marsden 2019 Corn-Soybean Yields.xlsx", sheet = "Soybean", skip = 6, na = c("", "NA", "N/a")) 
+
+M.soy.yield.19.clean <- M.soy.yield.19 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>%# remove blank columns
+    mutate(Year = "2019")
+```
+
+#### 2020
+
+```{r}
+M.soy.yield.20 <- read_excel("../2-Data/Raw/Yields/Marsden 2020 Corn-Soybean Yields.xlsx", sheet = "Soybean", skip = 6, na = c("", "NA", "N/a")) 
+
+M.soy.yield.20.clean <- M.soy.yield.20 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+    mutate(Year = "2020")
+```
+#### All soybean together
+
+```{r}
+M.soy <- rbindlist(list(M.soy.yield.17.clean,
+                    M.soy.yield.18.clean,
+                    M.soy.yield.19.clean,
+                    M.soy.yield.20.clean)) %>%
+  fill(Plot, Rotation, .direction = "down") %>%
+  mutate(Treatment = tolower(Treatment)) %>%
+  rename(Corn_weed_management = Treatment,
+         Crop_ID = Rotation) %>%
+     mutate(across(`Harvested Weight (lbs.)` : `Yield (Mg/ha @ 13%)`, ~as.numeric(as.character(.)))) %>%
+  mutate(Crop = "soybean",
+         `Yield (ton/acre @ 13%)` = `Yield (lb/acre @ 13%)`/2000,
+         `Yield (Mg/ha @ 0%)` = `Yield (Mg/ha @ 13%)`/1.13,
+         `Yield (ton/acre @ 0%)` = `Yield (ton/acre @ 13%)`/1.13,
+         Corn_weed_management = ifelse(Corn_weed_management == "low", "low", "conventional"),
+         Block = ifelse(Plot %in% c(11:19), "1",
+                        ifelse(Plot %in% c(21:29), "2",
+                               ifelse(Plot %in% c(31:39), "3", "4"))))
+``` 
+
+```{r}
+soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID) +
+                    (1|Block:Year:Corn_weed_management),
+                     data=M.soy,
+                     control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
+                                                                     tol = 1e-4)))
+```
+
+```{r}
+soy.lmer.si 
+```
+
+### Oat
+
+from the equipment note: "Grain was harvested with a John Deere 9450 plot combine. Weights, test weight and % moisture taken from the combine." That is the reason why each bushel of oat weights 32.9 lbs instead of 32 lbs as in USDA standard.
+USDA standard, as detailed in the conversion factor section, are used to calculate yield in ton/acre at 0%
+
+Any columns after bu/acre at 14% moisture sre about straw
+
+#### 2017
+```{r}
+M.oat.yield.17 <- read_excel("../2-Data/Raw/Yields//Marsden 2017 Oat-Straw.xlsx",  skip = 9, na = c("", "NA", "N/a")) 
+
+M.oat.yield.17.clean <- M.oat.yield.17 %>%
+  filter(!is.na(`bu/acre`)) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+  select(Plot: `bu/acre at 14% moisture`) %>%
+    select(Plot, Treatment,
+         `bu/ac @ 0% moisture`, `bu/acre at 14% moisture`) %>%
+    mutate(Year = "2017") %>%
+  mutate(`lb/acre at 14% moisture` = `bu/acre at 14% moisture` * 32,
+         `Mg/ha at 14% moisture` = `bu/acre at 14% moisture` * 0.035239,
+         `ton/acre at 14% moisture` = `lb/acre at 14% moisture`/2000,
+         `ton/acre at 0% moisture` = `ton/acre at 14% moisture`/1.14,
+         `Mg/ha at 0% moisture` =  `Mg/ha at 14% moisture` / 1.14) %>%
+    select(Plot, Treatment, Year,
+         `ton/acre at 0% moisture`, `Mg/ha at 0% moisture`)
+```
+
+#### 2018
+
+Oat was harvested for hay, not grain
+
+#### 2019
+
+```{r}
+M.oat.yield.19 <- read_excel("../2-Data/Raw/Yields//Marsden 2019 Oat Harvest.xlsx",  skip = 8, na = c("", "NA", "N/a")) 
+
+M.oat.yield.19.clean <- M.oat.yield.19 %>%
+  filter(!is.na(`bu/acre`)) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+#  rename(`% moisture` =  `% moisture...7`) %>%
+  select(Plot, Treatment,
+         `bu/ac @ 0% moisture`, `bu/acre at 14% moisture`) %>%
+  mutate(Year = "2019") %>%
+  mutate(`lb/acre at 14% moisture` = `bu/acre at 14% moisture` * 32,
+         `Mg/ha at 14% moisture` = `bu/acre at 14% moisture` * 0.035239,
+         `ton/acre at 14% moisture` = `lb/acre at 14% moisture`/2000,
+         `ton/acre at 0% moisture` = `ton/acre at 14% moisture`/1.14,
+         `Mg/ha at 0% moisture` =  `Mg/ha at 14% moisture` / 1.14) %>%
+    select(Plot, Treatment, Year,
+         `ton/acre at 0% moisture`, `Mg/ha at 0% moisture`)
+```
+
+#### 2020
+
+To be consistent with previous years, in which oat was harvested on a whole-plot basis, 2020 data are averaged by whole-plot identity
+
+```{r}
+M.oat.yield.20 <- read_excel("../2-Data/Raw/Yields//Marsden 2020 Oat Harvest.xlsx",  skip = 8, na = c("", "NA", "N/a")) 
+
+M.oat.yield.20.clean <- M.oat.yield.20 %>%
+  filter(!is.na(`plot average, bu/acre @ 14% moisture`)) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>% # remove blank columns
+  dplyr::select(Plot, Treatment, `lb/acre at 0% moisture`, `plot average, lb/acre @ 14% moisture` : `plot average, bu/acre @ 14% moisture`) %>%
+  mutate(Year = "2020") %>%
+  group_by(Plot, Treatment, Year,
+           `plot average, lb/acre @ 14% moisture`, `plot average, bu/acre @ 14% moisture`) %>%
+  summarize(`lb/acre at 0% moisture` = mean(`lb/acre at 0% moisture`, na.rm = TRUE), .groups = "drop") %>%
+  mutate( `ton/acre at 0% moisture` = `lb/acre at 0% moisture`/2000,
+          `Mg/ha at 0% moisture` = `ton/acre at 0% moisture` * 2.2417) %>%
+  dplyr::select(Plot, Treatment, Year,
+         `ton/acre at 0% moisture`, `Mg/ha at 0% moisture`)
+```
+
+#### All oat together
+```{r}
+M.oat <- rbindlist(list(M.oat.yield.17.clean,
+                    M.oat.yield.19.clean,
+                    M.oat.yield.20.clean)) %>%
+   mutate(across(4:5, ~as.numeric(as.character(.))),
+                   Block = ifelse(Plot %in% c(11:19), "1",
+                        ifelse(Plot %in% c(21:29), "2",
+                               ifelse(Plot %in% c(31:39), "3", "4")))) %>%
+  rename(Crop_ID = Treatment)
+```
+
+
+```{r}
+oat.lmer.si <- lmer(log(`Mg/ha at 0% moisture`) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID),
+#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
+  data=M.oat)
+```
+
+### Alfalfa
+
+Whole plots were harvested so there was no distinction of herbicide regimes applied to the corn phase that the alfalfa followed.
+`fresh weight (g)`: weight at cutting  
+`dry weight (g)`: weight after oven dried to constant value  
+`% moisture` = 100 * [`fresh weight (g)` - `dry weight (g)`]/`fresh weight (g)`, as in <https://forages.ca.uky.edu/baleageq27>
+Numbers in gram unit were measured in the lab and otherwise in the field. The moisture from lab measurement was used to calculate hay yield at 0% moisture  
+
+
+#### 2017
+```{r}
+M.alfalfa.yield.17 <- read_excel("../2-Data/Raw/Yields/Marsden 2017 Hay.xlsx",  skip = 6, na = c("", "NA", "N/a")) 
+
+M.alfalfa.yield.17.clean <- M.alfalfa.yield.17 %>%
+  filter(str_detect(`Bale wts (lb)`, "^[0-9]+$")) %>% # remove all rows that contain NAs and means of each cutting
+   select_if(~ any(!is.na(.))) %>%# remove blank columns
+  select(!c(`1st cutting`, ...2)) %>%
+  mutate(Year = "2017")
+
+names( M.alfalfa.yield.17.clean )
+```
+
+#### 2018
+```{r}
+M.alfalfa.yield.18 <- read_excel("../2-Data/Raw/Yields/Marsden 2018 Hay.xlsx", skip = 6, na = c("", "NA", "N/a")) 
+
+M.alfalfa.yield.18.clean <- M.alfalfa.yield.18 %>%
+  filter(str_detect(`Bale wts (lb)`, "^[0-9]+$")) %>% # remove all rows that contain NAs and means of each cutting
+   select_if(~ any(!is.na(.))) %>%# remove blank columns
+  select(!c(`1st cutting`, ...2)) %>%
+  mutate(Year = "2018")
+```
+
+#### 2019
+
+```{r}
+M.alfalfa.yield.19 <- read_excel("../2-Data/Raw/Yields/Marsden 2019 Hay.xlsx",  skip = 6, na = c("", "NA", "N/a")) 
+
+M.alfalfa.yield.19.clean <- M.alfalfa.yield.19 %>%
+  filter(str_detect(`Bale wts (lb)`, "^[0-9]+$")) %>% # remove all rows that contain NAs and means of each cutting
+   select_if(~ any(!is.na(.))) %>%# remove blank columns
+  select(!c(`1st cutting`, ...2)) %>%
+  mutate(Year = "2019")
+```
+
+#### 2020
+
+```{r}
+M.alfalfa.yield.20 <- read_excel("../2-Data/Raw/Yields/Marsden 2020 Hay.xlsx",  skip = 6, na = c("", "NA", "N/a")) 
+
+M.alfalfa.yield.20.clean <- M.alfalfa.yield.20 %>%
+  filter(str_detect(`Bale wts (lb)`, "^[0-9]+$")) %>% # remove all rows that contain NAs and means of each cutting
+   select_if(~ any(!is.na(.))) %>%# remove blank columns
+  select(!c(`1st cutting`, ...2, ...14)) %>%
+  mutate(Year = "2020")
+```
+
+#### All alfalfa together 
+```{r}
+M.alfalfa <- rbindlist(list(M.alfalfa.yield.17.clean,
+                    M.alfalfa.yield.18.clean,
+                    M.alfalfa.yield.19.clean,
+                    M.alfalfa.yield.20.clean)) %>%
+   mutate(across(2:8, ~as.numeric(as.character(.)))) %>%
+  mutate(Crop_ID = "A4",
+         Crop = "alfalfa",
+         `Harvested area (m2)` = 1512, # whole plot area = 18 x 84 m2
+         `Harvested area (acre)` = `Harvested area (m2)`/4046.86,
+         `Yield (ton/acre @ 0% moisture)` = ((100 - `% moisture`)/100) * `Fresh wt (ton/acre)`, # check dry weight: `Yield (ton/acre @ 0%)` is identical to Dry wt (ton/acre)
+         `Yield (Mg/ha @ 0% moisture)` = `Yield (ton/acre @ 0% moisture)` * 2.2417 ) %>% 
+  select(-`Dry wt (ton/acre)`)
+``` 
+
+### Alfalfa yields
+
+#### Marsden 
+```{r}
+alf_sum <- M.alfalfa %>%
+  group_by(Year, Block) %>%
+  summarize(Yield = sum(`Yield (Mg/ha @ 0% moisture)`)) 
+```
+
+```{r}
+alf.lmer <- lme4::lmer( Yield ~ Block + (1|Year),
+  data=alf_sum)
+alf.lmer
+```
+
+### Write data
+```{r}
+write.csv(M.corn, "../2-Data/Clean/M.corn_1720_clean.csv", row.names =  FALSE)
+write.csv(M.soy, "../2-Data/Clean/M.soybean_1720_clean.csv", row.names =  FALSE)
+write.csv(M.alfalfa, "../2-Data/Clean/M.alfalfa_1720_clean.csv", row.names =  FALSE)
+write.csv(M.oat, "../2-Data/Clean/M.oat_g_1720_clean.csv", row.names =  FALSE)
+```
