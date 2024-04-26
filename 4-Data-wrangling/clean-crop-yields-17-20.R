@@ -123,6 +123,9 @@ IA_yield_s <- IA_yield %>%
          County = str_to_title(County)) %>%
   mutate(Yield_Mg_p_ha = ifelse(Commodity == "corn", Value * 0.0628,
                                 ifelse(Commodity == "soybeans", Value * 0.0673,
-                                       ifelse(Commodity == "oats", Value*0.04, Value * 0.9072)))) 
+                                       ifelse(Commodity == "oats", Value*0.04, Value * 0.9072)))) %>%
+  mutate(Yield_ton_p_acre = ifelse(Commodity == "corn", Value * 0.028,
+                                ifelse(Commodity == "soybeans", Value * 0.030,
+                                       ifelse(Commodity == "oats", Value * 0.016 , Value )))) 
 
 #write.csv(IA_yield_s, here("2-Data/Clean/IA_yield_clean.csv"), row.names = FALSE)

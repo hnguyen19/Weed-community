@@ -68,7 +68,7 @@ alfalfa %<>%
 
 
 ```{r, include=FALSE}
-corn.lmer.si <- lmer(log(log(`Yield (Mg/ha @ 0%)`)) ~ Block +
+corn.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -80,16 +80,6 @@ corn.lmer.si <- lmer(log(log(`Yield (Mg/ha @ 0%)`)) ~ Block +
   data=corn)
 
 
-corn.lmer <- lmer(log(log(`Yield (ton/acre @ 0%)`)) ~ Block +
-                    Crop_ID*Corn_weed_management + 
-                    (1|Year) + 
-                    (1|Year:Block) + 
-                    (1|Year:Crop_ID) +
-                    (1|Year:Corn_weed_management) + 
-                    (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
-  data=corn)
 
 soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
@@ -101,15 +91,7 @@ soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_manag
                     (1|Block:Year:Corn_weed_management),
   data=soy)
 
-soy.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
-                    (1|Year) + 
-                    (1|Year:Block) + 
-                    (1|Year:Crop_ID) +
-                    (1|Year:Corn_weed_management) + 
-                    (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
-  data=soy)
+
 
 oat.lmer.si <- lmer(log(`Mg/ha at 0% moisture`) ~ Block + 
                    Crop_ID + 
@@ -119,13 +101,6 @@ oat.lmer.si <- lmer(log(`Mg/ha at 0% moisture`) ~ Block +
 #                   (1|Block:Year:Crop_ID), # removed because of over-fitting
   data=oat)
 
-oat.lmer <- lmer(log(`ton/acre at 0% moisture`) ~ Block + 
-                   Crop_ID + 
-                   (1|Year) +
-                   (1|Year:Block) +  
-                   (1|Year:Crop_ID),
-#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
-  data=oat)
 
 ## summing all the cuts within one year 
 alf_sum <- alfalfa %>%
@@ -136,7 +111,7 @@ alf_sum <- alfalfa %>%
 alf.lmer.si <- lmer(Yield.Mg.ha ~ Block + (1|Year),
   data=alf_sum)
 
-alf.lmer.si <- lmer(Yield.ton.ac ~ Block + (1|Year),
+alf.lmer.si <- lmer(Yield.Mg.ha ~ Block + (1|Year),
   data=alf_sum)
 ```
 
@@ -145,14 +120,14 @@ alf.lmer.si <- lmer(Yield.ton.ac ~ Block + (1|Year),
 ```{r , include=FALSE}
 ## ANOVA tables for the effects of crop identity and corn weed management on crop yields
 
-corn_jt <- print(joint_tests(emmeans(corn.lmer,
+corn_jt <- print(joint_tests(emmeans(corn.lmer.si,
                                      c("Crop_ID", "Corn_weed_management"))), 
                  export = TRUE)
-soy_jt <- print(joint_tests(emmeans(soy.lmer, 
+soy_jt <- print(joint_tests(emmeans(soy.lmer.si, 
                                     c("Crop_ID", "Corn_weed_management"))),
                 export = TRUE)
 
-oat_jt <- print(joint_tests(emmeans(oat.lmer, c("Crop_ID"))),export = TRUE)
+oat_jt <- print(joint_tests(emmeans(oat.lmer.si, c("Crop_ID"))),export = TRUE)
 
 
 crop_jt <- rbind(corn_jt$summary,
@@ -182,14 +157,14 @@ Results of the experiment indicated that crop diversification and reduced use of
 
 ## Rotation effect on corn yield
 
-corn_ct <- print(contrast(emmeans(corn.lmer, ~ Crop_ID, 
+corn_ct <- print(contrast(emmeans(corn.lmer.si, ~ Crop_ID, 
                                   infer = c(FALSE,TRUE), 
                                   type = "response"),
                           method = "pairwise"), 
                  export = TRUE)
 
 ## Rotation effect on soybean yield
-soy_ct <- print(contrast(emmeans(soy.lmer, ~ Crop_ID,
+soy_ct <- print(contrast(emmeans(soy.lmer.si, ~ Crop_ID,
                                  infer = c(FALSE,TRUE),
                                  type = "response"),
                          method = "pairwise"),
@@ -198,7 +173,7 @@ soy_ct <- print(contrast(emmeans(soy.lmer, ~ Crop_ID,
 
 ## Rotation effect on oat yield
 
-oat_ct <- print(contrast(emmeans(oat.lmer, ~ Crop_ID,
+oat_ct <- print(contrast(emmeans(oat.lmer.si, ~ Crop_ID,
                                  infer = c(FALSE,TRUE), 
                                  type = "response"), 
                          method = "pairwise", 
@@ -243,22 +218,22 @@ crop_jt_ct_df %>%
 ## Prepare data sets for crop yield bar graphs as faceted single picture
 
 #emmip gives the same numbers as emm, but emmip is tidier.
-corn.emmip <- emmip(corn.lmer, ~ Crop_ID,
+corn.emmip <- emmip(corn.lmer.si, ~ Crop_ID,
                     CIs = TRUE,
                     type = "response", 
                     plotit = FALSE)
 
-soy.emmip <- emmip(soy.lmer, ~ Crop_ID,
+soy.emmip <- emmip(soy.lmer.si, ~ Crop_ID,
                    CIs = TRUE, 
                    type = "response", 
                    plotit = FALSE)
 
-oat.emmip <- emmip(oat.lmer, ~ Crop_ID,
+oat.emmip <- emmip(oat.lmer.si, ~ Crop_ID,
                    CIs = TRUE, 
                    type = "response",
                    plotit = FALSE)
 
-alf.emmip <- emmip(alf.lmer, ~1,
+alf.emmip <- emmip(alf.lmer.si, ~1,
                    CIs = TRUE, 
                    type = "response",
                    plotit = FALSE)

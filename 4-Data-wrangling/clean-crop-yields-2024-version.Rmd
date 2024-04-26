@@ -99,7 +99,7 @@ M.corn <- rbindlist(list(M.corn.yield.17.clean,
    mutate(across(`Harvested Weight (lbs.)` : `Yield (Mg/ha @ 15.5%)`, ~as.numeric(as.character(.)))) %>%
   mutate(Crop = "corn",
          `Yield (ton/acre @ 15.5%)` = `Yield (lb/acre @ 15.5%)`/2000,
-         `Yield (Mg/ha @ 0%)` = `Yield (Mg/ha @ 15.5%)`/1.13,
+         `Yield (Mg/ha @ 0%)` = `Yield (Mg/ha @ 15.5%)`/1.55,
          `Yield (ton/acre @ 0%)` = `Yield (ton/acre @ 15.5%)`/1.155,
          Corn_weed_management = ifelse(Corn_weed_management == "low", "low", "conventional"),
          Block = ifelse(Plot %in% c(11:19), "1",
