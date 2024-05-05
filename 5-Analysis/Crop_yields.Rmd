@@ -75,8 +75,7 @@ corn.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
+                    (1|Block:Year:Crop_ID),
   data=corn)
 
 
@@ -87,8 +86,7 @@ soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_manag
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
+                    (1|Block:Year:Crop_ID),
   data=soy)
 
 

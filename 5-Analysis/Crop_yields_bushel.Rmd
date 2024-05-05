@@ -76,8 +76,7 @@ corn.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
+                    (1|Block:Year:Crop_ID),
   data=corn)
 
 soy.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
@@ -86,8 +85,7 @@ soy.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +  Crop_ID*Corn_weed_manag
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
+                    (1|Block:Year:Crop_ID),
   data=soy)
 
 
@@ -95,8 +93,8 @@ oat.lmer <- lmer(log(`ton/acre at 0% moisture`) ~ Block +
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
-                   (1|Year:Crop_ID),
-#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
+                   (1|Year:Crop_ID), 
+#                  (1|Block:Year:Crop_ID), # removed because of over-fitting
   data=oat)
 
 ## summing all the cuts within one year 
