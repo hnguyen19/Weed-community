@@ -290,7 +290,7 @@ M.alfalfa.yield.17 <- read_excel("../2-Data/Raw/Yields/Marsden 2017 Hay.xlsx",  
 M.alfalfa.yield.17.clean <- M.alfalfa.yield.17 %>%
   filter(str_detect(`Bale wts (lb)`, "^[0-9]+$")) %>% # remove all rows that contain NAs and means of each cutting
    select_if(~ any(!is.na(.))) %>%# remove blank columns
-  select(!c(`1st cutting`, ...2)) %>%
+  select(!c(`1st cutting`, ...2, ...14)) %>%
   mutate(Year = "2017")
 
 names( M.alfalfa.yield.17.clean )
@@ -305,6 +305,8 @@ M.alfalfa.yield.18.clean <- M.alfalfa.yield.18 %>%
    select_if(~ any(!is.na(.))) %>%# remove blank columns
   select(!c(`1st cutting`, ...2)) %>%
   mutate(Year = "2018")
+
+names(M.alfalfa.yield.18.clean)
 ```
 
 #### 2019
@@ -315,8 +317,10 @@ M.alfalfa.yield.19 <- read_excel("../2-Data/Raw/Yields/Marsden 2019 Hay.xlsx",  
 M.alfalfa.yield.19.clean <- M.alfalfa.yield.19 %>%
   filter(str_detect(`Bale wts (lb)`, "^[0-9]+$")) %>% # remove all rows that contain NAs and means of each cutting
    select_if(~ any(!is.na(.))) %>%# remove blank columns
-  select(!c(`1st cutting`, ...2)) %>%
+  select(!c(`1st cutting`, ...2, ...15)) %>%
   mutate(Year = "2019")
+
+names(M.alfalfa.yield.19.clean  )
 ```
 
 #### 2020
@@ -329,6 +333,8 @@ M.alfalfa.yield.20.clean <- M.alfalfa.yield.20 %>%
    select_if(~ any(!is.na(.))) %>%# remove blank columns
   select(!c(`1st cutting`, ...2, ...14)) %>%
   mutate(Year = "2020")
+
+names( M.alfalfa.yield.20.clean )
 ```
 
 #### All alfalfa together 
@@ -343,24 +349,10 @@ M.alfalfa <- rbindlist(list(M.alfalfa.yield.17.clean,
          `Harvested area (m2)` = 1512, # whole plot area = 18 x 84 m2
          `Harvested area (acre)` = `Harvested area (m2)`/4046.86,
          `ton/ac at 0% moisture` = ((100 - `% moisture`)/100) * `Fresh wt (ton/acre)`, # check dry weight: `Yield (ton/acre @ 0%)` is identical to Dry wt (ton/acre)
-         `Mg/ha at 0% moisture)` = `ton/ac at 0% moisture)` * 2.2417 ) %>% 
+         `Mg/ha at 0% moisture` = `ton/ac at 0% moisture` * 2.2417 ) %>% 
   select(-`Dry wt (ton/acre)`)
 ``` 
 
-### Alfalfa yields
-
-#### Marsden 
-```{r}
-alf_sum <- M.alfalfa %>%
-  group_by(Year, Block) %>%
-  summarize(Yield = sum(`Yield (Mg/ha @ 0% moisture)`)) 
-```
-
-```{r}
-alf.lmer <- lme4::lmer( Yield ~ Block + (1|Year),
-  data=alf_sum)
-alf.lmer
-```
 
 ### Write data
 ```{r}
