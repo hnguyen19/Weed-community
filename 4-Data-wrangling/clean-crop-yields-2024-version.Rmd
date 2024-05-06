@@ -96,51 +96,18 @@ M.corn <- rbindlist(list(M.corn.yield.17.clean,
   mutate(Treatment = tolower(Treatment)) %>%
   rename(Corn_weed_management = Treatment,
          Crop_ID = Rotation) %>%
-   mutate(across(`Harvested Weight (lbs.)` : `Yield (Mg/ha @ 15.5%)`, ~as.numeric(as.character(.)))) %>%
+   mutate(across(`Harvested Weight (lbs.)` : `Yield (Mg/ha @ 15.5%)`, ~as.numeric(as.character(.))))  %>%
   mutate(Crop = "corn",
-         `Yield (ton/acre @ 15.5%)` = `Yield (lb/acre @ 15.5%)`/2000,
-         `Yield (Mg/ha @ 0%)` = `Yield (Mg/ha @ 15.5%)`/1.55,
-         `Yield (ton/acre @ 0%)` = `Yield (ton/acre @ 15.5%)`/1.155,
+         `ton/ac at 15.5% moisture` = `Yield (lb/acre @ 15.5%)`/2000,
+         `Mg/ha at 0% moisture` = `Yield (Mg/ha @ 15.5%)`/1.55,
+         `ton/ac at 0% moisture` = `ton/ac at 15.5% moisture`/1.155,
          Corn_weed_management = ifelse(Corn_weed_management == "low", "low", "conventional"),
          Block = ifelse(Plot %in% c(11:19), "1",
                         ifelse(Plot %in% c(21:29), "2",
-                               ifelse(Plot %in% c(31:39), "3", "4"))))
+                               ifelse(Plot %in% c(31:39), "3", "4")))) %>%
+  rename(`Mg/ha at 15.5% moisture` = `Yield (Mg/ha @ 15.5%)`,
+         `bu/acre at 15.5% moisture` = `Yield (bu/acre @ 15.5%)`)
 ```  
-
-#### Model 
-
-##### Marsden
-
-```{r}
-corn.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +
-                    Crop_ID*Corn_weed_management + 
-                    (1|Year) + 
-                    (1|Year:Block) + 
-                    (1|Year:Crop_ID) +
-                    (1|Year:Corn_weed_management) + 
-                    (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
-  data=M.corn,
-                       control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
-                                                                     tol = 1e-4)))
-```
-
-
-```{r}
-corn.lmer.si <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +
-                    Crop_ID*Corn_weed_management + 
-                    (1|Year) + 
-                    (1|Year:Block) + 
-                    (1|Year:Crop_ID) +
-                    (1|Year:Corn_weed_management) + 
-                    (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
-  data=M.corn,
-                       control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
-                                                                     tol = 1e-4)))
-```
 
 
 ### Soybean
@@ -177,15 +144,6 @@ M.soy.yield.19.clean <- M.soy.yield.19 %>%
 ```
 
 #### 2020
-
-```{r}
-M.soy.yield.20 <- read_excel("../2-Data/Raw/Yields/Marsden 2020 Corn-Soybean Yields.xlsx", sheet = "Soybean", skip = 6, na = c("", "NA", "N/a")) 
-
-M.soy.yield.20.clean <- M.soy.yield.20 %>%
-  filter(!is.na(Treatment )) %>% # remove all rows below the main data
-   select_if(~ any(!is.na(.))) %>% # remove blank columns
-    mutate(Year = "2020")
-```
 #### All soybean together
 
 ```{r}
@@ -199,32 +157,18 @@ M.soy <- rbindlist(list(M.soy.yield.17.clean,
          Crop_ID = Rotation) %>%
      mutate(across(`Harvested Weight (lbs.)` : `Yield (Mg/ha @ 13%)`, ~as.numeric(as.character(.)))) %>%
   mutate(Crop = "soybean",
-         `Yield (ton/acre @ 13%)` = `Yield (lb/acre @ 13%)`/2000,
-         `Yield (Mg/ha @ 0%)` = `Yield (Mg/ha @ 13%)`/1.13,
-         `Yield (ton/acre @ 0%)` = `Yield (ton/acre @ 13%)`/1.13,
+         `ton/ac at 13% moisture` = `Yield (lb/acre @ 13%)`/2000,
+         `Mg/ha at 0% moisture` = `Yield (Mg/ha @ 13%)`/1.13,
+         `ton/ac at 0% moisture` = `ton/ac at 13% moisture` /1.13,
          Corn_weed_management = ifelse(Corn_weed_management == "low", "low", "conventional"),
          Block = ifelse(Plot %in% c(11:19), "1",
                         ifelse(Plot %in% c(21:29), "2",
-                               ifelse(Plot %in% c(31:39), "3", "4"))))
+                               ifelse(Plot %in% c(31:39), "3", "4")))) %>%
+  rename(`Mg/ha at 13% moisture` = `Yield (Mg/ha @ 13%)`,
+         `bu/acre at 13% moisture` = `Yield (bu/acre @ 13%)`)
 ``` 
 
-```{r}
-soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
-                    (1|Year) + 
-                    (1|Year:Block) + 
-                    (1|Year:Crop_ID) +
-                    (1|Year:Corn_weed_management) + 
-                    (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID) +
-                    (1|Block:Year:Corn_weed_management),
-                     data=M.soy,
-                     control=lmerControl(check.conv.singular = .makeCC(action = "ignore",
-                                                                     tol = 1e-4)))
-```
 
-```{r}
-soy.lmer.si 
-```
 
 ### Oat
 
@@ -244,13 +188,15 @@ M.oat.yield.17.clean <- M.oat.yield.17 %>%
     select(Plot, Treatment,
          `bu/ac @ 0% moisture`, `bu/acre at 14% moisture`) %>%
     mutate(Year = "2017") %>%
-  mutate(`lb/acre at 14% moisture` = `bu/acre at 14% moisture` * 32,
+  mutate(`lb/ac at 14% moisture` = `bu/acre at 14% moisture` * 32,
          `Mg/ha at 14% moisture` = `bu/acre at 14% moisture` * 0.035239,
-         `ton/acre at 14% moisture` = `lb/acre at 14% moisture`/2000,
-         `ton/acre at 0% moisture` = `ton/acre at 14% moisture`/1.14,
+         `ton/ac at 14% moisture` = `lb/ac at 14% moisture`/2000,
+         `ton/ac at 0% moisture` = `ton/ac at 14% moisture`/1.14,
          `Mg/ha at 0% moisture` =  `Mg/ha at 14% moisture` / 1.14) %>%
-    select(Plot, Treatment, Year,
-         `ton/acre at 0% moisture`, `Mg/ha at 0% moisture`)
+    select(Plot, Treatment, Year, 
+           `bu/acre at 14% moisture`, `ton/ac at 14% moisture`, `Mg/ha at 14% moisture`,
+         `ton/ac at 0% moisture`, `Mg/ha at 0% moisture`) %>%
+  rename(`bu/ac at 14% moisture`= `bu/acre at 14% moisture`)
 ```
 
 #### 2018
@@ -269,13 +215,15 @@ M.oat.yield.19.clean <- M.oat.yield.19 %>%
   select(Plot, Treatment,
          `bu/ac @ 0% moisture`, `bu/acre at 14% moisture`) %>%
   mutate(Year = "2019") %>%
-  mutate(`lb/acre at 14% moisture` = `bu/acre at 14% moisture` * 32,
+  mutate(`lb/ac at 14% moisture` = `bu/acre at 14% moisture` * 32,
          `Mg/ha at 14% moisture` = `bu/acre at 14% moisture` * 0.035239,
-         `ton/acre at 14% moisture` = `lb/acre at 14% moisture`/2000,
-         `ton/acre at 0% moisture` = `ton/acre at 14% moisture`/1.14,
+         `ton/ac at 14% moisture` = `lb/ac at 14% moisture`/2000,
+         `ton/ac at 0% moisture` = `ton/ac at 14% moisture`/1.14,
          `Mg/ha at 0% moisture` =  `Mg/ha at 14% moisture` / 1.14) %>%
     select(Plot, Treatment, Year,
-         `ton/acre at 0% moisture`, `Mg/ha at 0% moisture`)
+          `bu/acre at 14% moisture`,`ton/ac at 14% moisture`, `Mg/ha at 14% moisture`, 
+         `ton/ac at 0% moisture`, `Mg/ha at 0% moisture`) %>%
+  rename(`bu/acre at 14%`= `bu/acre at 14% moisture`)
 ```
 
 #### 2020
@@ -292,11 +240,15 @@ M.oat.yield.20.clean <- M.oat.yield.20 %>%
   mutate(Year = "2020") %>%
   group_by(Plot, Treatment, Year,
            `plot average, lb/acre @ 14% moisture`, `plot average, bu/acre @ 14% moisture`) %>%
-  summarize(`lb/acre at 0% moisture` = mean(`lb/acre at 0% moisture`, na.rm = TRUE), .groups = "drop") %>%
-  mutate( `ton/acre at 0% moisture` = `lb/acre at 0% moisture`/2000,
-          `Mg/ha at 0% moisture` = `ton/acre at 0% moisture` * 2.2417) %>%
+  summarize(`lb/ac at 0% moisture` = mean(`lb/acre at 0% moisture`, na.rm = TRUE), .groups = "drop") %>%
+  mutate( `ton/ac at 0% moisture` = `lb/ac at 0% moisture`/2000,
+          `ton/ac at 14% moisture` = `plot average, lb/acre @ 14% moisture`/2000,
+          `Mg/ha at 0% moisture` = `ton/ac at 0% moisture` * 2.2417,
+          `Mg/ha at 14% moisture` = `Mg/ha at 0% moisture` * 1.14)  %>%
+  rename(`bu/ac at 14% moisture` = `plot average, bu/acre @ 14% moisture`) %>%
   dplyr::select(Plot, Treatment, Year,
-         `ton/acre at 0% moisture`, `Mg/ha at 0% moisture`)
+                `bu/ac at 14% moisture`,`ton/ac at 14% moisture`, `Mg/ha at 14% moisture`, 
+         `ton/ac at 0% moisture`, `Mg/ha at 0% moisture`)
 ```
 
 #### All oat together
@@ -390,8 +342,8 @@ M.alfalfa <- rbindlist(list(M.alfalfa.yield.17.clean,
          Crop = "alfalfa",
          `Harvested area (m2)` = 1512, # whole plot area = 18 x 84 m2
          `Harvested area (acre)` = `Harvested area (m2)`/4046.86,
-         `Yield (ton/acre @ 0% moisture)` = ((100 - `% moisture`)/100) * `Fresh wt (ton/acre)`, # check dry weight: `Yield (ton/acre @ 0%)` is identical to Dry wt (ton/acre)
-         `Yield (Mg/ha @ 0% moisture)` = `Yield (ton/acre @ 0% moisture)` * 2.2417 ) %>% 
+         `ton/ac at 0% moisture` = ((100 - `% moisture`)/100) * `Fresh wt (ton/acre)`, # check dry weight: `Yield (ton/acre @ 0%)` is identical to Dry wt (ton/acre)
+         `Mg/ha at 0% moisture)` = `ton/ac at 0% moisture)` * 2.2417 ) %>% 
   select(-`Dry wt (ton/acre)`)
 ``` 
 

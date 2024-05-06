@@ -1,4 +1,4 @@
-"Block","Bale wts (lb)","Fresh wt  (lb/acre)","Fresh wt (ton/acre)","fresh weight (g)","dry weight (g)","% moisture","Year","Crop_ID","Crop","Harvested area (m2)","Harvested area (acre)","Yield (ton/acre @ 0% moisture)","Yield (Mg/ha @ 0% moisture)"
+"Block","Bale wts (lb)","Fresh wt  (lb/acre)","Fresh wt (ton/acre)","fresh weight (g)","dry weight (g)","% moisture","Year","Crop_ID","Crop","Harvested area (m2)","Harvested area (acre)","ton/ac at 0% moisture","Mg/ha at 0% moisture"
 "1",1711,4502.63157894737,2.25131578947368,440.1,357.7,18.7230174960236,"2017","A4","alfalfa",1512,0.373623006479097,1.82980154031978,4.10186611293486
 "2",1629,4286.84210526316,2.14342105263158,450,371.7,17.4,"2017","A4","alfalfa",1512,0.373623006479097,1.77046578947368,3.96885316026316
 "3",1839,4839.47368421053,2.41973684210526,447.2,359.1,19.7003577817531,"2017","A4","alfalfa",1512,0.373623006479097,1.94304002683363,4.35571282815295

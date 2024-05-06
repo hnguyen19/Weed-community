@@ -44,7 +44,7 @@ library(ggpubr)
 ```
  
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 corn <- read_csv("../2-Data/Clean/M.corn_1720_clean.csv")
 corn  %<>%
   mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
@@ -69,7 +69,7 @@ alfalfa %<>%
 
 ```{r, include=FALSE}
 
-corn.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +
+corn.lmer <- lmer(log(`Yield (bu/acre @ 15.5%)`) ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -79,7 +79,7 @@ corn.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +
                     (1|Block:Year:Crop_ID),
   data=corn)
 
-soy.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
+soy.lmer <- lmer(log(`Yield (bu/acre @ 13.5%)`) ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
@@ -89,7 +89,7 @@ soy.lmer <- lmer(log(`Yield (ton/acre @ 0%)`) ~ Block +  Crop_ID*Corn_weed_manag
   data=soy)
 
 
-oat.lmer <- lmer(log(`ton/acre at 0% moisture`) ~ Block + 
+oat.lmer <- lmer(log(`Yield (bu/acre @ 14%)`) ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
