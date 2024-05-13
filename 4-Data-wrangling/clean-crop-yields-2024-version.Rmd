@@ -20,6 +20,7 @@ library(data.table)
 library(tidyverse)
 library(dplyr)
 library(stringr)
+library(httr) # for GET
 ```
 
 ## Update to the previous version
@@ -34,9 +35,61 @@ Oats, 1 bushel = 32 pounds
 Soybean, 1 bushel = 60 pounds
 1 metric ton = 2,204.622 pounds
 1 U.S. (short) ton = 2,000 pounds
+1 pound = 0.00045359237 Mg
+1 acre = 0.404686 ha
+
+## NASS county and State yield data
+
+Original links from which csv files were downloaded, as of May 8, 2024:
+
++ corn and soy: <https://quickstats.nass.usda.gov/results/659D7374-9FE1-3604-82D4-C2F1C4DAB810>
+
++ oat: <https://quickstats.nass.usda.gov/results/C4885A45-1B6A-3EBA-88CD-4AE88E87176F>
+
++ alfalfa, whole state only: <https://quickstats.nass.usda.gov/results/1DA15606-E8E3-35D7-A971-E5590F5AEC35>
+
++ alfalfa, county, available up to 2018 only: <https://quickstats.nass.usda.gov/results/4386A120-915F-351C-A470-E66244312FF1>
+
+Note: choosing non-irrigated yield would not return Iowa.
+
+```{r}
+corn.soy.by.county <- read_csv("../2-Data/Raw/Yields/IA-corn-soy-county-6554ABE5-995A-3BE3-BAEB-9304D56ADEE7.csv")
+```
+
+```{r}
+oat.by.county <- read_csv("../2-Data/Raw/Yields/IA-oat-county-BDAF8BCF-81BB-3896-A1C2-93ABA45B91EF.csv") 
+```
+```{r}
+IA.grain.by.county <- rbind(corn.soy.by.county, oat.by.county)
+```  
+
+Alfalfa yield by county is available up to 2018, as of May 2024
+
+```{r}
+alfalfa.by.county <- read_csv("../2-Data/Raw/Yields/IA-alfalfa-county-2A6F55A9-4A5C-3160-90FD-8B6E7C0DCE5F.csv")
+```
+
+```{r}
+alfalfa.by.state <- read_csv("../2-Data/Raw/Yields/IA-alfalfa-state-61B0BB3A-2F85-3644-B6F5-19805AFF9766.csv")
+```
+
+### All NASS yield together 
+
+```{r}
+IA.yield.NASS <- rbind(corn.soy.by.county, oat.by.county,
+                       alfalfa.by.county, alfalfa.by.state) %>%
+  dplyr::select(Year, County, Commodity, `Data Item`, Value) %>% 
+  mutate(Commodity = tolower(Commodity)) %>%
+  mutate(`Value metric` = ifelse(Commodity == "corn", Value * 56 * 0.000454 / 0.404686,
+                                ifelse(Commodity == "soybeans", Value * 60 * 0.000454 / 0.404686,
+                                       ifelse(Commodity == "oats", Value * 32 * 0.0004534 / 0.404686,
+                                              Value * 0.907185 / 0.404686 )))) %>%
+  rename(`Value imperial` = Value) %>%
+  mutate(`Metric unit` = ifelse(Commodity == "alfalfa", "t/ha", "Mg/ha"))
+```
 
 
-## Raw data processing by crop
+## Marsden raw data processing by crop
 
 All dataframes starting with "M" indicate the yield at Marsden.
 
