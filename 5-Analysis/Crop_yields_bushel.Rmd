@@ -32,19 +32,19 @@ knitr::opts_chunk$set(message = FALSE,
 library(tidyverse)
 library(magrittr)
 library(lme4)
-
+library(patchwork) # for wrap_plots
 library(nlme)
 library(kableExtra)
-theme_set(theme_bw())
-
+library(ggResidpanel)
 library(gridExtra)
 library(lemon)
 library(data.table)
 library(ggpubr)
+theme_set(theme_bw())
 ```
  
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 corn <- read_csv("../2-Data/Clean/M.corn_1720_clean.csv")
 corn  %<>%
   mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
@@ -67,9 +67,17 @@ alfalfa %<>%
 ```
 
 
-```{r, include=FALSE}
+```{r}
+names(corn)
+names(soy)
+names(oat)
+names(alfalfa)
+```
+### Yield models 
 
-corn.lmer <- lmer(log(`Yield (bu/acre @ 15.5%)`) ~ Block +
+#### Corn
+```{r, include=FALSE}
+corn.lmer <- lmer(`bu/acre at 15.5% moisture` ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -79,7 +87,42 @@ corn.lmer <- lmer(log(`Yield (bu/acre @ 15.5%)`) ~ Block +
                     (1|Block:Year:Crop_ID),
   data=corn)
 
-soy.lmer <- lmer(log(`Yield (bu/acre @ 13.5%)`) ~ Block +  Crop_ID*Corn_weed_management + 
+
+
+corn.lmer.ln <- lmer(log(`bu/acre at 15.5% moisture`) ~ Block +
+                    Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=corn)
+
+corn.lmer.s <- lmer(sqrt(`bu/acre at 15.5% moisture`) ~ Block +
+                    Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=corn)
+```
+
+#### Corn diagnosis: `corn.lmer` best
+
+```{r, fig.height= 4, fig.width=12, fig.cap= "Model diagnosis for Marsden corn yield. Transformation doesn't improve model fitting"}
+list(corn.lmer, corn.lmer.ln, corn.lmer.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
+
+#### Soy
+
+```{r}
+soy.lmer <- lmer(`bu/acre at 13% moisture` ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
@@ -88,8 +131,39 @@ soy.lmer <- lmer(log(`Yield (bu/acre @ 13.5%)`) ~ Block +  Crop_ID*Corn_weed_man
                     (1|Block:Year:Crop_ID),
   data=soy)
 
+soy.lmer.ln <- lmer(log(`bu/acre at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=soy)
 
-oat.lmer <- lmer(log(`Yield (bu/acre @ 14%)`) ~ Block + 
+soy.lmer.s <- lmer(sqrt(`bu/acre at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=soy)
+```
+
+
+#### Soybean diagnosis: `soy.lmer` best
+
+```{r, fig.height= 4, fig.width=12, fig.cap= "Model diagnosis for Marsden soybean yield. Transformation doesn't improve model fitting"}
+list(soy.lmer, soy.lmer.ln, soy.lmer.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
+
+#### Oat
+
+```{r}
+oat.lmer <- lmer(`bu/ac at 14% moisture` ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
@@ -97,20 +171,58 @@ oat.lmer <- lmer(log(`Yield (bu/acre @ 14%)`) ~ Block +
 #                  (1|Block:Year:Crop_ID), # removed because of over-fitting
   data=oat)
 
-## summing all the cuts within one year 
-alf_sum <- alfalfa %>%
-  group_by(Year, Block) %>%
-  summarize(Yield.Mg.ha = sum(`Yield (Mg/ha @ 0% moisture)`),
-            Yield.ton.ac = sum(`Yield (ton/acre @ 0% moisture)`)) 
 
-alf.lmer <- lmer(Yield.ton.ac ~ Block + (1|Year),
-  data=alf_sum)
+oat.lmer.ln <- lmer(log(`bu/ac at 14% moisture`) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID), 
+  data=oat)
 
-alf.lmer <- lmer(Yield.ton.ac ~ Block + (1|Year),
-  data=alf_sum)
+oat.lmer.s <- lmer(sqrt(`bu/ac at 14% moisture`) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID), 
+  data=oat)
 ```
 
 
+#### Oat diagnosis: `oat.lmer.ln` best
+
+```{r, fig.height= 4, fig.width=12, fig.cap= "Model diagnosis for Marsden oat yield. Transformation doesn't model fitting"}
+list(oat.lmer, oat.lmer.ln, oat.lmer.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
+
+#### Alfalfa
+
+```{r}
+## summing all the cuts within one year 
+alf_sum <- alfalfa %>%
+  group_by(Year, Block) %>%
+  summarize(Yield.ton.ac = sum(`ton/ac at 0% moisture`)) 
+
+alf.lmer <- lmer(Yield.ton.ac ~ Block + (1|Year),
+  data=alf_sum)
+
+alf.lmer.ln <- lmer(log(Yield.ton.ac) ~ Block + (1|Year),
+  data=alf_sum)
+
+alf.lmer.s <- lmer(sqrt(Yield.ton.ac) ~ Block + (1|Year),
+  data=alf_sum)
+```
+
+#### Alfalfa diagnosis: `alf.lmer` best
+
+```{r, fig.height= 4, fig.width=12, fig.cap= "Model diagnosis for Marsden oat yield. Transformation doesn't improve model fitting"}
+list(alf.lmer, alf.lmer.ln, alf.lmer.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
 
 ```{r , include=FALSE}
 ## ANOVA tables for the effects of crop identity and corn weed management on crop yields
@@ -122,7 +234,10 @@ soy_jt <- print(joint_tests(emmeans(soy.lmer,
                                     c("Crop_ID", "Corn_weed_management"))),
                 export = TRUE)
 
-oat_jt <- print(joint_tests(emmeans(oat.lmer, c("Crop_ID"))),export = TRUE)
+oat_jt <- print(joint_tests(emmeans(oat.lmer.ln, c("Crop_ID"))),export = TRUE)
+
+#alf_jt <- print(joint_tests(emmeans(alf.lmer, c("Year"))),export = TRUE)
+
 
 
 crop_jt <- rbind(corn_jt$summary,
@@ -143,8 +258,7 @@ crop_df$F.ratio <- as.numeric(crop_df$F.ratio)
 ```
 
 
-
-#### How did rotation system and corn weed management affect crop yields? {-}   
+### How did rotation system and corn weed management affect crop yields? {-}   
 
 Results of the experiment indicated that crop diversification and reduced use of herbicides were not associated with lower crop yields (Table \@ref(tab:crop-jt-ct)). Averaged over four years, soybean was the only crop whose yield was affected by rotation (p = 0.0191, Table \@ref(tab:crop-jt-ct)). Soybean yield was 16% higher in the 4-year rotation than in the 2-year rotation (p = 0.0181). Crop yields in the experiment were as high or higher than the averages for the state of Iowa and Boone County (Figure \@ref(fig:crop-bar)). 
 
@@ -179,13 +293,9 @@ oat_ct <- print(contrast(emmeans(oat.lmer, ~ Crop_ID,
 crop_ct <- rbind(corn_ct$summary, soy_ct$summary, oat_ct$summary)
 crop_ct_df <- as.data.frame(crop_ct)
 
-#make sure that the contrast ratio is numeric
-crop_ct_df$ratio <- as.numeric(crop_ct_df$ratio)
+#crop_ct_df$contrast <- gsub("-", "vs", crop_ct_df$contrast )
 
-
-crop_ct_df$contrast <- gsub("/", "vs", crop_ct_df$contrast )
-
-crop_jt_ct <- cbind(crop_df, crop_ct_df[,-c(3:6)])
+crop_jt_ct <- cbind(crop_df, crop_ct_df[,-c(3:5)])
 
 rownames(crop_jt_ct) <- NULL
 
@@ -194,7 +304,7 @@ crop_jt_ct_df <- as.data.frame(crop_jt_ct)
 crop_jt_ct_df$`model term                  ` <- gsub("_", " ", crop_jt_ct_df$`model term                  `)
 crop_jt_ct_df$`model term                  ` <- gsub(":", " x ", crop_jt_ct_df$`model term                  `)
 
-colnames(crop_jt_ct_df) <- c("Source of variation", "df1", "df2","F","p", "contrast", "ratio", "p")
+colnames(crop_jt_ct_df) <- c("Source of variation", "df1", "df2","F","p", "contrast", "difference", "p")
 
 
 crop_jt_ct_df %>%
@@ -254,7 +364,7 @@ crops.emmip_commodity <- crops.emmip %>%
 
 ```
 
-
+continue here 
 ```{r, include=FALSE}
 ## Iowa and Boone yields 
 IA_yield <- read.csv("../2-Data/Clean/IA_yield_clean.csv")
