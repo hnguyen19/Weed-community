@@ -45,22 +45,19 @@ library(ggpubr)
  
 
 ```{r, echo=FALSE}
-corn <- read_csv("../2-Data/Clean/M.corn_1720_clean.csv")
+orn <- read_csv("../2-Data/Clean/corn_1720_clean.csv")
 corn  %<>%
   mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
             funs(factor(.)))
-
-soy <-  read_csv("../2-Data/Clean/M.soybean_1720_clean.csv")
+soy <-  read_csv("../2-Data/Clean/soybean_1720_clean.csv")
 soy  %<>% 
   mutate_at(c("Block","Crop_ID", "Year","Corn_weed_management"),
             funs(factor(.)))
-
-oat <- read_csv("../2-Data/Clean/M.oat_g_1720_clean.csv")
+oat <- read_csv("../2-Data/Clean/oat_g_1720_clean.csv")
 oat  %<>%  
   mutate_at(c("Block","Crop_ID", "Year"),
             funs(factor(.)))
-
-alfalfa <- read_csv("../2-Data/Clean/M.alfalfa_1720_clean.csv")
+alfalfa <- read_csv("../2-Data/Clean/alfalfa_1720_clean.csv")
 alfalfa %<>%  
   mutate_at(c("Block", "Year"),
                         funs(factor(.)))
@@ -68,19 +65,16 @@ alfalfa %<>%
 
 
 ```{r, include=FALSE}
-corn.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +
+corn.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
                     (1|Year:Corn_weed_management) + 
                     (1|Year:Crop_ID:Corn_weed_management)  +
-                    (1|Block:Year:Crop_ID),
+                    (1|Block:Year:Crop_ID) ,
   data=corn)
-
-
-
-soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_management + 
+soy.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
@@ -91,12 +85,12 @@ soy.lmer.si <- lmer(log(`Yield (Mg/ha @ 0%)`) ~ Block +  Crop_ID*Corn_weed_manag
 
 
 
-oat.lmer.si <- lmer(log(`Mg/ha at 0% moisture`) ~ Block + 
+oat.lmer <- lmer(log(Standardized_yield_MgpHa) ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
-                   (1|Year:Crop_ID),
-#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
+                   (1|Year:Crop_ID) + 
+                   (1|Block:Year:Crop_ID),
   data=oat)
 
 
@@ -113,7 +107,11 @@ alf.lmer.si <- lmer(Yield.Mg.ha ~ Block + (1|Year),
   data=alf_sum)
 ```
 
+`oat.lmer` run, erroneously, because one crop ID was mislabeled. 
 
+```{r}
+table(oat$Crop_ID, oat$Year)
+```
 
 ```{r , include=FALSE}
 ## ANOVA tables for the effects of crop identity and corn weed management on crop yields
