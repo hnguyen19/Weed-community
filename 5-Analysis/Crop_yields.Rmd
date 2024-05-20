@@ -1,10 +1,16 @@
 ---
 output: 
-  bookdown::pdf_document2: 
-    keep_tex: yes
+  # bookdown::pdf_document2: 
+  #   keep_tex: yes
+  #   toc: false
+  #   number_sections: false
+  #   extra_dependencies: ["float"]
+  bookdown::html_document2:
     toc: false
+    fig_caption: yes
     number_sections: false
-    extra_dependencies: ["float"]
+    keep_md: true
+    self_contained: true
 #bibliography: ecol.bib
 ---
 
