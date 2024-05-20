@@ -274,6 +274,17 @@ Boone_yield <- IA_yield %>%
 
 ```
 
+
+Erroneous yields from incorrect conversion factor applied on hay
+
+```{r}
+IA_avg_yield 
+```
+
+```{r}
+Boone_yield
+```
+
 ```{r, include=FALSE}
 ## merge Marsden and Iowa/Boone yields 
 crops.emmip.IA <- crops.emmip_commodity %>% 
