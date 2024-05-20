@@ -28,7 +28,7 @@ alfalfa <- read_csv("./2-Data/Raw/Yields/alfalfa_17_20.csv", show_col_types = FA
 ## Combine all crops to add Crop name and Block number
 crops <- rbindlist(list(corn,soy,oat_straw,oat_grain,alfalfa), fill = TRUE)
 
-crops_no_oat_straw %>% rbindlist(list(corn,soy, oat_grain,alfalfa), fill = TRUE)
+crops_no_oat_straw <- rbindlist(list(corn,soy, oat_grain,alfalfa), fill = TRUE)
 
 crops <- crops %>% mutate(Crop = ifelse(startsWith(Crop_ID,"S"),"soybean",
                                         ifelse(startsWith(Crop_ID,"O"),"oat",
@@ -38,22 +38,22 @@ crops <- crops %>% mutate(Crop = ifelse(startsWith(Crop_ID,"S"),"soybean",
                                                 ifelse(Plot %in% c(31:39),"3", "4"))))
 
 
-## 2024 version
-corn_clean <- corn %>%
-  mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (1 - Standard_moistrure/100)),
-         Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (1 - Standard_moistrure/100)))
-
-soy_clean <- soy %>%
-  mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (1 - Standard_moistrure/100)),
-         Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (1 - Standard_moistrure/100)))                                   
-
-oat_clean <- oat_grain %>%
-  mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (1 - Standard_moisture/100)),
-         Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (1 - Standard_moisture/100)))
-
-alfalfa_clean <- alfalfa %>%
-  mutate(Zero_moisture_yield_MgpHa = (Dry_MgpHa * (1 - Moisture/100)),
-         Zero_moisture_yield_ton_ac = (Dry_ton_p_ac * (1 - Moisture/100)))
+# ## 2024 version
+# corn_clean <- corn %>%
+#   mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (1 - Standard_moistrure/100)),
+#          Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (1 - Standard_moistrure/100)))
+# 
+# soy_clean <- soy %>%
+#   mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (1 - Standard_moistrure/100)),
+#          Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (1 - Standard_moistrure/100)))                                   
+# 
+# oat_clean <- oat_grain %>%
+#   mutate(Zero_moisture_yield_MgpHa = (Standardized_yield_MgpHa * (1 - Standard_moisture/100)),
+#          Zero_moisture_yield_bu_ac = (Standardized_yield_bu_ac * (1 - Standard_moisture/100)))
+# 
+# alfalfa_clean <- alfalfa %>%
+#   mutate(Zero_moisture_yield_MgpHa = (Dry_MgpHa * (1 - Moisture/100)),
+#          Zero_moisture_yield_ton_ac = (Dry_ton_p_ac * (1 - Moisture/100)))
 
 
 
@@ -87,7 +87,7 @@ oat_straw_clean <- oat_clean%>%filter(Crop=="oat straw") %>% keep(~!all(is.na(.)
 #write.csv(soy_clean, "./2-Data/Clean/soybean_1720_clean.csv", row.names =  FALSE)
 #write.csv(alfalfa_clean, "./2-Data/Clean/alfalfa_1720_clean.csv", row.names =  FALSE)
 #write.csv(oat_grain_clean , "./2-Data/Clean/oat_g_1720_clean.csv", row.names =  FALSE)
-#write.csv(oat_str, "./2-Data/Clean/oat_str_1720_clean.csv", row.names =  FALSE)
+#write.csv(oat_straw_clean , "./2-Data/Clean/oat_str_1720_clean.csv", row.names =  FALSE)
 
 ## Iowa yields 
 
