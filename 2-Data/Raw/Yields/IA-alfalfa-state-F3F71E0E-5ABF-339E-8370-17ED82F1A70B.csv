@@ -1,0 +1,5 @@
+"Program","Year","Period","Week Ending","Geo Level","State","State ANSI","Ag District","Ag District Code","County","County ANSI","Zip Code","Region","watershed_code","Watershed","Commodity","Data Item","Domain","Domain Category","Value","CV (%)"
+"SURVEY","2020","YEAR","","STATE","IOWA","19","","","","","","","00000000","","HAY","HAY - YIELD, MEASURED IN TONS / ACRE","TOTAL","NOT SPECIFIED","3.19",""
+"SURVEY","2019","YEAR","","STATE","IOWA","19","","","","","","","00000000","","HAY","HAY - YIELD, MEASURED IN TONS / ACRE","TOTAL","NOT SPECIFIED","3.06",""
+"SURVEY","2018","YEAR","","STATE","IOWA","19","","","","","","","00000000","","HAY","HAY - YIELD, MEASURED IN TONS / ACRE","TOTAL","NOT SPECIFIED","3.2",""
+"SURVEY","2017","YEAR","","STATE","IOWA","19","","","","","","","00000000","","HAY","HAY - YIELD, MEASURED IN TONS / ACRE","TOTAL","NOT SPECIFIED","3.08",""
