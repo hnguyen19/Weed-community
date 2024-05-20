@@ -46,7 +46,7 @@ Original links from which csv files were downloaded, as of May 8, 2024:
 
 + oat: <https://quickstats.nass.usda.gov/results/C4885A45-1B6A-3EBA-88CD-4AE88E87176F>
 
-+ alfalfa, whole state only: <https://quickstats.nass.usda.gov/results/1DA15606-E8E3-35D7-A971-E5590F5AEC35>
++ alfalfa, whole state only: <https://quickstats.nass.usda.gov/results/79392111-271D-38B9-BBC3-83081D333639>
 
 + alfalfa, county, available up to 2018 only: <https://quickstats.nass.usda.gov/results/4386A120-915F-351C-A470-E66244312FF1>
 
@@ -70,24 +70,56 @@ alfalfa.by.county <- read_csv("../2-Data/Raw/Yields/IA-alfalfa-county-2A6F55A9-4
 ```
 
 ```{r}
-alfalfa.by.state <- read_csv("../2-Data/Raw/Yields/IA-alfalfa-state-61B0BB3A-2F85-3644-B6F5-19805AFF9766.csv")
+alfalfa.by.state <- read_csv("../2-Data/Raw/Yields/IA-alfalfa-state-F3F71E0E-5ABF-339E-8370-17ED82F1A70B.csv")
+```
+
+### Check alfalfa yield in 2017 and 2018: county vs. state average
+
+
+```{r}
+table(alfalfa.by.county$County, alfalfa.by.county$Year)
+
+alfalfa.by.county %>% 
+  select(County, Year, Value) %>%
+  group_by(Year) %>% 
+  summarize(Value_m = mean(Value, na.rm = T))
+```
+
+```{r}
+alfalfa.by.state %>% 
+  select(County, Year, Value) %>%
+  filter(Year < 2019)
+
+```
+The county-based hay yields were 0.3 - 0.5 ton/ac higher than those of state-based yields.
+
+Use the 2019 and 2020 state-based alfalfa hay yields because county-based values are unavailable. 
+```{r}
+alfalfa.by.state.to.merge <- alfalfa.by.state %>%  filter(Year > 2018)
 ```
 
 ### All NASS yield together 
 
 ```{r}
 IA.yield.NASS <- rbind(corn.soy.by.county, oat.by.county,
-                       alfalfa.by.county, alfalfa.by.state) %>%
+                       alfalfa.by.county, alfalfa.by.state.to.merge ) %>%
   dplyr::select(Year, County, Commodity, `Data Item`, Value) %>% 
   mutate(Commodity = tolower(Commodity)) %>%
-  mutate(`Value metric` = ifelse(Commodity == "corn", Value * 56 * 0.000454 / 0.404686,
+  mutate(`Value ton/ac` = ifelse(Commodity == "corn", Value * 56 / 2000,
+                                ifelse(Commodity == "soybeans", Value * 60/ 2000,
+                                       ifelse(Commodity == "oats", Value * 32 / 2000,
+                                              Value )))) %>% #convert bu/ac to ton/ac for grains
+  mutate(`Value Mg/ha` = ifelse(Commodity == "corn", Value * 56 * 0.000454 / 0.404686,
                                 ifelse(Commodity == "soybeans", Value * 60 * 0.000454 / 0.404686,
                                        ifelse(Commodity == "oats", Value * 32 * 0.0004534 / 0.404686,
-                                              Value * 0.907185 / 0.404686 )))) %>%
-  rename(`Value imperial` = Value) %>%
-  mutate(`Metric unit` = ifelse(Commodity == "alfalfa", "t/ha", "Mg/ha"))
+                                              Value * 0.907185 / 0.404686 )))) #convert bu/ac to Mg/ha for grains and ton/ac to Mg/ha for alfalfa hay
 ```
 
+### Write data
+
+```{r}
+write.csv(IA.yield.NASS, "../2-Data/Clean/NASS.yield.csv", row.names =  FALSE)
+```
 
 ## Marsden raw data processing by crop
 
@@ -197,6 +229,16 @@ M.soy.yield.19.clean <- M.soy.yield.19 %>%
 ```
 
 #### 2020
+
+```{r}
+M.soy.yield.20 <- read_excel("../2-Data/Raw/Yields/Marsden 2020 Corn-Soybean Yields.xlsx", sheet = "Soybean", skip = 6, na = c("", "NA", "N/a")) 
+
+M.soy.yield.20.clean <- M.soy.yield.20 %>%
+  filter(!is.na(Treatment )) %>% # remove all rows below the main data
+   select_if(~ any(!is.na(.))) %>%# remove blank columns
+    mutate(Year = "2020")
+```
+
 #### All soybean together
 
 ```{r}
@@ -276,7 +318,7 @@ M.oat.yield.19.clean <- M.oat.yield.19 %>%
     select(Plot, Treatment, Year,
           `bu/acre at 14% moisture`,`ton/ac at 14% moisture`, `Mg/ha at 14% moisture`, 
          `ton/ac at 0% moisture`, `Mg/ha at 0% moisture`) %>%
-  rename(`bu/acre at 14%`= `bu/acre at 14% moisture`)
+  rename( `bu/ac at 14% moisture` =  `bu/acre at 14% moisture` )
 ```
 
 #### 2020
@@ -317,15 +359,6 @@ M.oat <- rbindlist(list(M.oat.yield.17.clean,
 ```
 
 
-```{r}
-oat.lmer.si <- lmer(log(`Mg/ha at 0% moisture`) ~ Block + 
-                   Crop_ID + 
-                   (1|Year) +
-                   (1|Year:Block) +  
-                   (1|Year:Crop_ID),
-#                   (1|Block:Year:Crop_ID), # removed because of over-fitting
-  data=M.oat)
-```
 
 ### Alfalfa
 
@@ -402,12 +435,15 @@ M.alfalfa <- rbindlist(list(M.alfalfa.yield.17.clean,
          `Harvested area (m2)` = 1512, # whole plot area = 18 x 84 m2
          `Harvested area (acre)` = `Harvested area (m2)`/4046.86,
          `ton/ac at 0% moisture` = ((100 - `% moisture`)/100) * `Fresh wt (ton/acre)`, # check dry weight: `Yield (ton/acre @ 0%)` is identical to Dry wt (ton/acre)
-         `Mg/ha at 0% moisture` = `ton/ac at 0% moisture` * 2.2417 ) %>% 
+         `ton/ac at 15% moisture` = `ton/ac at 0% moisture` * 1.15,
+         `Mg/ha at 0% moisture` = `ton/ac at 0% moisture` * 2.2417,
+          `Mg/ha at 15% moisture` =  `Mg/ha at 0% moisture` * 1.15) %>% 
   select(-`Dry wt (ton/acre)`)
 ``` 
 
 
 ### Write data
+
 ```{r}
 write.csv(M.corn, "../2-Data/Clean/M.corn_1720_clean.csv", row.names =  FALSE)
 write.csv(M.soy, "../2-Data/Clean/M.soybean_1720_clean.csv", row.names =  FALSE)
