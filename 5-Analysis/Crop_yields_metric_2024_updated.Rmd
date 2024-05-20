@@ -9,7 +9,6 @@ output:
   bookdown::html_document2:
     toc: false
     fig_caption: yes
-    number_sections: false
     keep_md: true
     self_contained: true
 #bibliography: ecol.bib
@@ -19,12 +18,12 @@ output:
 library(emmeans)
 library(here)
 library(readr)
-library(webshot2)
+library(webshot2) 
 #need relative path for figures
 knitr::opts_chunk$set(message = FALSE, 
                       error = FALSE, 
                       warning = FALSE, 
-                       webshot = TRUE,
+                      webshot = TRUE,
                       fig.pos = "H", 
                       table.placement = "H",
                     #  out.extra = "",
@@ -49,6 +48,7 @@ library(gridExtra)
 library(lemon)
 library(data.table)
 library(ggpubr)
+library(dplyr) # for %<>%  
 theme_set(theme_bw())
 ```
  
@@ -85,13 +85,8 @@ names(alfalfa)
 ### Yield models 
 
 #### Corn
-
-```{r}
-table(corn$Crop_ID, corn$Year)
-```
-
 ```{r, include=FALSE}
-corn.lmer <- lmer(`ton/ac at 15.5% moisture` ~ Block +
+corn.lmer <- lmer(`Mg/ha at 15.5% moisture` ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -103,7 +98,7 @@ corn.lmer <- lmer(`ton/ac at 15.5% moisture` ~ Block +
 
 
 
-corn.lmer.ln <- lmer(log(`ton/ac at 15.5% moisture`) ~ Block +
+corn.lmer.ln <- lmer(log(`Mg/ha at 15.5% moisture`) ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -113,7 +108,7 @@ corn.lmer.ln <- lmer(log(`ton/ac at 15.5% moisture`) ~ Block +
                     (1|Block:Year:Crop_ID),
   data=corn)
 
-corn.lmer.s <- lmer(sqrt(`ton/ac at 15.5% moisture`) ~ Block +
+corn.lmer.s <- lmer(sqrt(`Mg/ha at 15.5% moisture`) ~ Block +
                     Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -136,11 +131,7 @@ list(corn.lmer, corn.lmer.ln, corn.lmer.s) %>%
 #### Soy
 
 ```{r}
-table(soy$Crop_ID, soy$Year)
-```
-
-```{r}
-soy.lmer <- lmer(`ton/ac at 13% moisture` ~ Block +  Crop_ID*Corn_weed_management + 
+soy.lmer <- lmer(`Mg/ha at 13% moisture` ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
@@ -149,7 +140,7 @@ soy.lmer <- lmer(`ton/ac at 13% moisture` ~ Block +  Crop_ID*Corn_weed_managemen
                     (1|Block:Year:Crop_ID),
   data=soy)
 
-soy.lmer.ln <- lmer(log(`ton/ac at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
+soy.lmer.ln <- lmer(log(`Mg/ha at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
@@ -158,7 +149,7 @@ soy.lmer.ln <- lmer(log(`ton/ac at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_m
                     (1|Block:Year:Crop_ID),
   data=soy)
 
-soy.lmer.s <- lmer(sqrt(`ton/ac at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
+soy.lmer.s <- lmer(sqrt(`Mg/ha at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
                     (1|Year:Crop_ID) +
@@ -181,31 +172,27 @@ list(soy.lmer, soy.lmer.ln, soy.lmer.s) %>%
 #### Oat
 
 ```{r}
-table(oat$Crop_ID, oat$Year)
-```
-
-```{r}
-oat.lmer <- lmer(`ton/ac at 14% moisture` ~ Block + 
+oat.lmer <- lmer(`Mg/ha at 14% moisture` ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
-                   (1|Year:Crop_ID),
+                   (1|Year:Crop_ID), 
+#                  (1|Block:Year:Crop_ID), # removed because of over-fitting
   data=oat)
 
 
-oat.lmer.ln <- lmer(log(`ton/ac at 14% moisture`) ~ Block + 
+oat.lmer.ln <- lmer(log(`Mg/ha at 14% moisture`) ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
-                   (1|Year:Crop_ID),
+                   (1|Year:Crop_ID), 
   data=oat)
 
-
-oat.lmer.s <- lmer(sqrt(`ton/ac at 14% moisture`) ~ Block + 
+oat.lmer.s <- lmer(sqrt(`Mg/ha at 14% moisture`) ~ Block + 
                    Crop_ID + 
                    (1|Year) +
                    (1|Year:Block) +  
-                   (1|Year:Crop_ID),
+                   (1|Year:Crop_ID), 
   data=oat)
 ```
 
@@ -221,6 +208,7 @@ list(oat.lmer, oat.lmer.ln, oat.lmer.s) %>%
 
 #### Alfalfa
 
+
 ```{r}
 table(alfalfa$Crop_ID, alfalfa$Year)
 ```
@@ -229,22 +217,22 @@ table(alfalfa$Crop_ID, alfalfa$Year)
 ## summing all the cuts within one year 
 alf_sum <- alfalfa %>%
   group_by(Year, Block, Crop_ID) %>%
-  summarize(Yield.ton.ac = sum(`ton/ac at 15% moisture`)) 
+  summarize(Yield.Mg.ha = sum(`Mg/ha at 15% moisture`)) 
 ```
-
 
 ```{r}
 table(alf_sum$Crop_ID, alf_sum$Year)
 ```
 
+
 ```{r}
-alf.lmer <- lmer(Yield.ton.ac ~ Block + (1|Year),
+alf.lmer <- lmer(Yield.Mg.ha ~ Block + (1|Year),
   data=alf_sum)
 
-alf.lmer.ln <- lmer(log(Yield.ton.ac) ~ Block + (1|Year),
+alf.lmer.ln <- lmer(log(Yield.Mg.ha) ~ Block + (1|Year),
   data=alf_sum)
 
-alf.lmer.s <- lmer(sqrt(Yield.ton.ac) ~ Block + (1|Year),
+alf.lmer.s <- lmer(sqrt(Yield.Mg.ha) ~ Block + (1|Year),
   data=alf_sum)
 ```
 
@@ -405,14 +393,14 @@ IA_yield <- read.csv("../2-Data/Clean/NASS.yield.csv")
 ##Iowa average, need update when 2020 corn, 2019 and 2020 hay, 2019 oat, and 2020 soy yields are  available 
 IA_avg_yield <- IA_yield %>% 
   group_by(Commodity) %>%
-  summarise(IA_avg_ton = mean(Value.ton.ac, na.rm = TRUE),
-            IA_sd_ton = sd(Value.ton.ac, na.rm = TRUE))
+  summarise(IA_avg_Mg = mean(Value.Mg.ha, na.rm = TRUE),
+            IA_sd_Mg = sd(Value.Mg.ha, na.rm = TRUE))
 
 Boone_yield <- IA_yield %>%
   filter(County == "BOONE") %>%
   group_by(Commodity) %>%
-  summarise(Boone_avg_ton = mean(Value.ton.ac, na.rm = TRUE),
-            Boone_sd_ton = sd(Value.ton.ac, na.rm = TRUE))
+  summarise(Boone_avg_Mg = mean(Value.Mg.ha, na.rm = TRUE),
+            Boone_sd_Mg = sd(Value.Mg.ha, na.rm = TRUE))
 ```
 
 ```{r, include=FALSE}
@@ -434,7 +422,7 @@ crops.emmip.IA$Commodity <- factor(crops.emmip.IA$Commodity,
                                                   "alfalfa hay"))
 ```
 
-```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (ton ac$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively.", echo=FALSE, fig.width=8, fig.height=6}
+```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020.", echo=FALSE, fig.width=8, fig.height=6}
 
 crops.emmip.IA %>%
  # filter(Commodity != "alfalfa hay") %>%
@@ -443,9 +431,9 @@ ggplot(aes(x = Crop_ID, y = yvar, fill = Rotation))+
   scale_fill_brewer(palette = "Dark2") +
   geom_errorbar(aes(ymin= LCL, ymax= UCL), width=.2) + 
   facet_grid(.~ Commodity, scales = "free", space = "free") + # scales: remove empty bar, space: equal bar width
-  geom_hline(aes(yintercept = IA_avg_ton, linetype = "IA average")) + 
-  geom_hline(aes(yintercept = Boone_avg_ton, linetype = "Boone County average")) + 
-  ylab("Crop yield (ton/ac)") +
+  geom_hline(aes(yintercept = IA_avg_Mg, linetype = "IA average")) + 
+  geom_hline(aes(yintercept = Boone_avg_Mg, linetype = "Boone County average")) + 
+  ylab("Crop yield (Mg/ha)") +
   xlab("Crop identity") +
   labs(linetype = "Yield") +
   theme(legend.position="bottom") 
