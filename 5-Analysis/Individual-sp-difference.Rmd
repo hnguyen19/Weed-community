@@ -80,6 +80,13 @@ biom_1720_clean %<>%
 ```
 
 
+```{r}
+dens_1720_clean %>%
+  group_by(Corn_weed_management, Crop_ID, Year) %>%
+  summarise(meanP_pl = mean(AMATA)) %>%
+  filter(Year %in% c("2018", "2019"), Corn_weed_management == "conv")
+```
+
 ```{r, include=FALSE}
 
 ##### Fit all species at once with split-fit-combine syntax 

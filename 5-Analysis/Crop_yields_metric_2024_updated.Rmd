@@ -229,7 +229,7 @@ table(alf_sum$Crop_ID, alf_sum$Year)
 alf.lmer <- lmer(Yield.Mg.ha ~ Block + (1|Year),
   data=alf_sum)
 
-alf.lmer.ln <- lmer(log(Yield.Mg.ha) ~ Block + (1|Year),
+alf.lmer.ln <- lmer(log(Yield.Mg.ha) ~ Block + (1|Year) ,
   data=alf_sum)
 
 alf.lmer.s <- lmer(sqrt(Yield.Mg.ha) ~ Block + (1|Year),
@@ -385,8 +385,8 @@ crops.emmip_commodity <- crops.emmip %>%
 
 ```
 
-continue here 
-```{r, include=FALSE}
+ 
+```{r, echo=FALSE}
 ## Iowa and Boone yields 
 IA_yield <- read.csv("../2-Data/Clean/NASS.yield.csv")
 
@@ -396,11 +396,16 @@ IA_avg_yield <- IA_yield %>%
   summarise(IA_avg_Mg = mean(Value.Mg.ha, na.rm = TRUE),
             IA_sd_Mg = sd(Value.Mg.ha, na.rm = TRUE))
 
+IA_avg_yield
+```
+
+```{r, echo=FALSE}
 Boone_yield <- IA_yield %>%
   filter(County == "BOONE") %>%
   group_by(Commodity) %>%
   summarise(Boone_avg_Mg = mean(Value.Mg.ha, na.rm = TRUE),
             Boone_sd_Mg = sd(Value.Mg.ha, na.rm = TRUE))
+Boone_yield 
 ```
 
 ```{r, include=FALSE}

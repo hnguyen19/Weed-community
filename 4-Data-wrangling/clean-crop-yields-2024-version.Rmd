@@ -256,6 +256,7 @@ M.soy <- rbindlist(list(M.soy.yield.17.clean,
          `Mg/ha at 0% moisture` = `Yield (Mg/ha @ 13%)`/1.13,
          `ton/ac at 0% moisture` = `ton/ac at 13% moisture` /1.13,
          Corn_weed_management = ifelse(Corn_weed_management == "low", "low", "conventional"),
+         Plot = gsub("\\*+", "", Plot), # remove * and ** from plots 15 and 46
          Block = ifelse(Plot %in% c(11:19), "1",
                         ifelse(Plot %in% c(21:29), "2",
                                ifelse(Plot %in% c(31:39), "3", "4")))) %>%

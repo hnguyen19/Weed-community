@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-04-16" />
+<meta name="date" content="2024-05-27" />
 
 <title>Clean crop yields</title>
 
@@ -337,17 +337,336 @@ display: none;
 
 
 <h1 class="title toc-ignore">Clean crop yields</h1>
-<h4 class="date">2024-04-16</h4>
+<h4 class="date">2024-05-27</h4>
 
 </div>
 
 
-<div id="update-to-the-previous-version" class="section level3">
-<h3>Update to the previous version</h3>
+<div id="update-to-the-previous-version" class="section level2">
+<h2>Update to the previous version</h2>
 <p>This script is a more streamlined version of <code>clean-crop-yields-17-20.R</code>. Data was loaded directly from the shared Box folder and curated extensively in R instead of copying and pasting desirable rows and columns. That practice resulted in an error that the standardized crop yields, to industry level moisture, at the experiment site was compared to the 0% moisture published by USDA NASS. This error is corrected here and will reflect in <code>Crop-yields.Rmd</code>.</p>
 </div>
-<div id="raw-data" class="section level3">
-<h3>Raw data</h3>
+<div id="conversion-factor" class="section level2">
+<h2>Conversion factor</h2>
+<p>From <a href="https://www.ers.usda.gov/webdocs/publications/41880/33132_ah697_002.pdf" class="uri">https://www.ers.usda.gov/webdocs/publications/41880/33132_ah697_002.pdf</a></p>
+<p>Corn, 1 bushel = 56 pounds
+Oats, 1 bushel = 32 pounds
+Soybean, 1 bushel = 60 pounds
+1 metric ton = 2,204.622 pounds
+1 U.S. (short) ton = 2,000 pounds
+1 pound = 0.00045359237 Mg
+1 acre = 0.404686 ha</p>
+</div>
+<div id="nass-county-and-state-yield-data" class="section level2">
+<h2>NASS county and State yield data</h2>
+<p>Original links from which csv files were downloaded, as of May 8, 2024:</p>
+<ul>
+<li><p>corn and soy: <a href="https://quickstats.nass.usda.gov/results/659D7374-9FE1-3604-82D4-C2F1C4DAB810" class="uri">https://quickstats.nass.usda.gov/results/659D7374-9FE1-3604-82D4-C2F1C4DAB810</a></p></li>
+<li><p>oat: <a href="https://quickstats.nass.usda.gov/results/C4885A45-1B6A-3EBA-88CD-4AE88E87176F" class="uri">https://quickstats.nass.usda.gov/results/C4885A45-1B6A-3EBA-88CD-4AE88E87176F</a></p></li>
+<li><p>alfalfa, whole state only: <a href="https://quickstats.nass.usda.gov/results/79392111-271D-38B9-BBC3-83081D333639" class="uri">https://quickstats.nass.usda.gov/results/79392111-271D-38B9-BBC3-83081D333639</a></p></li>
+<li><p>alfalfa, county, available up to 2018 only: <a href="https://quickstats.nass.usda.gov/results/4386A120-915F-351C-A470-E66244312FF1" class="uri">https://quickstats.nass.usda.gov/results/4386A120-915F-351C-A470-E66244312FF1</a></p></li>
+</ul>
+<p>Note: choosing non-irrigated yield would not return Iowa.</p>
+<pre><code>## Rows: 749 Columns: 21
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (12): Program, Period, Geo Level, State, Ag District, County, County ANS...
+## dbl  (5): Year, State ANSI, Ag District Code, Value, CV (%)
+## lgl  (4): Week Ending, Zip Code, Region, Watershed
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## Rows: 151 Columns: 21
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (12): Program, Period, Geo Level, State, Ag District, County, County ANS...
+## dbl  (5): Year, State ANSI, Ag District Code, Value, CV (%)
+## lgl  (4): Week Ending, Zip Code, Region, Watershed
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Alfalfa yield by county is available up to 2018, as of May 2024</p>
+<pre><code>## Rows: 93 Columns: 21
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (12): Program, Period, Geo Level, State, Ag District, County, County ANS...
+## dbl  (4): Year, State ANSI, Ag District Code, Value
+## lgl  (5): Week Ending, Zip Code, Region, Watershed, CV (%)
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## Rows: 4 Columns: 21
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (9): Program, Period, Geo Level, State, watershed_code, Commodity, Data ...
+## dbl (3): Year, State ANSI, Value
+## lgl (9): Week Ending, Ag District, Ag District Code, County, County ANSI, Zi...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div id="check-alfalfa-yield-in-2017-and-2018-county-vs.-state-average" class="section level3">
+<h3>Check alfalfa yield in 2017 and 2018: county vs. state average</h3>
+<pre><code>##                            
+##                             2017 2018
+##   ADAIR                        0    1
+##   ALLAMAKEE                    1    1
+##   APPANOOSE                    0    1
+##   AUDUBON                      1    1
+##   BOONE                        0    1
+##   CASS                         1    0
+##   CHICKASAW                    1    0
+##   CLARKE                       0    1
+##   CLAY                         0    1
+##   CLAYTON                      1    1
+##   CLINTON                      1    0
+##   DAVIS                        1    1
+##   DECATUR                      1    0
+##   DELAWARE                     1    0
+##   DES MOINES                   1    1
+##   DUBUQUE                      1    1
+##   EMMET                        1    1
+##   FAYETTE                      1    0
+##   FRANKLIN                     1    0
+##   FREMONT                      1    0
+##   GRUNDY                       1    0
+##   HAMILTON                     1    1
+##   HANCOCK                      1    0
+##   HOWARD                       1    0
+##   HUMBOLDT                     1    1
+##   JACKSON                      1    1
+##   JOHNSON                      1    0
+##   JONES                        1    0
+##   KEOKUK                       0    1
+##   LEE                          1    1
+##   LINN                         1    0
+##   LOUISA                       1    1
+##   LYON                         1    1
+##   MADISON                      1    0
+##   MARION                       1    0
+##   MILLS                        0    1
+##   MITCHELL                     1    0
+##   MONONA                       1    0
+##   MONROE                       0    1
+##   MONTGOMERY                   1    0
+##   O BRIEN                      1    0
+##   OTHER (COMBINED) COUNTIES    9    9
+##   PALO ALTO                    0    1
+##   POLK                         0    1
+##   POWESHIEK                    1    0
+##   RINGGOLD                     1    1
+##   TAYLOR                       0    1
+##   UNION                        0    1
+##   VAN BUREN                    1    1
+##   WAPELLO                      1    0
+##   WARREN                       0    1
+##   WASHINGTON                   1    0
+##   WEBSTER                      1    1
+##   WINNEBAGO                    1    1
+##   WINNESHIEK                   1    1
+##   WORTH                        1    0
+##   WRIGHT                       1    1</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##    Year Value_m
+##   &lt;dbl&gt;   &lt;dbl&gt;
+## 1  2017    3.61
+## 2  2018    3.59</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   County  Year Value
+##   &lt;lgl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 NA      2018  3.2 
+## 2 NA      2017  3.08</code></pre>
+<p>The county-based hay yields were 0.3 - 0.5 ton/ac higher than those of state-based yields.</p>
+<p>Use the 2019 and 2020 state-based alfalfa hay yields because county-based values are unavailable.</p>
+</div>
+<div id="all-nass-yield-together" class="section level3">
+<h3>All NASS yield together</h3>
+</div>
+<div id="write-data" class="section level3">
+<h3>Write data</h3>
+</div>
+</div>
+<div id="marsden-raw-data-processing-by-crop" class="section level2">
+<h2>Marsden raw data processing by crop</h2>
+<p>All dataframes starting with “M” indicate the yield at Marsden.</p>
+<div id="corn" class="section level3">
+<h3>Corn</h3>
+<div id="section" class="section level4">
+<h4>2017</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="section-1" class="section level4">
+<h4>2018</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="section-2" class="section level4">
+<h4>2019</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="section-3" class="section level4">
+<h4>2020</h4>
+<pre><code>## New names:
+## • `` -&gt; `...5`
+## • `` -&gt; `...16`
+## • `` -&gt; `...17`
+## • `` -&gt; `...18`</code></pre>
+</div>
+<div id="all-corn-together" class="section level4">
+<h4>All corn together</h4>
+</div>
+</div>
+<div id="soybean" class="section level3">
+<h3>Soybean</h3>
+<div id="section-4" class="section level4">
+<h4>2017</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="section-5" class="section level4">
+<h4>2018</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="section-6" class="section level4">
+<h4>2019</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="section-7" class="section level4">
+<h4>2020</h4>
+<pre><code>## New names:
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+</div>
+<div id="all-soybean-together" class="section level4">
+<h4>All soybean together</h4>
+</div>
+</div>
+<div id="oat" class="section level3">
+<h3>Oat</h3>
+<p>from the equipment note: “Grain was harvested with a John Deere 9450 plot combine. Weights, test weight and % moisture taken from the combine.” That is the reason why each bushel of oat weights 32.9 lbs instead of 32 lbs as in USDA standard.
+USDA standard, as detailed in the conversion factor section, are used to calculate yield in ton/acre at 0%</p>
+<p>Any columns after bu/acre at 14% moisture sre about straw</p>
+<div id="section-8" class="section level4">
+<h4>2017</h4>
+<pre><code>## New names:
+## • `` -&gt; `...3`
+## • `lbs/acre` -&gt; `lbs/acre...5`
+## • `% moisture` -&gt; `% moisture...7`
+## • `` -&gt; `...11`
+## • `` -&gt; `...12`
+## • `lbs/acre` -&gt; `lbs/acre...14`
+## • `` -&gt; `...17`
+## • `% moisture` -&gt; `% moisture...20`</code></pre>
+</div>
+<div id="section-9" class="section level4">
+<h4>2018</h4>
+<p>Oat was harvested for hay, not grain</p>
+</div>
+<div id="section-10" class="section level4">
+<h4>2019</h4>
+<pre><code>## New names:
+## • `` -&gt; `...3`
+## • `lbs/acre` -&gt; `lbs/acre...5`
+## • `% moisture` -&gt; `% moisture...7`
+## • `` -&gt; `...11`
+## • `` -&gt; `...12`
+## • `` -&gt; `...13`
+## • `` -&gt; `...14`
+## • `lbs/acre` -&gt; `lbs/acre...16`
+## • `` -&gt; `...19`
+## • `% moisture` -&gt; `% moisture...22`</code></pre>
+</div>
+<div id="section-11" class="section level4">
+<h4>2020</h4>
+<p>To be consistent with previous years, in which oat was harvested on a whole-plot basis, 2020 data are averaged by whole-plot identity</p>
+<pre><code>## New names:
+## • `` -&gt; `...2`
+## • `` -&gt; `...4`
+## • `lbs/acre` -&gt; `lbs/acre...6`
+## • `% moisture` -&gt; `% moisture...7`
+## • `` -&gt; `...14`
+## • `` -&gt; `...16`
+## • `lbs/acre` -&gt; `lbs/acre...18`
+## • `` -&gt; `...21`
+## • `% moisture` -&gt; `% moisture...24`</code></pre>
+</div>
+<div id="all-oat-together" class="section level4">
+<h4>All oat together</h4>
+</div>
+</div>
+<div id="alfalfa" class="section level3">
+<h3>Alfalfa</h3>
+<p>Whole plots were harvested so there was no distinction of herbicide regimes applied to the corn phase that the alfalfa followed.
+<code>fresh weight (g)</code>: weight at cutting<br />
+<code>dry weight (g)</code>: weight after oven dried to constant value<br />
+<code>% moisture</code> = 100 * [<code>fresh weight (g)</code> - <code>dry weight (g)</code>]/<code>fresh weight (g)</code>, as in <a href="https://forages.ca.uky.edu/baleageq27" class="uri">https://forages.ca.uky.edu/baleageq27</a>
+Numbers in gram unit were measured in the lab and otherwise in the field. The moisture from lab measurement was used to calculate hay yield at 0% moisture</p>
+<div id="section-12" class="section level4">
+<h4>2017</h4>
+<pre><code>## New names:
+## • `` -&gt; `...2`
+## • `` -&gt; `...3`
+## • `` -&gt; `...13`
+## • `` -&gt; `...14`</code></pre>
+<pre><code>## [1] &quot;Block&quot;               &quot;Bale wts (lb)&quot;       &quot;Fresh wt  (lb/acre)&quot;
+## [4] &quot;Fresh wt (ton/acre)&quot; &quot;Dry wt (ton/acre)&quot;   &quot;fresh weight (g)&quot;   
+## [7] &quot;dry weight (g)&quot;      &quot;% moisture&quot;          &quot;Year&quot;</code></pre>
+</div>
+<div id="section-13" class="section level4">
+<h4>2018</h4>
+<pre><code>## New names:
+## • `` -&gt; `...2`
+## • `` -&gt; `...3`</code></pre>
+<pre><code>## [1] &quot;Block&quot;               &quot;Bale wts (lb)&quot;       &quot;Fresh wt  (lb/acre)&quot;
+## [4] &quot;Fresh wt (ton/acre)&quot; &quot;Dry wt (ton/acre)&quot;   &quot;fresh weight (g)&quot;   
+## [7] &quot;dry weight (g)&quot;      &quot;% moisture&quot;          &quot;Year&quot;</code></pre>
+</div>
+<div id="section-14" class="section level4">
+<h4>2019</h4>
+<pre><code>## New names:
+## • `` -&gt; `...2`
+## • `` -&gt; `...3`
+## • `` -&gt; `...13`
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`</code></pre>
+<pre><code>## [1] &quot;Block&quot;               &quot;Bale wts (lb)&quot;       &quot;Fresh wt  (lb/acre)&quot;
+## [4] &quot;Fresh wt (ton/acre)&quot; &quot;Dry wt (ton/acre)&quot;   &quot;fresh weight (g)&quot;   
+## [7] &quot;dry weight (g)&quot;      &quot;% moisture&quot;          &quot;Year&quot;</code></pre>
+</div>
+<div id="section-15" class="section level4">
+<h4>2020</h4>
+<pre><code>## New names:
+## • `` -&gt; `...2`
+## • `` -&gt; `...3`
+## • `` -&gt; `...13`
+## • `` -&gt; `...14`</code></pre>
+<pre><code>## [1] &quot;Block&quot;               &quot;Bale wts (lb)&quot;       &quot;Fresh wt  (lb/acre)&quot;
+## [4] &quot;Fresh wt (ton/acre)&quot; &quot;Dry wt (ton/acre)&quot;   &quot;fresh weight (g)&quot;   
+## [7] &quot;dry weight (g)&quot;      &quot;% moisture&quot;          &quot;Year&quot;</code></pre>
+</div>
+<div id="all-alfalfa-together" class="section level4">
+<h4>All alfalfa together</h4>
+</div>
+</div>
+<div id="write-data-1" class="section level3">
+<h3>Write data</h3>
+</div>
 </div>
 
 

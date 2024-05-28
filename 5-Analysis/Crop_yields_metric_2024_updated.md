@@ -311,32 +311,32 @@ Results of the experiment indicated that crop diversification and reduced use of
 <tr>
    <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Crop ID </td>
    <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 5.98 </td>
-   <td style="text-align:right;"> 8.39 </td>
-   <td style="text-align:right;border-right:1px solid;"> 0.0184 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 8.22 </td>
+   <td style="text-align:right;border-right:1px solid;"> 0.0191 </td>
    <td style="text-align:left;"> S2 / S3 </td>
-   <td style="text-align:right;"> 0.961 </td>
-   <td style="text-align:right;"> 0.5681 </td>
+   <td style="text-align:right;"> 0.959 </td>
+   <td style="text-align:right;"> 0.5499 </td>
   </tr>
   <tr>
    <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Corn weed management </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 3.00 </td>
-   <td style="text-align:right;"> 0.12 </td>
-   <td style="text-align:right;border-right:1px solid;"> 0.7523 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 0.18 </td>
+   <td style="text-align:right;border-right:1px solid;"> 0.7018 </td>
    <td style="text-align:left;"> S2 / S4 </td>
    <td style="text-align:right;"> 0.862 </td>
-   <td style="text-align:right;"> 0.0176 </td>
+   <td style="text-align:right;"> 0.0181 </td>
   </tr>
   <tr>
    <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Crop ID x Corn weed management </td>
    <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 5.88 </td>
-   <td style="text-align:right;"> 0.69 </td>
-   <td style="text-align:right;border-right:1px solid;"> 0.5372 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 0.62 </td>
+   <td style="text-align:right;border-right:1px solid;"> 0.5678 </td>
    <td style="text-align:left;"> S3 / S4 </td>
-   <td style="text-align:right;"> 0.897 </td>
-   <td style="text-align:right;"> 0.0624 </td>
+   <td style="text-align:right;"> 0.898 </td>
+   <td style="text-align:right;"> 0.0670 </td>
   </tr>
   <tr grouplength="1"><td colspan="8" style="border-bottom: 1px solid;"><strong>(C) - Oat</strong></td></tr>
 <tr>
@@ -357,14 +357,34 @@ Results of the experiment indicated that crop diversification and reduced use of
 
 
 
-continue here 
+ 
 
+```
+## # A tibble: 4 × 3
+##   Commodity IA_avg_Mg IA_sd_Mg
+##   <chr>         <dbl>    <dbl>
+## 1 corn          11.9     1.30 
+## 2 hay            8.05    1.41 
+## 3 oats           2.57    0.556
+## 4 soybeans       3.70    0.321
+```
+
+
+```
+## # A tibble: 4 × 3
+##   Commodity Boone_avg_Mg Boone_sd_Mg
+##   <chr>            <dbl>       <dbl>
+## 1 corn             11.6        1.04 
+## 2 hay               7.51      NA    
+## 3 oats              3.28       1.06 
+## 4 soybeans          3.62       0.164
+```
 
 
 
 <div class="figure">
-<img src="Crop_yields_metric_2024_updated_files/figure-html/crop-bar-1.png" alt="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively."  />
-<p class="caption">(\#fig:crop-bar)Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively.</p>
+<img src="Crop_yields_metric_2024_updated_files/figure-html/crop-bar-1.png" alt="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020."  />
+<p class="caption">(\#fig:crop-bar)Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020.</p>
 </div>
 
 
