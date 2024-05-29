@@ -78,7 +78,159 @@ names(alfalfa)
 ## [13] "ton/ac at 0% moisture"  "ton/ac at 15% moisture" "Mg/ha at 0% moisture"  
 ## [16] "Mg/ha at 15% moisture"
 ```
-### Yield models 
+
+### Yield models, bu/ac for grains
+#### Corn
+
+
+```r
+table(corn$Crop_ID, corn$Year)
+```
+
+```
+##     
+##      2017 2018 2019 2020
+##   C2    8    8    8    8
+##   C3    8    8    8    8
+##   C4    8    8    8    8
+```
+
+
+
+#### Corn diagnosis: `corn.lmer` and `corn.lmer.ln` similar
+
+
+```r
+list(corn.lmer.bu, corn.lmer.bu.ln, corn.lmer.bu.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
+
+<div class="figure">
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-6-1.png" alt="Model diagnosis for Marsden corn yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-6)Model diagnosis for Marsden corn yield. Model fitting does not differ between original vs. transform.</p>
+</div>
+
+#### Soy
+
+
+```r
+table(soy$Crop_ID, soy$Year)
+```
+
+```
+##     
+##      2017 2018 2019 2020
+##   S2    8    8    8    8
+##   S3    8    8    8    8
+##   S4    8    8    8    8
+```
+
+
+```r
+soy.lmer.bu <- lmer(`bu/acre at 13% moisture` ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=soy)
+
+soy.lmer.bu.ln <- lmer(log(`bu/acre at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=soy)
+
+soy.lmer.bu.s <- lmer(sqrt(`bu/acre at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_management + 
+                    (1|Year) + 
+                    (1|Year:Block) + 
+                    (1|Year:Crop_ID) +
+                    (1|Year:Corn_weed_management) + 
+                    (1|Year:Crop_ID:Corn_weed_management)  +
+                    (1|Block:Year:Crop_ID),
+  data=soy)
+```
+
+
+#### Soybean diagnosis: `soy.lmer` and `soy.lmer.ln` similar
+
+
+```r
+list(soy.lmer.bu, soy.lmer.bu.ln, soy.lmer.bu.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
+
+<div class="figure">
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-9-1.png" alt="Model diagnosis for Marsden soybean yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-9)Model diagnosis for Marsden soybean yield. Model fitting does not differ between original vs. transform.</p>
+</div>
+
+#### Oat
+
+
+```r
+table(oat$Crop_ID, oat$Year)
+```
+
+```
+##     
+##      2017 2019 2020
+##   O3    4    4    4
+##   O4    4    4    4
+```
+
+
+```r
+oat.lmer.bu <- lmer(`bu/ac at 14% moisture` ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID),
+  data=oat)
+
+
+oat.lmer.bu.ln <- lmer(log(`bu/ac at 14% moisture`) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID),
+  data=oat)
+
+
+oat.lmer.bu.s <- lmer(sqrt(`bu/ac at 14% moisture`) ~ Block + 
+                   Crop_ID + 
+                   (1|Year) +
+                   (1|Year:Block) +  
+                   (1|Year:Crop_ID),
+  data=oat)
+```
+
+
+#### Oat diagnosis: `oat.lmer` and `oat.lmer.ln` similar
+
+
+```r
+list(oat.lmer.bu, oat.lmer.bu.ln, oat.lmer.bu.s) %>%
+  lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
+                              wrap_plots() +
+                              plot_annotation(tag_levels = "a")
+```
+
+<div class="figure">
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-12-1.png" alt="Model diagnosis for Marsden oat yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-12)Model diagnosis for Marsden oat yield. Model fitting does not differ between original vs. transform.</p>
+</div>
+
+
+### Yield models, ton/ac 
 
 #### Corn
 
@@ -108,8 +260,8 @@ list(corn.lmer, corn.lmer.ln, corn.lmer.s) %>%
 ```
 
 <div class="figure">
-<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-6-1.png" alt="Model diagnosis for Marsden corn yield. Model fitting does not differ between original vs. transform."  />
-<p class="caption">(\#fig:unnamed-chunk-6)Model diagnosis for Marsden corn yield. Model fitting does not differ between original vs. transform.</p>
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-15-1.png" alt="Model diagnosis for Marsden corn yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-15)Model diagnosis for Marsden corn yield. Model fitting does not differ between original vs. transform.</p>
 </div>
 
 #### Soy
@@ -169,8 +321,8 @@ list(soy.lmer, soy.lmer.ln, soy.lmer.s) %>%
 ```
 
 <div class="figure">
-<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-9-1.png" alt="Model diagnosis for Marsden soybean yield. Model fitting does not differ between original vs. transform."  />
-<p class="caption">(\#fig:unnamed-chunk-9)Model diagnosis for Marsden soybean yield. Model fitting does not differ between original vs. transform.</p>
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-18-1.png" alt="Model diagnosis for Marsden soybean yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-18)Model diagnosis for Marsden soybean yield. Model fitting does not differ between original vs. transform.</p>
 </div>
 
 #### Oat
@@ -225,8 +377,8 @@ list(oat.lmer, oat.lmer.ln, oat.lmer.s) %>%
 ```
 
 <div class="figure">
-<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-12-1.png" alt="Model diagnosis for Marsden oat yield. Model fitting does not differ between original vs. transform."  />
-<p class="caption">(\#fig:unnamed-chunk-12)Model diagnosis for Marsden oat yield. Model fitting does not differ between original vs. transform.</p>
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-21-1.png" alt="Model diagnosis for Marsden oat yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-21)Model diagnosis for Marsden oat yield. Model fitting does not differ between original vs. transform.</p>
 </div>
 
 #### Alfalfa
@@ -285,8 +437,8 @@ list(alf.lmer, alf.lmer.ln, alf.lmer.s) %>%
 ```
 
 <div class="figure">
-<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-17-1.png" alt="Model diagnosis for Marsden alfalfa hay yield. Model fitting does not differ between original vs. transform."  />
-<p class="caption">(\#fig:unnamed-chunk-17)Model diagnosis for Marsden alfalfa hay yield. Model fitting does not differ between original vs. transform.</p>
+<img src="Crop_yields_bushel_files/figure-html/unnamed-chunk-26-1.png" alt="Model diagnosis for Marsden alfalfa hay yield. Model fitting does not differ between original vs. transform."  />
+<p class="caption">(\#fig:unnamed-chunk-26)Model diagnosis for Marsden alfalfa hay yield. Model fitting does not differ between original vs. transform.</p>
 </div>
 
 
@@ -350,32 +502,32 @@ Results of the experiment indicated that crop diversification and reduced use of
 <tr>
    <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Crop ID </td>
    <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 5.98 </td>
-   <td style="text-align:right;"> 8.39 </td>
-   <td style="text-align:right;border-right:1px solid;"> 0.0184 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 8.22 </td>
+   <td style="text-align:right;border-right:1px solid;"> 0.0191 </td>
    <td style="text-align:left;"> S2 / S3 </td>
-   <td style="text-align:right;"> 0.961 </td>
-   <td style="text-align:right;"> 0.5681 </td>
+   <td style="text-align:right;"> 0.959 </td>
+   <td style="text-align:right;"> 0.5499 </td>
   </tr>
   <tr>
    <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Corn weed management </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 3.00 </td>
-   <td style="text-align:right;"> 0.12 </td>
-   <td style="text-align:right;border-right:1px solid;"> 0.7523 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 0.18 </td>
+   <td style="text-align:right;border-right:1px solid;"> 0.7018 </td>
    <td style="text-align:left;"> S2 / S4 </td>
    <td style="text-align:right;"> 0.862 </td>
-   <td style="text-align:right;"> 0.0176 </td>
+   <td style="text-align:right;"> 0.0181 </td>
   </tr>
   <tr>
    <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Crop ID x Corn weed management </td>
    <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 5.88 </td>
-   <td style="text-align:right;"> 0.69 </td>
-   <td style="text-align:right;border-right:1px solid;"> 0.5372 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 0.62 </td>
+   <td style="text-align:right;border-right:1px solid;"> 0.5678 </td>
    <td style="text-align:left;"> S3 / S4 </td>
-   <td style="text-align:right;"> 0.897 </td>
-   <td style="text-align:right;"> 0.0624 </td>
+   <td style="text-align:right;"> 0.898 </td>
+   <td style="text-align:right;"> 0.0670 </td>
   </tr>
   <tr grouplength="1"><td colspan="8" style="border-bottom: 1px solid;"><strong>(C) - Oat</strong></td></tr>
 <tr>
@@ -394,16 +546,33 @@ Results of the experiment indicated that crop diversification and reduced use of
 </table>
 
 
+```r
+corn.emmip.bu <- emmip(corn.lmer.bu.ln, ~ Crop_ID,
+                    CIs = TRUE,
+                    type = "response", 
+                    plotit = FALSE)
+
+soy.emmip.bu <- emmip(soy.lmer.bu.ln, ~ Crop_ID,
+                   CIs = TRUE, 
+                   type = "response", 
+                   plotit = FALSE)
+
+oat.emmip.bu <- emmip(oat.lmer.bu.ln, ~ Crop_ID,
+                   CIs = TRUE, 
+                   type = "response",
+                   plotit = FALSE)
+```
 
 
-continue here 
+
+
 
 
 
 
 <div class="figure">
-<img src="Crop_yields_bushel_files/figure-html/crop-bar-1.png" alt="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (ton ac$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively."  />
-<p class="caption">(\#fig:crop-bar)Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (ton ac$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively.</p>
+<img src="Crop_yields_bushel_files/figure-html/crop-bar-ton-1.png" alt="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (ton ac$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively."  />
+<p class="caption">(\#fig:crop-bar-ton)Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (ton ac$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively.</p>
 </div>
 
 
