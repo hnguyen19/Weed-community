@@ -535,9 +535,7 @@ alf.emmip$Crop_ID <- gsub("overall", "A4", alf.emmip$Crop_ID)
 alf.emmip$xvar <- gsub("overall", "A4", alf.emmip$xvar)
 
 ## All crop yields in one table 
-crops.emmip <- rbind(corn.emmip, soy.emmip, oat.emmip, 
-                     corn.emmip.bu, soy.emmip.bu, oat.emmip.bu, 
-                     alf.emmip) # bu/ac and ton/ac together
+crops.emmip <- rbind(corn.emmip, soy.emmip, oat.emmip, alf.emmip) 
 
 ## Duplicate the Crop_ID and save as character
 crops.emmip$Crop_ID_char <- as.character(crops.emmip$Crop_ID)
@@ -562,9 +560,9 @@ IA_avg_yield <- IA_yield %>%
   group_by(Commodity) %>%
   summarise(IA_avg_ton = mean(Value.ton.ac, na.rm = TRUE),
             IA_sd_ton = sd(Value.ton.ac, na.rm = TRUE)) %>%
-  mutate(IA_avg_10bu = ifelse(Commodity == "corn", IA_avg_ton * 2000/ 560,
-                                ifelse(Commodity == "soybeans", IA_avg_ton * 2000/ 600,
-                                       ifelse(Commodity == "oats", IA_avg_ton * 2000/ 320 ,
+  mutate(IA_avg_bu = ifelse(Commodity == "corn", IA_avg_ton * 2000/ 56,
+                                ifelse(Commodity == "soybeans", IA_avg_ton * 2000/ 60,
+                                       ifelse(Commodity == "oats", IA_avg_ton * 2000/ 32 ,
                                               NA )))) 
 
 Boone_yield <- IA_yield %>%
@@ -572,9 +570,9 @@ Boone_yield <- IA_yield %>%
   group_by(Commodity) %>%
   summarise(Boone_avg_ton = mean(Value.ton.ac, na.rm = TRUE),
             Boone_sd_ton = sd(Value.ton.ac, na.rm = TRUE)) %>%
-  mutate(Boone_avg_10bu = ifelse(Commodity == "corn", Boone_avg_ton * 2000/ 560,
-                                ifelse(Commodity == "soybeans", Boone_avg_ton * 2000/ 600,
-                                       ifelse(Commodity == "oats", Boone_avg_ton * 2000/ 320,
+  mutate(Boone_avg_bu = ifelse(Commodity == "corn", Boone_avg_ton * 2000/ 56,
+                                ifelse(Commodity == "soybeans", Boone_avg_ton * 2000/ 60,
+                                       ifelse(Commodity == "oats", Boone_avg_ton * 2000/ 32,
                                               NA )))) 
 ```
 
@@ -595,6 +593,38 @@ crops.emmip.IA$Commodity <- factor(crops.emmip.IA$Commodity,
                                                   "soybean grain",
                                                   "oat grain", 
                                                   "alfalfa hay"))
+```
+
+##### Yield table for extension communication
+
+```{r}
+corn.ext <- emmip(corn.lmer.bu.ln , ~ Crop_ID | Corn_weed_management,
+                    CIs = TRUE,
+                    type = "response", 
+                    plotit = FALSE)
+
+soy.ext  <- emmip(soy.lmer.bu.ln , ~ Crop_ID | Corn_weed_management,
+                   CIs = TRUE, 
+                   type = "response", 
+                   plotit = FALSE)
+
+oat.ext  <- emmip(oat.lmer.bu.ln , ~ Crop_ID,
+                   CIs = TRUE, 
+                   type = "response",
+                   plotit = FALSE) %>% 
+  mutate(Corn_weed_management = "both")
+
+alf.ext <- alf.emmip %>% 
+  mutate(Corn_weed_management = "both")
+ 
+rbind(corn.ext, soy.ext, oat.ext , alf.ext) %>%
+  select(Crop_ID, Corn_weed_management, yvar,
+         LCL, UCL) %>%
+  mutate(unit = ifelse(Crop_ID == "A4", "ton/ac", "bu/ac")) %>%
+   mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.1f', .)))) %>%
+  mutate(`Yield [95% CI]` = paste0(yvar, " [", LCL, " , ", UCL, "]")) %>%
+  select(Crop_ID, Corn_weed_management, `Yield [95% CI]`, unit) %>%
+  arrange(Corn_weed_management)
 ```
 
 ```{r crop-bar-ton, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (ton ac$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Because county-specific alfalfa hay yields in 2019 and 2020 were unavailable at this writing, Boone County alfalfa yield (solid line) was averaged over 2017 and 2018 and Iowa hay yield was averaged over all counties in 2017 and 2018 and Iowa hay yield (dashed line) was averaged from all county-based values in 2017 and 2018 and two state-based values in 2019 and 2020. Corn, soybean, oat grain, and alfalfa hay yields were reported at 15.5%, 13%, 14%, and 0% moisture respectively.", echo=FALSE, fig.width=8, fig.height=6}
