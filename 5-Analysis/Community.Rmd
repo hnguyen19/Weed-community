@@ -40,7 +40,7 @@ library(lemon)
 
 
 
-```{r, include=FALSE}
+```{r}
 ### Ecological indices calculated with plant population densities
 
 dens_ind_1720 <- read.csv(here("2-Data/Clean/pldens_indices_1720_clean.csv"))
@@ -58,9 +58,9 @@ dens_ind_1720$Crop_ID <- factor(dens_ind_1720$Crop_ID,
 dens_ind_1720$Crop <- factor(dens_ind_1720$Crop,
                              levels = c("corn", "soybean", "oat", "alfalfa"))
 ```
+##### Seedbank ecological indices
 
-
-```{r, include=FALSE}
+```{r}
 dens_diversity.lmer1 <- lmer(log(Diversity+1) ~ Block + 
                                Crop_ID * Corn_weed_management +
                                (1|Year) + 
@@ -107,8 +107,7 @@ summary(dens_rich.lmer2)$sigma  #0.288
 ```
 
 
-```{r, include=FALSE}
-
+```{r}
 ### Ecological indices calculated with plant population biomass densities
 biom_ind_1720 <- read_csv("../2-Data/Clean/biom_indices_1720_clean.csv")
 
@@ -120,8 +119,9 @@ biom_ind_1720$Crop_ID <- factor(biom_ind_1720$Crop_ID,
                                            "C3", "S3", "O3",
                                            "C4", "S4", "O4", "A4"))
 ```
+##### Biomass ecological indices
 
-```{r, include=FALSE}
+```{r}
 # zero variance: https://rpubs.com/bbolker/6226
 # Block is fixed
 min(biom_ind_1720$Diversity[biom_ind_1720$Diversity > 0])
@@ -186,6 +186,7 @@ summary(biom_rich.lmer2_r)$sigma  #0.3143426
 
 ```
 
+##### ANOVAs of ecological indices
 
 ```{r, echo=FALSE}
 ## density portion
@@ -250,6 +251,7 @@ kable(longtable = FALSE, booktabs = TRUE, digits = 2, align = "lrrrrrr",
 ```
 
 
+##### Arrow plots for ecological indices 
 
 ```{r index-arrow-p, echo=FALSE, fig.cap= "Weed community stand diversity (A), evenness (B), and richness (C) and community aboveground diversity (D), evenness (E), and richness (F). The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation). The black dots are estimated marginal means. The blue bars are 95% confidence intervals. The red arrows reflect comparisons among means. Overlapping arrows indicate non-significant differences.", fig.width= 8, fig.height=13}
 
@@ -321,7 +323,10 @@ Averaged over crop phases within the same rotation (Table \@ref(tab:dens-indices
 
 The same patterns of difference and similarity of weed community richness index calculated with aboveground mass was observed (Table \@ref(tab:biom-indices-ct)).  
 
-```{r, include=FALSE}
+
+##### Contrasts for ecological indices: diversity 
+
+```{r}
 ## Coefficients for customized contrasts 
 C2 <- c(1,rep(0,8)); C3 <- c(0,0,1,rep(0,6)); C4 <- c(rep(0,5),1,rep(0,3))
 S2 <- c(0, 1,rep(0,7)); S3 <- c(rep(0,3), 1,rep(0,5)); S4 <- c(rep(0,6),1,rep(0,2))
@@ -569,7 +574,57 @@ biom_diversity_OA <- print(contrast(emmeans(biom_diversity.lmer1, ~ Crop_ID,
                            export = TRUE)
 ```
 
-```{r, include=FALSE}
+```{r diversity-ct, echo=FALSE}
+dens_diversity <- rbind(dens_diversity_2yrvs34yr$summary,
+                        dens_diversity_3yrvs4yr$summary,
+                        dens_diversity_CS2yr_vs_CS34yr$summary,
+                        dens_diversity_CS3yr_vs_CS4yr$summary,
+                        dens_diversity_C2vs3_4$summary,
+                        dens_diversity_C3vs4$summary,
+                        dens_diversity_S2vs3_4$summary,
+                        dens_diversity_S3vs4$summary,
+                        dens_diversity_oat$summary,
+                        dens_diversity_summer_vs_cool$summary,
+                        dens_diversity_CS3_vs_O3$summary,
+                        dens_diversity_CS4_vs_OA4$summary,
+                        dens_diversity_OA$summary)
+
+dens_diversity_df <- as.data.frame(dens_diversity)
+
+dens_diversity_df[,c(2:6)] <- sapply(dens_diversity_df[,c(2:6)],as.numeric)
+
+dens_diversity_rounded <- dens_diversity_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+
+biom_diversity <- rbind(biom_diversity_2yrvs34yr$summary,
+                        biom_diversity_3yrvs4yr$summary,
+                        biom_diversity_CS2yr_vs_CS34yr$summary,
+                        biom_diversity_CS3yr_vs_CS4yr$summary,
+                        biom_diversity_C2vs3_4$summary,
+                        biom_diversity_C3vs4$summary,
+                        biom_diversity_S2vs3_4$summary,
+                        biom_diversity_S3vs4$summary,
+                        biom_diversity_oat$summary,
+                        biom_diversity_summer_vs_cool$summary,
+                        biom_diversity_CS3_vs_O3$summary,
+                        biom_diversity_CS4_vs_OA4$summary,
+                        biom_diversity_OA$summary)
+
+
+biom_diversity_df <- as.data.frame(biom_diversity)
+
+biom_diversity_df[,c(2:6)] <- sapply(biom_diversity_df[,c(2:6)],as.numeric)
+
+biom_diversity_rounded <- biom_diversity_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) #%>%
+#  mutate(across(where(is.numeric), as.character)) #%>% #remove trailing zeros
+#  as_tibble 
+```
+
+##### Contrasts for ecological indices: evenness
+
+```{r}
 
 #### Did rotation affect community stand density evenness? 
 ## Rotation effect, overall:
@@ -800,7 +855,54 @@ biom_even_OA <- print(contrast(emmeans(biom_even.lmer4, ~ Crop_ID,
                       export = TRUE)
 ```
 
-```{r, include=FALSE}
+
+```{r even-ct, echo=FALSE}
+dens_even <- rbind(dens_even_2yrvs34yr$summary,
+                   dens_even_3yrvs4yr$summary,
+                   dens_even_CS2yr_vs_CS34yr$summary,
+                   dens_even_CS3yr_vs_CS4yr$summary,
+                   dens_even_C2vs3_4$summary,
+                   dens_even_C3vs4$summary,
+                   dens_even_S2vs3_4$summary,
+                   dens_even_S3vs4$summary,
+                   dens_even_oat$summary,
+                   dens_even_summer_vs_cool$summary,
+                   dens_evenn_CS3_vs_O3$summary,
+                   dens_even_CS4_vs_OA4$summary,
+                   dens_even_OA$summary)
+dens_even_df <- as.data.frame(dens_even)
+
+dens_even_df[,c(2:6)] <- sapply(dens_even_df[,c(2:6)],as.numeric)
+
+dens_even_rounded <- dens_even_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+
+biom_even <- rbind(biom_even_2yrvs34yr$summary,
+                   biom_even_3yrvs4yr$summary,
+                   biom_even_CS2yr_vs_CS34yr$summary,
+                   biom_even_CS3yr_vs_CS4yr$summary,
+                   biom_even_C2vs3_4$summary,
+                   biom_even_C3vs4$summary,
+                   biom_even_S2vs3_4$summary,
+                   biom_even_S3vs4$summary,
+                   biom_even_oat$summary,
+                   biom_even_summer_vs_cool$summary,
+                   biom_even_CS3_vs_O3$summary,
+                   biom_even_CS4_vs_OA4$summary,
+                   biom_even_OA$summary)
+
+
+biom_even_df <- as.data.frame(biom_even)
+
+biom_even_df[,c(2:6)] <- sapply(biom_even_df[,c(2:6)],as.numeric)
+
+biom_even_rounded <- biom_even_df %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
+```
+
+##### Contrasts for ecological indices: richness
+
+```{r}
 
 #### Did rotation affect density richness?
 
@@ -1055,98 +1157,6 @@ biom_rich_OA <- print(contrast(emmeans(biom_rich.lmer2, ~ Crop_ID,
 ```
 
 
-```{r diversity-ct, echo=FALSE}
-dens_diversity <- rbind(dens_diversity_2yrvs34yr$summary,
-                        dens_diversity_3yrvs4yr$summary,
-                        dens_diversity_CS2yr_vs_CS34yr$summary,
-                        dens_diversity_CS3yr_vs_CS4yr$summary,
-                        dens_diversity_C2vs3_4$summary,
-                        dens_diversity_C3vs4$summary,
-                        dens_diversity_S2vs3_4$summary,
-                        dens_diversity_S3vs4$summary,
-                        dens_diversity_oat$summary,
-                        dens_diversity_summer_vs_cool$summary,
-                        dens_diversity_CS3_vs_O3$summary,
-                        dens_diversity_CS4_vs_OA4$summary,
-                        dens_diversity_OA$summary)
-
-dens_diversity_df <- as.data.frame(dens_diversity)
-
-dens_diversity_df[,c(2:6)] <- sapply(dens_diversity_df[,c(2:6)],as.numeric)
-
-dens_diversity_rounded <- dens_diversity_df %>%
-  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
-
-
-biom_diversity <- rbind(biom_diversity_2yrvs34yr$summary,
-                        biom_diversity_3yrvs4yr$summary,
-                        biom_diversity_CS2yr_vs_CS34yr$summary,
-                        biom_diversity_CS3yr_vs_CS4yr$summary,
-                        biom_diversity_C2vs3_4$summary,
-                        biom_diversity_C3vs4$summary,
-                        biom_diversity_S2vs3_4$summary,
-                        biom_diversity_S3vs4$summary,
-                        biom_diversity_oat$summary,
-                        biom_diversity_summer_vs_cool$summary,
-                        biom_diversity_CS3_vs_O3$summary,
-                        biom_diversity_CS4_vs_OA4$summary,
-                        biom_diversity_OA$summary)
-
-
-biom_diversity_df <- as.data.frame(biom_diversity)
-
-biom_diversity_df[,c(2:6)] <- sapply(biom_diversity_df[,c(2:6)],as.numeric)
-
-biom_diversity_rounded <- biom_diversity_df %>%
-  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) #%>%
-#  mutate(across(where(is.numeric), as.character)) #%>% #remove trailing zeros
-#  as_tibble 
-```
-
-```{r even-ct, echo=FALSE}
-dens_even <- rbind(dens_even_2yrvs34yr$summary,
-                   dens_even_3yrvs4yr$summary,
-                   dens_even_CS2yr_vs_CS34yr$summary,
-                   dens_even_CS3yr_vs_CS4yr$summary,
-                   dens_even_C2vs3_4$summary,
-                   dens_even_C3vs4$summary,
-                   dens_even_S2vs3_4$summary,
-                   dens_even_S3vs4$summary,
-                   dens_even_oat$summary,
-                   dens_even_summer_vs_cool$summary,
-                   dens_evenn_CS3_vs_O3$summary,
-                   dens_even_CS4_vs_OA4$summary,
-                   dens_even_OA$summary)
-dens_even_df <- as.data.frame(dens_even)
-
-dens_even_df[,c(2:6)] <- sapply(dens_even_df[,c(2:6)],as.numeric)
-
-dens_even_rounded <- dens_even_df %>%
-  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
-
-biom_even <- rbind(biom_even_2yrvs34yr$summary,
-                   biom_even_3yrvs4yr$summary,
-                   biom_even_CS2yr_vs_CS34yr$summary,
-                   biom_even_CS3yr_vs_CS4yr$summary,
-                   biom_even_C2vs3_4$summary,
-                   biom_even_C3vs4$summary,
-                   biom_even_S2vs3_4$summary,
-                   biom_even_S3vs4$summary,
-                   biom_even_oat$summary,
-                   biom_even_summer_vs_cool$summary,
-                   biom_even_CS3_vs_O3$summary,
-                   biom_even_CS4_vs_OA4$summary,
-                   biom_even_OA$summary)
-
-
-biom_even_df <- as.data.frame(biom_even)
-
-biom_even_df[,c(2:6)] <- sapply(biom_even_df[,c(2:6)],as.numeric)
-
-biom_even_rounded <- biom_even_df %>%
-  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))))
-```
-
 ```{r rich-ct, echo=FALSE}
 dens_rich <- rbind(dens_rich_2yrvs34yr$summary,
                    dens_rich_3yrvs4yr$summary,
@@ -1200,9 +1210,12 @@ dens_index <-  dens_diversity_rounded %>%
   left_join(dens_rich_rounded, by =  "contrast                                 ") 
 # replace "/" with vs  
 dens_index$`contrast                                 ` <- gsub(" / ", " vs ", dens_index$`contrast                                 ` )
-  
+dens_index
+```
 
-dens_index[,-c(3:6,9:12,15:18)] %>%  
+```{r}
+
+dens_index[,-c(3:5,8:10,12:14)] %>%  
   `colnames<-` (c("Contrast", rep(c("ratio", "p"), 3))) %>% #null, SE, df, t.ratio removed
 kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
     caption = "Weed stand density ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>%
@@ -1224,7 +1237,7 @@ biom_index <-  biom_diversity_rounded  %>%
 biom_index$`contrast                                 ` <- gsub(" / ", " vs ", biom_index$`contrast                                 ` )
 
 
-biom_index[,-c(3:6,9:12,15:18)] %>%
+biom_index[,-c(3:5,8:10,12:14)] %>%
   `colnames<-` (c("Contrast", rep(c("ratio", "p"), 3))) %>% #null, SE, df, t.ratio removed
 kable(booktabs = TRUE, longtable = FALSE, digits = 2, align = "lrrr",
     caption = "Weed aboveground mass ecological indices contrast significance. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.") %>%
@@ -1323,7 +1336,7 @@ total_dens$Crop_ID <- factor(total_dens$Crop_ID,
 
 
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 #+ 0.0005)
 ## Did crop identity and corn weed management affect total weed community aboveground mass?  
 
@@ -1650,6 +1663,7 @@ comm_biom_OA <- print(contrast(emmeans(comm_biom_lmer, ~ Crop_ID,
 ```
 
 
+
 ```{r, include=FALSE}
 #### Merge all contrasts about weed community stand density 
 
@@ -1787,6 +1801,37 @@ grid.arrange(dens_plot, biom_plot, nrow = 1)
 
 ```
 
+##### Density and biomass per sq ft
+
+```{r}
+comm_dens_tab <- emmeans(comm_dens_lmer, ~ Crop_ID | Corn_weed_management,  infer = c(FALSE,TRUE),  type = "response") %>%
+  broom::tidy() %>%
+  select(Crop_ID, Corn_weed_management, response, std.error) %>%
+  rename(density = response)
+```
+```{r}
+comm_biom_tab <- emmeans(comm_biom_lmer, ~ Crop_ID | Corn_weed_management,  infer = c(FALSE,TRUE),  type = "response") %>%
+  broom::tidy()  %>%
+  select(Crop_ID, Corn_weed_management, response, std.error) %>%
+  rename(biomass = response)
+```
+
+```{r}
+left_join(comm_dens_tab, comm_biom_tab, by = c("Crop_ID", "Corn_weed_management")) %>%
+  mutate(density_sq_yd = density/1.2,
+         density_sq_yd_se = std.error.x/1.2,
+         biomass_sq_yd = biomass* 0.0353/1.2,
+         biomass_sq_yd_se = std.error.y * 0.0353/1.2) %>%
+  select(Crop_ID, Corn_weed_management,
+         density_sq_yd, density_sq_yd_se,
+         biomass_sq_yd, biomass_sq_yd_se) %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.1f', .)))) %>%
+  mutate(`density (SE)` = paste0(density_sq_yd, " (", density_sq_yd_se, ")") ,
+         `biomass (SE)` = paste0(biomass_sq_yd, " (", biomass_sq_yd_se, ")")) %>%
+  select(Crop_ID, Corn_weed_management, `density (SE)`,  `biomass (SE)`)%>%
+  pivot_wider(names_from = Corn_weed_management,
+              values_from = c(`density (SE)`,  `biomass (SE)` ))
+```
 
 ```{r, include=FALSE}
 ### Read data in again, now with different names 
@@ -1805,7 +1850,11 @@ biom_1720_clean <- biom_1720 %>% replace(is.na(.), 0)%>%
   dplyr::select(Crop, Crop_ID, Block, Year, Corn_weed_management,
                 AMATA , CHEAL , DIGSA , ECHCG , SETFA , SETLU , TAROF, zOTHERS) %>%
   mutate_at(13, funs(round(., 8))) # zOTHERS make the group listed last in ggplot2
+```
 
+
+
+```{r}
 # remove rows that sum to zeros https://www.tutorialspoint.com/how-to-remove-rows-that-contains-all-zeros-in-an-r-data-frame
 #dens_1720_clean <- dens_1720[rowSums(dens_1720[,13:46])>0,] 
 
