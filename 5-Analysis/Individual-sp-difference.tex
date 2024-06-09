@@ -4,20 +4,20 @@
 %
 \documentclass[
 ]{article}
-\author{}
-\date{\vspace{-2.5em}}
-
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -36,13 +36,47 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
@@ -87,20 +121,62 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
 
 \begin{document}
 
-\hypertarget{how-did-rotation-crop-species-and-corn-weed-management-affect-individual-weed-species-abundance}{%
-\paragraph*{How did rotation, crop species, and corn weed management affect individual weed species abundance?}\label{how-did-rotation-crop-species-and-corn-weed-management-affect-individual-weed-species-abundance}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dens\_1720\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Corn\_weed\_management, Crop\_ID, Year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{meanP\_pl =} \FunctionTok{mean}\NormalTok{(AMATA)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Year }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"2018"}\NormalTok{, }\StringTok{"2019"}\NormalTok{), Corn\_weed\_management }\SpecialCharTok{==} \StringTok{"conv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 18 x 4
+## # Groups:   Corn_weed_management, Crop_ID [9]
+##    Corn_weed_management Crop_ID Year  meanP_pl
+##    <fct>                <fct>   <fct>    <dbl>
+##  1 conv                 C2      2018    0.337 
+##  2 conv                 C2      2019    5.02  
+##  3 conv                 S2      2018    0.661 
+##  4 conv                 S2      2019    0.148 
+##  5 conv                 C3      2018    0.0270
+##  6 conv                 C3      2019    3.01  
+##  7 conv                 S3      2018    0.621 
+##  8 conv                 S3      2019    0     
+##  9 conv                 O3      2018   24.4   
+## 10 conv                 O3      2019   23.0   
+## 11 conv                 C4      2018    0.0135
+## 12 conv                 C4      2019    0.781 
+## 13 conv                 S4      2018    0.445 
+## 14 conv                 S4      2019    0     
+## 15 conv                 O4      2018    8.62  
+## 16 conv                 O4      2019  109.    
+## 17 conv                 A4      2018    2     
+## 18 conv                 A4      2019   14.3
+\end{verbatim}
+
+\paragraph*{How did rotation, crop species, and corn weed management affect individual weed species abundance?}\label{how-did-rotation-crop-species-and-corn-weed-management-affect-individual-weed-species-abundance}
 \addcontentsline{toc}{paragraph}{How did rotation, crop species, and corn weed management affect individual weed species abundance?}
 
-\emph{The hypothesis that ``including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean'' was partially supported.} Crop identity affected individual density of seven most abundant weed species but corn weed management affected that of two weed species only, i.e., DIGSA and SETFA (p = 0.0189 and p = 0.0196, resepectively; Table \ref{tab:ind-dens-biom-jt}. Among those seven weed species, the aboveground mass of four (CHEAL, DIGSA, SETFA, and TAROF) were affected by crop identity, but none was affected by corn weed management (Table \ref{tab:ind-dens-biom-jt}. The magnitude of difference in stand density and aboveground mass were the most pronounced between crop types (Tables \ref{tab:indiv-dens-ct} and \ref{tab:indiv-biom-ct}). The main-plot effects concerning crop identity on individual species responses are elaborated below.
+\emph{The hypothesis that ``including oat and alfalfa in rotations with corn and soybean will reduce the density and aboveground mass of noxious weed species in corn and soybean'' was partially supported.} Crop identity affected individual density of seven most abundant weed species but corn weed management affected that of two weed species only, i.e., DIGSA and SETFA (p = 0.0189 and p = 0.0196, resepectively; Table \ref{tab:ind-dens-biom-jt}. Among those seven weed species, the aboveground mass of four (CHEAL, DIGSA, SETFA, and TAROF) were affected by crop identity, but none was affected by corn weed management (Table \ref{tab:ind-dens-biom-jt}. The magnitude of difference in stand density and aboveground mass were the most pronounced between crop types (Table \ref{tab:indiv-dens-biom-ct}). The main-plot effects concerning crop identity on individual species responses are elaborated below.
 
 \begin{table}
-
-\caption{\label{tab:ind-dens-biom-jt}Treatment effects on the stand density and aboveground mass seven most abundant weed species, listed alphabetically. All the other weeds species were grouped into OTHERS.}
 \centering
-\resizebox{\linewidth}{!}{
+\caption{\label{tab:ind-dens-biom-jt}Treatment effects on the stand density and aboveground mass of the seven most abundant weed species, listed alphabetically. All the other weeds species were grouped into OTHERS.}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
 \begin{threeparttable}
 \begin{tabular}[t]{lrrr>{}r|rr}
 \toprule
@@ -128,9 +204,9 @@ Source of variation & df1 & df2 & F & p & F & p\\
 \multicolumn{7}{l}{\textbf{(C) - DIGSA}}\\
 \hspace{1em}Crop ID & 8 & 24 & 15.52 & <.0001 & 8.14 & <.0001\\
  
-\hspace{1em}Corn weed management & 1 & 3 & 21.52 & 0.0189 & 16.44 & 0.0270\\
+\hspace{1em}Corn weed management & 1 & 3 & 20.86 & 0.0197 & 16.44 & 0.0270\\
  
-\hspace{1em}Crop ID x Corn weed management & 8 & 24 & 1.25 & 0.3126 & 0.78 & 0.6237\\
+\hspace{1em}Crop ID x Corn weed management & 8 & 24 & 1.22 & 0.3321 & 0.78 & 0.6237\\
  
 \addlinespace[0.3em]
 \multicolumn{7}{l}{\textbf{(D) - ECHCG}}\\
@@ -180,115 +256,301 @@ Source of variation & df1 & df2 & F & p & F & p\\
 \end{threeparttable}}
 \end{table}
 
-\emph{The cool-season crops were responsible for AMATA stand density differences, but those differences were not strong enough to be apparent between rotation averages.} AMATA stand density and aboveground mass were comparable among all rotation systems averaged over crop phases (p-values \textgreater{} 0.05), among rotations for the same crop species (p-values \textgreater{} 0.05), and within the same crop type across rotations (p-values \textgreater{} 0.05). Averaged over the same crop types (warm-season or cool-season), AMATA stand density in cool-season was 12.25-fold greater than that in warm-season crops (p-value = 0.0001), but AMATA aboveground mass was comparable (p-value = 0.0906) in cool-season and warm-season crops. Within the same rotation, AMATA stand density was 11-fold and 23-fold greater in the cool-season than in the warm-season crops overall averages (p-values 0.0143, and 0.0003), but AMATA aboveground mass was comparable in these crop environments (p-values = 0.2355, and 0.0493).
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{biom\_result\_t}\SpecialCharTok{$}\NormalTok{means }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{map}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ broom}\SpecialCharTok{::}\FunctionTok{tidy}\NormalTok{(.x)) }\SpecialCharTok{\%\textgreater{}\%}
+ \FunctionTok{bind\_rows}\NormalTok{(}\AttributeTok{.id =} \StringTok{"spp"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
 
-\emph{The cool-season crops, especially oat were responsible for CHEAL stand density and aboveground mass differences between rotation averages.} CHEAL stand density and aboveground mass were 4-fold and 5-fold greater in the average of the 3-year and 4-year rotations than in the 2-year rotation (p-values = 0.008 and 0.199), but comparable between the 3-year and 4-year rotations (p-values = 0.9195 and 0.6114). CHEAL stand density and aboveground mass were comparable across rotations for the same crop species (p-values \textgreater{} 0.05) and within the warm-season crops (p-values \textgreater{} 0.05). CHEAL stand density and aboveground mass were 38-fold and 204-fold greater in the cool-season crops than in the warm-season crops overall averages (p-values \textless{} 0.0001), 67-fold and 571-fold greater in the cool-season crop than in the warm-season crops average of the 3-year rotation (p-values \textless{} 0.0001), and 37-fold and 232-fold greater in the cool-season crop than in the warm-season crops average of the 4-year rotation (p-values \textless{} 0.0001). CHEAL stand density and aboveground mass were 11-fold and 96-fold (p-values = 0.0001) greater in oat than in alfalfa.
+\begin{verbatim}
+## # A tibble: 144 x 5
+##    spp   Crop_ID Corn_weed_management response std.error
+##    <chr> <chr>   <chr>                   <dbl>     <dbl>
+##  1 AMATA C2      conv                   0.357     0.547 
+##  2 AMATA S2      conv                   0.886     1.36  
+##  3 AMATA C3      conv                   0.0547    0.0844
+##  4 AMATA S3      conv                   0.403     0.616 
+##  5 AMATA O3      conv                   1.41      2.15  
+##  6 AMATA C4      conv                   0.0203    0.0319
+##  7 AMATA S4      conv                   0.0165    0.0260
+##  8 AMATA O4      conv                   4.29      6.56  
+##  9 AMATA A4      conv                   0.0658    0.101 
+## 10 AMATA C2      low                    0.0985    0.151 
+## # i 134 more rows
+\end{verbatim}
 
-\emph{The cool-season crops, especially alfalfa were responsible for DIGSA stand density and aboveground mass differences between rotation averages.} DIGSA stand density in the average of the 3-year and 4-year rotations was two-fold greater than in the 2-year rotation (p-value = 0.0072) and 5-fold greater in the 4-year rotation than in the 3-year rotation (p-value \textless{} 0.0001). DIGSA aboveground mass was comparable between the 2-year and the average of the 3-year and 4-year rotations (p-value = 0.1098), but 14-fold greater in the 4-year than in the 3-year rotations (p-value = 0.0001). DIGSA stand density and aboveground mass were comparable across rotations for the same crop species (p-values \textgreater{} 0.05), except for oat (p-values = 0.0062 and 0.0032). DIGSA stand density and aboveground mass were 10-fold and 27-fold greater in the cool-season crop averages than in the warm-season crops averages, 20-fold and 103-fold greater in the cool-season crops than in the warm-season crops of the 4-year rotation (p-values = 0.0001), but comparable between cool-season and warm-season crops of the 3-year rotation (p-value = 0.0603 and 0.3924). DIGSA stand density and aboveground mass were 14-fold (p-value = 0.0001) and 33-fold (p-value = 0.0001) greater in alfalfa than in oat.
+\emph{The cool-season crops were responsible for AMATA stand density differences, but those differences were not strong enough to be apparent between rotation averages.} AMATA stand density and aboveground mass were comparable among all rotation systems averaged over crop phases (p-values \textgreater{} 0.05), among rotations for the same crop species (p-values \textgreater{} 0.05), and within the same crop type across rotations (p-values \textgreater{} 0.05). Averaged over the same crop types (warm-season or cool-season), AMATA stand density in cool-season was 12.25-fold greater than that in warm-season crops (p = 0.0001), but AMATA aboveground mass was comparable in cool-season and warm-season crops (p = 0.0906). Within the same rotation, AMATA stand density was 11-fold (p = 0.0143) and 23-fold (p = 0.0003) greater in the cool-season than in the warm-season crops overall averages, but AMATA aboveground mass was comparable in these crop environments (p = 0.2355 and p = 0.0493, respectively).
 
-\emph{ECHCG responses generally were similar to those of AMATA.} ECHCG stand density and aboveground mass were comparable between all rotation averages (p-values \textgreater{} 0.05), across rotations for the same crop species (p-values \textgreater{} 0.05), within the same crop type across rotations (p-values \textgreater{} 0.05), and within the 3-year rotation (p-values \textgreater{} 0.05). Averaged over the same crop types, ECHCG stand density and aboveground mass were 4-fold and 10-fold greater in the cool-season than in the warm-season crops (p-value = 0.0003 and 0.0012). Within the 4-year rotation, ECHCG stand density and aboveground mass were 5-fold and 18-fold greater in the cool-season than in the warm-season crops (p-values 0.0014, and 0.0031).
+\emph{The cool-season crops, especially oat were responsible for CHEAL stand density and aboveground mass differences between rotation averages.} CHEAL stand density and aboveground mass were 4-fold (p = 0.008) and 5-fold (p = 0.199) greater in the average of the 3-year and 4-year rotations than in the 2-year rotation, but comparable between the 3-year and 4-year rotations (p = 0.9195 and p = 0.6114, respectively). CHEAL stand density and aboveground mass were comparable between rotations for the same crop species (p-values \textgreater{} 0.05) and within the warm-season crops (p-values \textgreater{} 0.05). CHEAL stand density and aboveground mass were 38-fold (p \textless{} 0.0001) and 204-fold (p \textless{} 0.0001) greater in the cool-season crops than in the warm-season crops overall averages; 67-fold (p \textless{} 0.0001) and 571-fold (p \textless{} 0.0001) greater in the cool-season crop than in the warm-season crops average of the 3-year rotation; and 37-fold (p \textless{} 0.0001) and 232-fold (p \textless{} 0.0001) greater in the cool-season crop than in the warm-season crops average of the 4-year rotation. CHEAL stand density and aboveground mass were 11-fold (p = 0.0001) and 96-fold (p = 0.0001) greater in oat than in alfalfa.
 
-\emph{The cool-season crops were responsible for SETFA stand density and aboveground mass differences, but those differences were not strong enough be apparent between rotation averages.} SETFA stand density and aboveground mass were comparable across all rotation averages (p-values \textgreater{} 0.05), across rotations for the same crop species (p-values \textgreater{} 0.05), within the warm-season crops across rotations (p-values \textgreater{} 0.05), and within the cool-season crops (p-values \textgreater{} 0.05). Averaged over the same crop types, SETFA stand density and aboveground mass were 10-fold to 22-fold greater in the cool-season than in the warm-season crops (p-value \textless{} 0.0001 and p-value = 0.0008). Within the same rotation, SETFA stand density and aboveground mass were 11-fold to 23-fold greater in the cool-season than in the warm-season crops (p-values = 0.001, 0.018, 0.0001, and 0.0045).
+\emph{The cool-season crops, especially alfalfa were responsible for DIGSA stand density and aboveground mass differences between rotation averages.} DIGSA stand density in the average of the 3-year and 4-year rotations was two-fold greater than in the 2-year rotation (p = 0.0072) and 5-fold greater in the 4-year rotation than in the 3-year rotation (p \textless{} 0.0001). DIGSA aboveground mass was comparable between the 2-year and the average of the 3-year and 4-year rotations (p = 0.1098), but 14-fold greater in the 4-year than in the 3-year rotations (p = 0.0001). DIGSA stand density and aboveground mass were comparable between rotations for the same crop species (p-values \textgreater{} 0.05), except for oat (p = 0.0062 and p = 0.0032). DIGSA stand density and aboveground mass were 10-fold and 27-fold greater in the cool-season crop averages than in the warm-season crops averages, 20-fold (p = 0.0001) and 103-fold (p = 0.0001) greater in the cool-season crops than in the warm-season crops of the 4-year rotation, but comparable between cool-season and warm-season crops of the 3-year rotation (p = 0.0603 and p = 0.3924, respectively). DIGSA stand density and aboveground mass were 14-fold (p = 0.0001) and 33-fold (p = 0.0001) greater in alfalfa than in oat.
 
-SETLU stand density and aboveground mass were comparable in most pairs of comparison (p-values \textgreater{} 0.05), except that SETLU stand density was 2.5-fold greater in the cool-season crops average than in the warm-season crops average(p-value = 0.0404).
+\emph{ECHCG responses generally were similar to those of AMATA.} ECHCG stand density and aboveground mass were comparable between all rotation averages (p-values \textgreater{} 0.05), between rotations for the same crop species (p-values \textgreater{} 0.05), within the same crop type between rotations (p-values \textgreater{} 0.05), and within the 3-year rotation (p-values \textgreater{} 0.05). Averaged over the same crop types, ECHCG stand density and aboveground mass were 4-fold (p = 0.0003) and 10-fold (p = 0.0012) greater in the cool-season than in the warm-season crops. Within the 4-year rotation, ECHCG stand density and aboveground mass were 5-fold (p = 0.0014) and 18-fold (p = 0.0031) greater in the cool-season than in the warm-season crops.
 
-\emph{The cool-season crops, especially oat were responsible for TAROF stand density and aboveground mass differences across rotation averages.} TAROF stand density and aboveground mass in the 3-year and 4-year rotations average were 4-fold and 14-fold greater than those in the 2-year rotation (p-value \textless{} 0.0001). TAROF stand density and aboveground mass in the 3-year rotation were and 5-fold and 20-fold greater than those in the 4-year rotation (p-value \textless{} 0.0001). TAROF stand density and aboveground mass were comparable among the warm-season crops across rotations and within the same crops across rotations (p-values \textgreater{} 0.05), except in oat (p-values \textless{} 0.0001). TAROF stand density and aboveground mass were 24-fold and 390-fold greater in cool-season than in warm-season crop averages (p-values \textless{} 0.0001), 4-fold and 20-fold greater in oat than in corn and soybean averages in the 3-year rotation (p-values = 0.0001 and 0.0002), and 54-fold to 1483-fold greater in the cool-season crops than in the warm-season crops in the 4-year rotation (p-values \textless{} 0.0001). TAROF stand density and aboveground mass were 6-fold (p-value \textless{} 0.0001) and 20-fold (p-value = 0.0001) greater in oat than in alfalfa.
+\emph{The cool-season crops were responsible for SETFA stand density and aboveground mass differences, but those differences were not strong enough be apparent between rotation averages.} SETFA stand density and aboveground mass were comparable between all rotation averages (p-values \textgreater{} 0.05), between rotations for the same crop species (p-values \textgreater{} 0.05), within the warm-season crops between rotations (p-values \textgreater{} 0.05), and within the cool-season crops (p-values \textgreater{} 0.05). Averaged over the same crop types, SETFA stand density and aboveground mass were 10-fold (p \textless{} 0.0001) and 15-fold (p = 0.0008) greater in the cool-season than in the warm-season crops. Within the same rotation, SETFA stand density and aboveground mass were 11-fold to 23-fold greater in the cool-season than in the warm-season crops (Table \ref{tab:indiv-dens-biom-ct}).
+
+SETLU stand density and aboveground mass were comparable in most pairs of comparison (p-values \textgreater{} 0.05), except that SETLU stand density was 2.5-fold greater in the cool-season crops average than in the warm-season crops average(p = 0.0404).
+
+\emph{The cool-season crops, especially oat were responsible for TAROF stand density and aboveground mass differences between rotation averages.} TAROF stand density and aboveground mass in the 3-year and 4-year rotations average were 4-fold (p \textless{} 0.0001) and 14-fold (p \textless{} 0.0001) greater than those in the 2-year rotation. TAROF stand density and aboveground mass in the 3-year rotation were and 5-fold (p \textless{} 0.0001) and 20-fold (p \textless{} 0.0001) greater than those in the 4-year rotation. TAROF stand density and aboveground mass were comparable among the warm-season crops between rotations and within the same crops between rotations (p-values \textgreater{} 0.05), except in oat (p \textless{} 0.0001). TAROF stand density and aboveground mass were 24-fold (p \textless{} 0.001) and 390-fold (p \textless{} 0.0001) greater in cool-season than in warm-season crop averages, 4-fold (p = 0.0001) and 20-fold (p = 0.0002) greater in oat than in corn and soybean averages in the 3-year rotation, and 54-fold (p \textless{} 0.0001) and 1483-fold (p \textless{} 0.0001) greater in the cool-season crops than in the warm-season crops in the 4-year rotation. TAROF stand density and aboveground mass were 6-fold (p \textless{} 0.0001) and 20-fold (p = 0.0001) greater in oat than in alfalfa.
+
+\subparagraph{Relative abundance of biomass}\label{relative-abundance-of-biomass}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{biom\_1720\_clean.raw }\OtherTok{\textless{}{-}}\NormalTok{ biom\_1720 }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{replace}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(.), }\DecValTok{0}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{SETSP =}\NormalTok{ SETFA }\SpecialCharTok{+}\NormalTok{ SETLU) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{( Crop\_ID, Block, Year, Corn\_weed\_management, Total,}
+\NormalTok{                AMATA , CHEAL , DIGSA , ECHCG , SETSP , TAROF) }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{AMATA\_percent =}\NormalTok{ (AMATA }\SpecialCharTok{/}\NormalTok{ Total) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{CHEAL\_percent =}\NormalTok{ (CHEAL }\SpecialCharTok{/}\NormalTok{ Total) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{DIGSA\_percent =}\NormalTok{ (DIGSA }\SpecialCharTok{/}\NormalTok{ Total) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{ECHCG\_percent =}\NormalTok{ (ECHCG }\SpecialCharTok{/}\NormalTok{ Total) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{SETSP\_percent =}\NormalTok{ (SETSP }\SpecialCharTok{/}\NormalTok{ Total) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{TAROF\_percent =}\NormalTok{ (TAROF }\SpecialCharTok{/}\NormalTok{ Total) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Year, Block, }
+\NormalTok{                  Crop\_ID, Corn\_weed\_management, }
+\NormalTok{                  AMATA\_percent, CHEAL\_percent, DIGSA\_percent,}
+\NormalTok{                  ECHCG\_percent, SETSP\_percent, TAROF\_percent) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{biom\_1720\_clean.raw\_long }\OtherTok{\textless{}{-}}\NormalTok{  biom\_1720\_clean.raw }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{c}\NormalTok{(Year }\SpecialCharTok{:}\NormalTok{ Corn\_weed\_management),}
+               \AttributeTok{names\_to =} \StringTok{"Species"}\NormalTok{,}
+               \AttributeTok{values\_to =}  \StringTok{"Relative.abundance"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tran }\OtherTok{\textless{}{-}} \FunctionTok{make.tran}\NormalTok{(}\StringTok{"asin.sqrt"}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+
+\NormalTok{indv\_spp\_result\_t }\OtherTok{\textless{}{-}}\NormalTok{ biom\_1720\_clean.raw\_long }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Species) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# to fit a linear model for each species}
+  \FunctionTok{nest}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{models=}\FunctionTok{map}\NormalTok{(data,}\SpecialCharTok{\textasciitilde{}}\FunctionTok{lmer}\NormalTok{(Relative.abundance }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Block }\SpecialCharTok{+}
+\NormalTok{                                 Crop\_ID}\SpecialCharTok{*}\NormalTok{Corn\_weed\_management }\SpecialCharTok{+} 
+\NormalTok{                        (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Block) }\SpecialCharTok{+} 
+\NormalTok{                       (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Crop\_ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Corn\_weed\_management) }\SpecialCharTok{+} 
+\NormalTok{                       (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Crop\_ID}\SpecialCharTok{:}\NormalTok{Corn\_weed\_management)  }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Block}\SpecialCharTok{:}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Crop\_ID),}\AttributeTok{data =}\NormalTok{.x))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{models.t =} \FunctionTok{map}\NormalTok{(data, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{with}\NormalTok{(tran, }
+                                  \FunctionTok{lmer}\NormalTok{(}\FunctionTok{linkfun}\NormalTok{(Relative.abundance) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Block }\SpecialCharTok{+}
+\NormalTok{                                         Crop\_ID }\SpecialCharTok{*}\NormalTok{ Corn\_weed\_management }\SpecialCharTok{+} 
+\NormalTok{                                         (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Block) }\SpecialCharTok{+} 
+\NormalTok{                                         (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Crop\_ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Corn\_weed\_management) }\SpecialCharTok{+} 
+\NormalTok{                                         (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Crop\_ID}\SpecialCharTok{:}\NormalTok{Corn\_weed\_management) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Block}\SpecialCharTok{:}\NormalTok{Year}\SpecialCharTok{:}\NormalTok{Crop\_ID),}
+                                       \AttributeTok{data =}\NormalTok{ .x)))) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  ungroup }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{jts =} \FunctionTok{map}\NormalTok{(models.t, joint\_tests), }\CommentTok{\#ANOVA table, with Block effect}
+         \AttributeTok{diag\_plots =} \FunctionTok{map}\NormalTok{(models, resid\_panel),  }\CommentTok{\#diagnosis plot}
+        \AttributeTok{diag\_plots.t =} \FunctionTok{map}\NormalTok{(models.t, resid\_panel), }
+    \AttributeTok{jt\_cleans =} \FunctionTok{map2}\NormalTok{(data, jts, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{print}\NormalTok{(.y, }\AttributeTok{export =} \ConstantTok{TRUE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{summary), }\CommentTok{\#ANOVA table, with Block effect with clean format}
+         \AttributeTok{means =} \FunctionTok{map2}\NormalTok{(data, models.t,}\SpecialCharTok{\textasciitilde{}} \FunctionTok{emmeans}\NormalTok{(.y, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Crop\_ID }\SpecialCharTok{|}\NormalTok{ Corn\_weed\_management,}\AttributeTok{data=}\NormalTok{.x, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)), }\CommentTok{\#estimated mean density of each weed species in each crop ID, separated by corn weed management, for arrow\_plot}
+        \AttributeTok{means2 =} \FunctionTok{map2}\NormalTok{(data, models.t,}\SpecialCharTok{\textasciitilde{}}\FunctionTok{emmeans}\NormalTok{(.y,  }\FunctionTok{c}\NormalTok{(}\StringTok{"Crop\_ID"}\NormalTok{,}\StringTok{"Corn\_weed\_management"}\NormalTok{),}\AttributeTok{data=}\NormalTok{.x, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)), }\CommentTok{\# EM means, for ANOVA table, averaged over block}
+    \AttributeTok{jts2 =} \FunctionTok{map}\NormalTok{(means2, joint\_tests), }\CommentTok{\#ANOVA table, averaged over block }
+    \AttributeTok{jts2\_clean =} \FunctionTok{map2}\NormalTok{(data, jts2, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{print}\NormalTok{(.y, }\AttributeTok{export =} \ConstantTok{TRUE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{summary), }\CommentTok{\#ANOVA table, averaged over block in clean format}
+\FunctionTok{across}\NormalTok{(models}\SpecialCharTok{:}\NormalTok{jts2\_clean, setNames,  .}\SpecialCharTok{$}\NormalTok{Species))}
+\end{Highlighting}
+\end{Shaded}
+
+Arsine squareroot improved model fitting.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{indv\_spp\_result\_t}\SpecialCharTok{$}\NormalTok{diag\_plots}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $AMATA_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-14-1.png}
+
+\begin{verbatim}
+## 
+## $CHEAL_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-14-2.png}
+
+\begin{verbatim}
+## 
+## $DIGSA_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-14-3.png}
+
+\begin{verbatim}
+## 
+## $ECHCG_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-14-4.png}
+
+\begin{verbatim}
+## 
+## $SETSP_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-14-5.png}
+
+\begin{verbatim}
+## 
+## $TAROF_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-14-6.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{indv\_spp\_result\_t}\SpecialCharTok{$}\NormalTok{diag\_plots.t}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $AMATA_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-15-1.png}
+
+\begin{verbatim}
+## 
+## $CHEAL_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-15-2.png}
+
+\begin{verbatim}
+## 
+## $DIGSA_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-15-3.png}
+
+\begin{verbatim}
+## 
+## $ECHCG_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-15-4.png}
+
+\begin{verbatim}
+## 
+## $SETSP_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-15-5.png}
+
+\begin{verbatim}
+## 
+## $TAROF_percent
+\end{verbatim}
+
+\includegraphics{Individual-sp-difference_files/figure-latex/unnamed-chunk-15-6.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{indv\_spp\_result\_t}\SpecialCharTok{$}\NormalTok{means }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{map}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ broom}\SpecialCharTok{::}\FunctionTok{tidy}\NormalTok{(.x)) }\SpecialCharTok{\%\textgreater{}\%}
+ \FunctionTok{bind\_rows}\NormalTok{(}\AttributeTok{.id =} \StringTok{"spp"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}\%.2f\textquotesingle{}}\NormalTok{, .)) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{ )) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Relative.abundance =} \FunctionTok{paste0}\NormalTok{(response, }\StringTok{" ("}\NormalTok{, std.error, }\StringTok{")"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(response, std.error)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{spp =} \FunctionTok{substr}\NormalTok{(spp, }\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ spp, }\AttributeTok{values\_from =}\NormalTok{ Relative.abundance) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Crop\_ID =} \FunctionTok{factor}\NormalTok{(Crop\_ID, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"C2"}\NormalTok{, }\StringTok{"C3"}\NormalTok{, }\StringTok{"C4"}\NormalTok{,}
+                                                \StringTok{"S2"}\NormalTok{, }\StringTok{"S3"}\NormalTok{, }\StringTok{"S4"}\NormalTok{,}
+                                                \StringTok{"O3"}\NormalTok{, }\StringTok{"O4"}\NormalTok{, }\StringTok{"A4"}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# Replace with the specific order of Crop\_ID you need}
+  \FunctionTok{arrange}\NormalTok{(Corn\_weed\_management, Crop\_ID)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 18 x 8
+##    Crop_ID Corn_weed_management AMATA       CHEAL      DIGSA   ECHCG SETSP TAROF
+##    <fct>   <chr>                <chr>       <chr>      <chr>   <chr> <chr> <chr>
+##  1 C2      conv                 2019 (1371) 68 (171)   371 (2~ 3 (1~ 5965~ 1 (1~
+##  2 C3      conv                 1637 (1263) 3 (38)     536 (3~ 0 (0) 5733~ 12 (~
+##  3 C4      conv                 752 (900)   3 (36)     376 (2~ 8 (2~ 6141~ 2 (1~
+##  4 S2      conv                 6029 (1671) 879 (588)  165 (1~ 0 (5) 468 ~ 0 (1)
+##  5 S3      conv                 4232 (1718) 397 (420)  27 (75) 3 (1~ 2903~ 0 (5)
+##  6 S4      conv                 1504 (1229) 1583 (770) 62 (11~ 10 (~ 836 ~ 122 ~
+##  7 O3      conv                 2102 (1391) 3525 (993) 125 (1~ 54 (~ 1435~ 158 ~
+##  8 O4      conv                 2104 (1392) 1850 (807) 199 (1~ 156 ~ 3383~ 372 ~
+##  9 A4      conv                 117 (367)   257 (329)  1698 (~ 287 ~ 1352~ 3496~
+## 10 C2      low                  1329 (1159) 40 (131)   5 (32)  0 (0) 6712~ 2 (1~
+## 11 C3      low                  381 (654)   235 (315)  2 (18)  0 (0) 7953~ 4 (2~
+## 12 C4      low                  666 (851)   54 (152)   78 (12~ 0 (0) 6112~ 22 (~
+## 13 S2      low                  5398 (1702) 836 (575)  5 (31)  1 (8) 1737~ 0 (3)
+## 14 S3      low                  2623 (1524) 1113 (674) 14 (54) 19 (~ 2456~ 0 (2)
+## 15 S4      low                  1984 (1362) 282 (344)  85 (12~ 0 (0) 1850~ 39 (~
+## 16 O3      low                  1144 (1087) 2777 (931) 25 (69) 3 (1~ 3677~ 96 (~
+## 17 O4      low                  1931 (1348) 1887 (813) 210 (1~ 38 (~ 3733~ 382 ~
+## 18 A4      low                  317 (598)   143 (247)  1538 (~ 52 (~ 1593~ 3557~
+\end{verbatim}
 
 \begin{landscape}\begin{table}
-
-\caption{\label{tab:indiv-dens-ct}Contrast of population density of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
 \centering
-\resizebox{\linewidth}{!}{
+\caption{\label{tab:indiv-dens-biom-ct}Contrast of stand density and aboveground mass of the seven most abundant weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
 \begin{threeparttable}
 \begin{tabular}[t]{lr>{}r|r>{}r|r>{}r|r>{}r|r>{}r|r>{}r|rr}
 \toprule
 \multicolumn{1}{c}{ } & \multicolumn{2}{c}{AMATA} & \multicolumn{2}{c}{CHEAL} & \multicolumn{2}{c}{DIGSA} & \multicolumn{2}{c}{ECHCG} & \multicolumn{2}{c}{SETFA} & \multicolumn{2}{c}{SETLU} & \multicolumn{2}{c}{TAROF} \\
 \cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7} \cmidrule(l{3pt}r{3pt}){8-9} \cmidrule(l{3pt}r{3pt}){10-11} \cmidrule(l{3pt}r{3pt}){12-13} \cmidrule(l{3pt}r{3pt}){14-15}
-Contrast of the main-plot effect & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value\\
-\midrule
-\addlinespace[0.3em]
-\multicolumn{15}{l}{\textbf{(A) - Rotation system effects}}\\
-\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7] & 0.74 & 0.6105 & 0.28 & 0.0008 & 0.42 & 0.0072 & 0.57 & 0.1170 & 0.64 & 0.3011 & 0.50 & 0.1569 & 0.24 & <.0001\\
-\hspace{1em}{}[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4] & 0.81 & 0.7077 & 0.97 & 0.9195 & 0.21 & <.0001 & 0.55 & 0.0834 & 0.49 & 0.0927 & 0.44 & 0.0827 & 0.19 & <.0001\\
-\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+C4+S4)/4] & 2.45 & 0.1746 & 1.37 & 0.3889 & 1.14 & 0.6798 & 0.98 & 0.9584 & 1.86 & 0.1906 & 0.70 & 0.4944 & 0.95 & 0.8129\\
-\hspace{1em}{}[(C3+S3)/2] vs [(C4+S4)/2] & 1.76 & 0.4533 & 1.45 & 0.3823 & 0.69 & 0.3213 & 0.97 & 0.9384 & 0.75 & 0.5877 & 0.74 & 0.6234 & 0.84 & 0.5105\\
-\addlinespace[0.3em]
-\multicolumn{15}{l}{\textbf{(B) - Rotation system effects within individual crops}}\\
-\hspace{1em}C2 vs [(C3+C4)/2] & 2.33 & 0.3598 & 1.42 & 0.4995 & 0.93 & 0.8818 & 0.97 & 0.9497 & 1.56 & 0.5010 & 0.56 & 0.4277 & 1.02 & 0.9547\\
-\hspace{1em}C3 vs C4 & 1.65 & 0.6368 & 1.31 & 0.6510 & 0.54 & 0.2466 & 0.89 & 0.8579 & 0.49 & 0.3501 & 0.49 & 0.3990 & 0.87 & 0.6923\\
-\hspace{1em}S2 vs [(S3+S4)/2] & 2.58 & 0.3065 & 1.33 & 0.5837 & 1.40 & 0.4658 & 0.99 & 0.9915 & 2.21 & 0.2337 & 0.88 & 0.8628 & 0.88 & 0.6958\\
-\hspace{1em}S3 vs S4 & 1.87 & 0.5543 & 1.60 & 0.4312 & 0.88 & 0.8088 & 1.04 & 0.9444 & 1.14 & 0.8620 & 1.14 & 0.8780 & 0.82 & 0.5914\\
-\hspace{1em}O3 vs O4 & 0.32 & 0.2890 & 0.74 & 0.6212 & 0.21 & 0.0062 & 0.46 & 0.2130 & 0.59 & 0.4848 & 0.33 & 0.2006 & 0.09 & <.0001\\
-\addlinespace[0.3em]
-\multicolumn{15}{l}{\textbf{(C) - Crop type effects}}\\
-\hspace{1em}{}[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6] & 12.25 & 0.0001 & 38.15 & <.0001 & 10.11 & <.0001 & 3.60 & 0.0003 & 9.85 & <.0001 & 2.48 & 0.0404 & 24.33 & <.0001\\
-\hspace{1em}O3 vs [(C3+S3)/2] & 10.94 & 0.0143 & 67.07 & <.0001 & 2.43 & 0.0630 & 1.94 & 0.2248 & 11.32 & 0.0010 & 1.05 & 0.9435 & 4.33 & 0.0001\\
-\hspace{1em}{}[(O4+A4)/2] vs [(C4+S4)/2] & 23.36 & 0.0003 & 36.99 & <.0001 & 20.08 & <.0001 & 4.82 & 0.0014 & 11.63 & 0.0001 & 2.96 & 0.0798 & 53.81 & <.0001\\
-\hspace{1em}{}[(O3+O4)/2] vs A4 & 3.71 & 0.1606 & 10.75 & 0.0001 & 0.07 & <.0001 & 0.49 & 0.1954 & 1.17 & 0.8068 & 0.37 & 0.1812 & 0.17 & <.0001\\
-\bottomrule
-\end{tabular}
-\begin{tablenotes}[para]
-\item \textit{Note: } 
-\item C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.
-\end{tablenotes}
-\end{threeparttable}}
-\end{table}
-\end{landscape}
-
-\begin{landscape}\begin{table}
-
-\caption{\label{tab:indiv-dens-biom-ct}Contrast of stand density and aboveground mass of the top seven weed species. Weed species are listed alphabetically. The abbreviations on the contrast column are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred.}
-\centering
-\resizebox{\linewidth}{!}{
-\begin{threeparttable}
-\begin{tabular}[t]{lr>{}r|r>{}r|r>{}r|r>{}r|r>{}r|r>{}r|rr}
-\toprule
-\multicolumn{1}{c}{ } & \multicolumn{2}{c}{AMATA} & \multicolumn{2}{c}{CHEAL} & \multicolumn{2}{c}{DIGSA} & \multicolumn{2}{c}{ECHCG} & \multicolumn{2}{c}{SETFA} & \multicolumn{2}{c}{SETLU} & \multicolumn{2}{c}{TAROF} \\
-\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7} \cmidrule(l{3pt}r{3pt}){8-9} \cmidrule(l{3pt}r{3pt}){10-11} \cmidrule(l{3pt}r{3pt}){12-13} \cmidrule(l{3pt}r{3pt}){14-15}
-Contrast of the main-plot effect & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value & ratio & p-value\\
+Contrast of the main-plot effect & ratio & p & ratio & p & ratio & p & ratio & p & ratio & p & ratio & p & ratio & p\\
 \midrule
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(A) - Stand density}}\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(A1) - Rotation system effects}}\\
-\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7] & 0.74 & 0.6105 & 0.28 & 0.0008 & 0.42 & 0.0072 & 0.57 & 0.1170 & 0.64 & 0.3011 & 0.50 & 0.1569 & 0.24 & <.0001\\
-\hspace{1em}\hspace{1em}{}[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4] & 0.81 & 0.7077 & 0.97 & 0.9195 & 0.21 & <.0001 & 0.55 & 0.0834 & 0.49 & 0.0927 & 0.44 & 0.0827 & 0.19 & <.0001\\
-\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+C4+S4)/4] & 2.45 & 0.1746 & 1.37 & 0.3889 & 1.14 & 0.6798 & 0.98 & 0.9584 & 1.86 & 0.1906 & 0.70 & 0.4944 & 0.95 & 0.8129\\
-\hspace{1em}\hspace{1em}{}[(C3+S3)/2] vs [(C4+S4)/2] & 1.76 & 0.4533 & 1.45 & 0.3823 & 0.69 & 0.3213 & 0.97 & 0.9384 & 0.75 & 0.5877 & 0.74 & 0.6234 & 0.84 & 0.5105\\
+\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7] & -0.31 & 0.6105 & -1.29 & 0.0008 & -0.88 & 0.0072 & -0.57 & 0.1170 & -0.45 & 0.3011 & -0.70 & 0.1569 & -1.41 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4] & -0.21 & 0.7077 & -0.03 & 0.9195 & -1.58 & <.0001 & -0.60 & 0.0834 & -0.71 & 0.0927 & -0.82 & 0.0827 & -1.67 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+C4+S4)/4] & 0.90 & 0.1746 & 0.32 & 0.3889 & 0.13 & 0.6798 & -0.02 & 0.9584 & 0.62 & 0.1906 & -0.36 & 0.4944 & -0.05 & 0.8129\\
+\hspace{1em}\hspace{1em}{}[(C3+S3)/2] vs [(C4+S4)/2] & 0.56 & 0.4533 & 0.37 & 0.3823 & -0.38 & 0.3213 & -0.03 & 0.9384 & -0.29 & 0.5877 & -0.30 & 0.6234 & -0.17 & 0.5105\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(A2) - Rotation system effects within individual crops}}\\
-\hspace{1em}\hspace{1em}C2 vs [(C3+C4)/2] & 2.33 & 0.3598 & 1.42 & 0.4995 & 0.93 & 0.8818 & 0.97 & 0.9497 & 1.56 & 0.5010 & 0.56 & 0.4277 & 1.02 & 0.9547\\
-\hspace{1em}\hspace{1em}C3 vs C4 & 1.65 & 0.6368 & 1.31 & 0.6510 & 0.54 & 0.2466 & 0.89 & 0.8579 & 0.49 & 0.3501 & 0.49 & 0.3990 & 0.87 & 0.6923\\
-\hspace{1em}\hspace{1em}S2 vs [(S3+S4)/2] & 2.58 & 0.3065 & 1.33 & 0.5837 & 1.40 & 0.4658 & 0.99 & 0.9915 & 2.21 & 0.2337 & 0.88 & 0.8628 & 0.88 & 0.6958\\
-\hspace{1em}\hspace{1em}S3 vs S4 & 1.87 & 0.5543 & 1.60 & 0.4312 & 0.88 & 0.8088 & 1.04 & 0.9444 & 1.14 & 0.8620 & 1.14 & 0.8780 & 0.82 & 0.5914\\
-\hspace{1em}\hspace{1em}O3 vs O4 & 0.32 & 0.2890 & 0.74 & 0.6212 & 0.21 & 0.0062 & 0.46 & 0.2130 & 0.59 & 0.4848 & 0.33 & 0.2006 & 0.09 & <.0001\\
+\hspace{1em}\hspace{1em}C2 vs [(C3+C4)/2] & 0.85 & 0.3598 & 0.35 & 0.4995 & -0.07 & 0.8818 & -0.03 & 0.9497 & 0.44 & 0.5010 & -0.59 & 0.4277 & 0.02 & 0.9547\\
+\hspace{1em}\hspace{1em}C3 vs C4 & 0.50 & 0.6368 & 0.27 & 0.6510 & -0.62 & 0.2466 & -0.11 & 0.8579 & -0.72 & 0.3501 & -0.72 & 0.3990 & -0.14 & 0.6923\\
+\hspace{1em}\hspace{1em}S2 vs [(S3+S4)/2] & 0.95 & 0.3065 & 0.28 & 0.5837 & 0.34 & 0.4658 & -0.01 & 0.9915 & 0.79 & 0.2337 & -0.13 & 0.8628 & -0.12 & 0.6958\\
+\hspace{1em}\hspace{1em}S3 vs S4 & 0.63 & 0.5543 & 0.47 & 0.4312 & -0.13 & 0.8088 & 0.04 & 0.9444 & 0.13 & 0.8620 & 0.13 & 0.8780 & -0.19 & 0.5914\\
+\hspace{1em}\hspace{1em}O3 vs O4 & -1.13 & 0.2890 & -0.29 & 0.6212 & -1.58 & 0.0062 & -0.79 & 0.2130 & -0.53 & 0.4848 & -1.10 & 0.2006 & -2.40 & <.0001\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(A3) - Crop type effects}}\\
-\hspace{1em}\hspace{1em}{}[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6] & 12.25 & 0.0001 & 38.15 & <.0001 & 10.11 & <.0001 & 3.60 & 0.0003 & 9.85 & <.0001 & 2.48 & 0.0404 & 24.33 & <.0001\\
-\hspace{1em}\hspace{1em}O3 vs [(C3+S3)/2] & 10.94 & 0.0143 & 67.07 & <.0001 & 2.43 & 0.0630 & 1.94 & 0.2248 & 11.32 & 0.0010 & 1.05 & 0.9435 & 4.33 & 0.0001\\
-\hspace{1em}\hspace{1em}{}[(O4+A4)/2] vs [(C4+S4)/2] & 23.36 & 0.0003 & 36.99 & <.0001 & 20.08 & <.0001 & 4.82 & 0.0014 & 11.63 & 0.0001 & 2.96 & 0.0798 & 53.81 & <.0001\\
-\hspace{1em}\hspace{1em}{}[(O3+O4)/2] vs A4 & 3.71 & 0.1606 & 10.75 & 0.0001 & 0.07 & <.0001 & 0.49 & 0.1954 & 1.17 & 0.8068 & 0.37 & 0.1812 & 0.17 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6] & 2.51 & 0.0001 & 3.64 & <.0001 & 2.31 & <.0001 & 1.28 & 0.0003 & 2.29 & <.0001 & 0.91 & 0.0404 & 3.19 & <.0001\\
+\hspace{1em}\hspace{1em}O3 vs [(C3+S3)/2] & 2.39 & 0.0143 & 4.21 & <.0001 & 0.89 & 0.0631 & 0.66 & 0.2248 & 2.43 & 0.0010 & 0.05 & 0.9435 & 1.47 & 0.0001\\
+\hspace{1em}\hspace{1em}{}[(O4+A4)/2] vs [(C4+S4)/2] & 3.15 & 0.0003 & 3.61 & <.0001 & 3.00 & <.0001 & 1.57 & 0.0014 & 2.45 & 0.0001 & 1.09 & 0.0798 & 3.99 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(O3+O4)/2] vs A4 & 1.31 & 0.1606 & 2.37 & 0.0001 & -2.61 & <.0001 & -0.71 & 0.1954 & 0.16 & 0.8068 & -1.00 & 0.1812 & -1.77 & <.0001\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(B) - Aboveground mass}}\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(B1) - Rotation system effects}}\\
-\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7] & 3.10 & 0.3402 & 0.21 & 0.0199 & 0.36 & 0.1098 & 0.35 & 0.1417 & 0.93 & 0.9245 & 0.46 & 0.3588 & 0.07 & <.0001\\
-\hspace{1em}\hspace{1em}{}[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4] & 1.30 & 0.8168 & 1.33 & 0.6414 & 0.07 & 0.0001 & 0.32 & 0.1040 & 0.56 & 0.4497 & 0.39 & 0.2420 & 0.05 & <.0001\\
-\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+C4+S4)/4] & 9.26 & 0.0893 & 2.30 & 0.2315 & 1.60 & 0.4852 & 0.89 & 0.8841 & 3.54 & 0.1566 & 0.58 & 0.5502 & 0.86 & 0.7608\\
-\hspace{1em}\hspace{1em}{}[(C3+S3)/2] vs [(C4+S4)/2] & 2.83 & 0.4799 & 2.43 & 0.2676 & 0.54 & 0.4264 & 1.00 & 0.9958 & 0.94 & 0.9537 & 0.89 & 0.9148 & 0.67 & 0.4810\\
+\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+O3+C4+S4+O4+A4)/7] & 1.13 & 0.3402 & -1.57 & 0.0199 & -1.02 & 0.1098 & -1.06 & 0.1417 & -0.08 & 0.9245 & -0.77 & 0.3588 & -2.68 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(C3+S3+O3)/3] vs [(C4+S4+O4+A4)/4] & 0.26 & 0.8168 & 0.28 & 0.6414 & -2.66 & 0.0001 & -1.13 & 0.1040 & -0.59 & 0.4497 & -0.94 & 0.2420 & -3.06 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(C2+S2)/2] vs [(C3+S3+C4+S4)/4] & 2.23 & 0.0893 & 0.83 & 0.2315 & 0.47 & 0.4852 & -0.11 & 0.8841 & 1.26 & 0.1566 & -0.54 & 0.5502 & -0.15 & 0.7608\\
+\hspace{1em}\hspace{1em}{}[(C3+S3)/2] vs [(C4+S4)/2] & 1.04 & 0.4799 & 0.89 & 0.2676 & -0.62 & 0.4264 & -0.00 & 0.9958 & -0.06 & 0.9537 & -0.11 & 0.9148 & -0.39 & 0.4810\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(B2) - Rotation system effects within individual crops}}\\
-\hspace{1em}\hspace{1em}C2 vs [(C3+C4)/2] & 7.45 & 0.2696 & 2.21 & 0.4167 & 1.06 & 0.9499 & 1.02 & 0.9882 & 2.81 & 0.4070 & 0.48 & 0.5668 & 0.94 & 0.9237\\
-\hspace{1em}\hspace{1em}C3 vs C4 & 1.78 & 0.7802 & 1.70 & 0.6372 & 0.40 & 0.3994 & 0.69 & 0.7630 & 0.39 & 0.5131 & 0.50 & 0.6404 & 0.85 & 0.8309\\
-\hspace{1em}\hspace{1em}S2 vs [(S3+S4)/2] & 11.50 & 0.1821 & 2.39 & 0.3720 & 2.40 & 0.3571 & 0.79 & 0.8252 & 4.47 & 0.2329 & 0.71 & 0.7847 & 0.80 & 0.7378\\
-\hspace{1em}\hspace{1em}S3 vs S4 & 4.50 & 0.4709 & 3.49 & 0.2708 & 0.73 & 0.7772 & 1.44 & 0.7687 & 2.27 & 0.5667 & 1.59 & 0.7516 & 0.54 & 0.4336\\
-\hspace{1em}\hspace{1em}O3 vs O4 & 0.14 & 0.3486 & 0.53 & 0.5666 & 0.03 & 0.0032 & 0.10 & 0.0768 & 0.29 & 0.3941 & 0.12 & 0.1539 & 0.01 & <.0001\\
+\hspace{1em}\hspace{1em}C2 vs [(C3+C4)/2] & 2.01 & 0.2696 & 0.79 & 0.4167 & 0.06 & 0.9499 & 0.02 & 0.9882 & 1.03 & 0.4070 & -0.73 & 0.5668 & -0.07 & 0.9237\\
+\hspace{1em}\hspace{1em}C3 vs C4 & 0.58 & 0.7802 & 0.53 & 0.6372 & -0.93 & 0.3994 & -0.38 & 0.7630 & -0.94 & 0.5131 & -0.69 & 0.6404 & -0.17 & 0.8309\\
+\hspace{1em}\hspace{1em}S2 vs [(S3+S4)/2] & 2.44 & 0.1821 & 0.87 & 0.3720 & 0.88 & 0.3571 & -0.24 & 0.8252 & 1.50 & 0.2329 & -0.35 & 0.7847 & -0.23 & 0.7378\\
+\hspace{1em}\hspace{1em}S3 vs S4 & 1.50 & 0.4709 & 1.25 & 0.2708 & -0.31 & 0.7772 & 0.37 & 0.7687 & 0.82 & 0.5667 & 0.47 & 0.7516 & -0.62 & 0.4336\\
+\hspace{1em}\hspace{1em}O3 vs O4 & -1.96 & 0.3486 & -0.64 & 0.5666 & -3.53 & 0.0032 & -2.28 & 0.0768 & -1.23 & 0.3941 & -2.14 & 0.1539 & -4.30 & <.0001\\
 \addlinespace[0.3em]
 \multicolumn{15}{l}{\textbf{(B3) - Crop type effects}}\\
-\hspace{1em}\hspace{1em}{}[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6] & 6.11 & 0.0906 & 204.44 & <.0001 & 27.29 & <.0001 & 9.56 & 0.0012 & 15.00 & 0.0008 & 2.05 & 0.3316 & 389.81 & <.0001\\
-\hspace{1em}\hspace{1em}O3 vs [(C3+S3)/2] & 8.70 & 0.2355 & 571.14 & <.0001 & 2.26 & 0.3924 & 2.54 & 0.3920 & 22.34 & 0.0180 & 0.47 & 0.5554 & 19.10 & 0.0002\\
-\hspace{1em}\hspace{1em}{}[(O4+A4)/2] vs [(C4+S4)/2] & 20.20 & 0.0493 & 231.64 & <.0001 & 102.80 & <.0001 & 17.54 & 0.0031 & 22.79 & 0.0045 & 3.18 & 0.2706 & 1482.81 & <.0001\\
-\hspace{1em}\hspace{1em}{}[(O3+O4)/2] vs A4 & 28.24 & 0.0724 & 94.46 & 0.0001 & 0.03 & 0.0008 & 0.64 & 0.6762 & 5.38 & 0.1818 & 0.43 & 0.5132 & 0.05 & 0.0001\\
+\hspace{1em}\hspace{1em}{}[(O3+O4+A4)/3] vs [(C2+S2+C3+S3+C4+S4)/6] & 1.81 & 0.0906 & 5.32 & <.0001 & 3.31 & <.0001 & 2.26 & 0.0012 & 2.71 & 0.0008 & 0.72 & 0.3316 & 5.97 & <.0001\\
+\hspace{1em}\hspace{1em}O3 vs [(C3+S3)/2] & 2.16 & 0.2355 & 6.35 & <.0001 & 0.81 & 0.3924 & 0.93 & 0.3920 & 3.11 & 0.0180 & -0.75 & 0.5554 & 2.95 & 0.0002\\
+\hspace{1em}\hspace{1em}{}[(O4+A4)/2] vs [(C4+S4)/2] & 3.01 & 0.0493 & 5.45 & <.0001 & 4.63 & <.0001 & 2.86 & 0.0031 & 3.13 & 0.0045 & 1.16 & 0.2706 & 7.30 & <.0001\\
+\hspace{1em}\hspace{1em}{}[(O3+O4)/2] vs A4 & 3.34 & 0.0724 & 4.55 & 0.0001 & -3.58 & 0.0008 & -0.45 & 0.6762 & 1.68 & 0.1818 & -0.83 & 0.5132 & -3.05 & 0.0001\\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[para]

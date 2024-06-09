@@ -1,10 +1,15 @@
 ---
 output: 
-  bookdown::pdf_document2: 
-    keep_tex: yes
+  # bookdown::pdf_document2: 
+  #   keep_tex: yes
+  #   toc: false
+  #   number_sections: false
+  #  extra_dependencies: ["float"]
+  bookdown::html_document2:
     toc: false
-    number_sections: false
-    extra_dependencies: ["float"]
+    fig_caption: yes
+    keep_md: true
+    self_contained: true
 ---
 
 
@@ -287,6 +292,13 @@ ind_dens_biom_jt_clean %>%
   footnote(general = "Corn weed management: low herbicide or conventional. C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.", threeparttable = TRUE, footnote_as_chunk = TRUE)
 ```
 
+```{r}
+biom_result_t$means %>%
+  map(~ broom::tidy(.x)) %>%
+ bind_rows(.id = "spp") %>%
+  select(1:5) 
+```
+
 *The cool-season crops were responsible for AMATA stand density differences, but those differences were not strong enough to be apparent between rotation averages.* AMATA stand density and aboveground mass were comparable among all rotation systems averaged over crop phases (p-values > 0.05), among rotations for the same crop species (p-values > 0.05), and within the same crop type across rotations (p-values > 0.05). Averaged over the same crop types (warm-season or cool-season), AMATA stand density in cool-season was 12.25-fold greater than that in warm-season crops (p = 0.0001), but AMATA aboveground mass was comparable in cool-season and warm-season crops (p = 0.0906). Within the same rotation, AMATA stand density was 11-fold (p = 0.0143) and 23-fold (p = 0.0003) greater in the cool-season than in the warm-season crops overall averages, but AMATA aboveground mass was comparable in these crop environments (p = 0.2355 and p = 0.0493, respectively).  
 
 
@@ -368,6 +380,107 @@ biom_ct_df_rounded <- biom_ct_df_clean %>%
             replacement = '<.0001')
 ```
 
+##### Relative abundance of biomass 
+```{r}
+biom_1720_clean.raw <- biom_1720 %>% replace(is.na(.), 0)%>%
+  mutate(SETSP = SETFA + SETLU) %>%
+  dplyr::select( Crop_ID, Block, Year, Corn_weed_management, Total,
+                AMATA , CHEAL , DIGSA , ECHCG , SETSP , TAROF) %>%
+   mutate(
+    AMATA_percent = (AMATA / Total) * 100,
+    CHEAL_percent = (CHEAL / Total) * 100,
+    DIGSA_percent = (DIGSA / Total) * 100,
+    ECHCG_percent = (ECHCG / Total) * 100,
+    SETSP_percent = (SETSP / Total) * 100,
+    TAROF_percent = (TAROF / Total) * 100) %>%
+    dplyr::select(Year, Block, 
+                  Crop_ID, Corn_weed_management, 
+                  AMATA_percent, CHEAL_percent, DIGSA_percent,
+                  ECHCG_percent, SETSP_percent, TAROF_percent) 
+```
+
+```{r, include=FALSE, eval=FALSE}
+biom_1720_clean.ext.raw <-  biom_1720_clean.raw %>%
+   group_by(Crop_ID, Corn_weed_management) %>%  
+  summarise(
+    across(ends_with("_percent"), list(mean = ~ mean(.x, na.rm = TRUE), 
+                                       sd = ~ sd(.x, na.rm = TRUE)), .names = "{.col}_{.fn}")
+  ) %>%
+  ungroup() %>%
+  mutate(
+    AMATA = paste0(round(AMATA_percent_mean, 1), " (", round(AMATA_percent_sd, 1), ")"),
+    CHEAL = paste0(round(CHEAL_percent_mean, 1), " (", round(CHEAL_percent_sd, 1), ")"),
+    DIGSA = paste0(round(DIGSA_percent_mean, 1), " (", round(DIGSA_percent_sd, 1), ")"),
+    ECHCG = paste0(round(ECHCG_percent_mean, 1), " (", round(ECHCG_percent_sd, 1), ")"),
+    SETSP = paste0(round(SETSP_percent_mean, 1), " (", round(SETSP_percent_sd, 1), ")"),
+    TAROF = paste0(round(TAROF_percent_mean, 1), " (", round(TAROF_percent_sd, 1), ")")
+  ) #%>%
+  # Select the desired columns
+  arrange(Corn_weed_management, Crop_ID)
+
+```
+
+```{r}
+biom_1720_clean.raw_long <-  biom_1720_clean.raw %>%
+  pivot_longer(!c(Year : Corn_weed_management),
+               names_to = "Species",
+               values_to =  "Relative.abundance")
+```
+
+```{r}
+tran <- make.tran("asin.sqrt", 100)
+
+indv_spp_result_t <- biom_1720_clean.raw_long %>%
+  group_by(Species) %>% # to fit a linear model for each species
+  nest() %>%
+  mutate(models=map(data,~lmer(Relative.abundance ~ Block +
+                                 Crop_ID*Corn_weed_management + 
+                        (1|Year) + (1|Year:Block) + 
+                       (1|Year:Crop_ID) + (1|Year:Corn_weed_management) + 
+                       (1|Year:Crop_ID:Corn_weed_management)  + (1|Block:Year:Crop_ID),data =.x))) %>%
+  mutate(models.t = map(data, ~with(tran, 
+                                  lmer(linkfun(Relative.abundance) ~ Block +
+                                         Crop_ID * Corn_weed_management + 
+                                         (1|Year) + (1|Year:Block) + 
+                                         (1|Year:Crop_ID) + (1|Year:Corn_weed_management) + 
+                                         (1|Year:Crop_ID:Corn_weed_management) + (1|Block:Year:Crop_ID),
+                                       data = .x)))) %>%
+  ungroup %>%
+  mutate(jts = map(models.t, joint_tests), #ANOVA table, with Block effect
+         diag_plots = map(models, resid_panel),  #diagnosis plot
+        diag_plots.t = map(models.t, resid_panel), 
+    jt_cleans = map2(data, jts, ~print(.y, export = TRUE)$summary), #ANOVA table, with Block effect with clean format
+         means = map2(data, models.t,~ emmeans(.y, ~ Crop_ID | Corn_weed_management,data=.x, type = "response")), #estimated mean density of each weed species in each crop ID, separated by corn weed management, for arrow_plot
+        means2 = map2(data, models.t,~emmeans(.y,  c("Crop_ID","Corn_weed_management"),data=.x, type = "response")), # EM means, for ANOVA table, averaged over block
+    jts2 = map(means2, joint_tests), #ANOVA table, averaged over block 
+    jts2_clean = map2(data, jts2, ~print(.y, export = TRUE)$summary), #ANOVA table, averaged over block in clean format
+across(models:jts2_clean, setNames,  .$Species))
+```
+Arsine squareroot improved model fitting.  
+
+```{r}
+indv_spp_result_t$diag_plots
+```
+
+```{r}
+indv_spp_result_t$diag_plots.t
+```
+
+```{r}
+indv_spp_result_t$means %>%
+   map(~ broom::tidy(.x)) %>%
+ bind_rows(.id = "spp") %>%
+  select(1:5) %>%
+    mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))*100)) %>%
+  mutate(Relative.abundance = paste0(response, " (", std.error, ")")) %>%
+  select(-c(response, std.error)) %>%
+  mutate(spp = substr(spp, 1, 5)) %>%
+  pivot_wider(names_from = spp, values_from = Relative.abundance) %>%
+    mutate(Crop_ID = factor(Crop_ID, levels = c("C2", "C3", "C4",
+                                                "S2", "S3", "S4",
+                                                "O3", "O4", "A4"))) %>% # Replace with the specific order of Crop_ID you need
+  arrange(Corn_weed_management, Crop_ID) #unknown error why the knitted table is totally irrelevant of this table
+```
 
 ```{r, include=FALSE}
 ## stack density and aboveground mass, keep the rows with the most representative contrasts only 
