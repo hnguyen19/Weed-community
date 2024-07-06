@@ -25,7 +25,7 @@ output:
 `oat.lmer` run, erroneously, because one crop ID was mislabeled. 
 
 
-```r
+``` r
 table(oat$Crop_ID, oat$Year)
 ```
 
@@ -151,7 +151,7 @@ Results of the experiment indicated that crop diversification and reduced use of
 Erroneous yields from incorrect conversion factor applied on hay
 
 
-```r
+``` r
 IA_avg_yield 
 ```
 
@@ -166,7 +166,7 @@ IA_avg_yield
 ```
 
 
-```r
+``` r
 Boone_yield
 ```
 

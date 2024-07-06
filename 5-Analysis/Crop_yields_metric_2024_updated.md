@@ -21,7 +21,7 @@ output:
 
 
 
-```r
+``` r
 names(corn)
 ```
 
@@ -38,7 +38,7 @@ names(corn)
 ## [19] "Block"
 ```
 
-```r
+``` r
 names(soy)
 ```
 
@@ -55,7 +55,7 @@ names(soy)
 ## [19] "Block"
 ```
 
-```r
+``` r
 names(oat)
 ```
 
@@ -65,7 +65,7 @@ names(oat)
 ## [7] "ton/ac at 0% moisture"  "Mg/ha at 0% moisture"   "Block"
 ```
 
-```r
+``` r
 names(alfalfa)
 ```
 
@@ -85,7 +85,7 @@ names(alfalfa)
 #### Corn diagnosis: `corn.lmer` and `corn.lmer.ln` similar
 
 
-```r
+``` r
 list(corn.lmer, corn.lmer.ln, corn.lmer.s) %>%
   lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
                               wrap_plots() +
@@ -100,7 +100,7 @@ list(corn.lmer, corn.lmer.ln, corn.lmer.s) %>%
 #### Soy
 
 
-```r
+``` r
 soy.lmer <- lmer(`Mg/ha at 13% moisture` ~ Block +  Crop_ID*Corn_weed_management + 
                     (1|Year) + 
                     (1|Year:Block) + 
@@ -133,7 +133,7 @@ soy.lmer.s <- lmer(sqrt(`Mg/ha at 13% moisture`) ~ Block +  Crop_ID*Corn_weed_ma
 #### Soybean diagnosis: `soy.lmer` and `soy.lmer.ln` similar
 
 
-```r
+``` r
 list(soy.lmer, soy.lmer.ln, soy.lmer.s) %>%
   lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
                               wrap_plots() +
@@ -148,7 +148,7 @@ list(soy.lmer, soy.lmer.ln, soy.lmer.s) %>%
 #### Oat
 
 
-```r
+``` r
 oat.lmer <- lmer(`Mg/ha at 14% moisture` ~ Block + 
                    Crop_ID + 
                    (1|Year) +
@@ -177,7 +177,7 @@ oat.lmer.s <- lmer(sqrt(`Mg/ha at 14% moisture`) ~ Block +
 #### Oat diagnosis: `oat.lmer` and `oat.lmer.ln` similar
 
 
-```r
+``` r
 list(oat.lmer, oat.lmer.ln, oat.lmer.s) %>%
   lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
                               wrap_plots() +
@@ -193,7 +193,7 @@ list(oat.lmer, oat.lmer.ln, oat.lmer.s) %>%
 
 
 
-```r
+``` r
 table(alfalfa$Crop_ID, alfalfa$Year)
 ```
 
@@ -204,7 +204,7 @@ table(alfalfa$Crop_ID, alfalfa$Year)
 ```
 
 
-```r
+``` r
 ## summing all the cuts within one year 
 alf_sum <- alfalfa %>%
   group_by(Year, Block, Crop_ID) %>%
@@ -212,7 +212,7 @@ alf_sum <- alfalfa %>%
 ```
 
 
-```r
+``` r
 table(alf_sum$Crop_ID, alf_sum$Year)
 ```
 
@@ -224,11 +224,11 @@ table(alf_sum$Crop_ID, alf_sum$Year)
 
 
 
-```r
+``` r
 alf.lmer <- lmer(Yield.Mg.ha ~ Block + (1|Year),
   data=alf_sum)
 
-alf.lmer.ln <- lmer(log(Yield.Mg.ha) ~ Block + (1|Year),
+alf.lmer.ln <- lmer(log(Yield.Mg.ha) ~ Block + (1|Year) ,
   data=alf_sum)
 
 alf.lmer.s <- lmer(sqrt(Yield.Mg.ha) ~ Block + (1|Year),
@@ -238,7 +238,7 @@ alf.lmer.s <- lmer(sqrt(Yield.Mg.ha) ~ Block + (1|Year),
 #### Alfalfa diagnosis: `alf.lmer` and `alf.lmer.ln` similar
 
 
-```r
+``` r
 list(alf.lmer, alf.lmer.ln, alf.lmer.s) %>%
   lapply(resid_panel,  qqbands = TRUE , nrow = 2) %>%
                               wrap_plots() +

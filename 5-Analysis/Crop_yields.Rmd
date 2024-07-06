@@ -310,15 +310,15 @@ crops.emmip.IA$Commodity <- factor(crops.emmip.IA$Commodity,
                                                   "alfalfa hay"))
 ```
 
-```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.", echo=FALSE, fig.width=8, fig.height=6}
+```{r crop-bar, fig.cap="Mean crop yields by rotation from 2017 to 2020. The color-coded bars show crop yields (Mg ha$^-1$) in the experiment plots. The error bars show the 95% confidence intervals. The solid horizontal lines show mean yields for Iowa and dashed lines show mean yields for Boone County. Corn, soybean, and alfalfa yields in the experiment were averaged over four years, oat grain yields in the experiment were averaged over 2017, 2019, and 2020 because in 2018 oat was harvested for hay. Boone County and Iowa hay yields were averaged over 2017 and 2018 because 2019 and 2020 yields were not available at this writing.", echo=FALSE, fig.width=6, fig.height=4}
 
 ggplot(crops.emmip.IA , aes(x = Crop_ID, y = yvar, fill = Rotation))+ 
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Dark2") +
   geom_errorbar(aes(ymin= LCL, ymax= UCL), width=.2) + 
   facet_grid(.~ Commodity, scales = "free", space = "free") + # scales: remove empty bar, space: equal bar width
-  geom_hline(aes(yintercept = IA_avg, linetype = "IA average")) + 
-  geom_hline(aes(yintercept = Boone_avg, linetype = "Boone County average")) + 
+  geom_hline(aes(yintercept = IA_avg, linetype = "Iowa \naverage")) + 
+  geom_hline(aes(yintercept = Boone_avg, linetype = "Boone County \naverage")) + 
   ylab("Crop yield (Mg/ha)") +
   xlab("Crop identity") +
   labs(linetype = "Yield") +
