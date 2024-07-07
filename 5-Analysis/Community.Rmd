@@ -1761,6 +1761,7 @@ comm_dens_biom_ct_clean <-  comm_dens_biom_ct_rounded[,-c(3:6,9:12)]
 comm_dens_biom_blank_ct <- add_column(comm_dens_biom_ct_clean, 
                                      blank1 = rep("",13),
                                      blank2 = rep("",13),
+                                     blank3 = rep("",13),
                                       .after = "contrast                                 ")
 
 # Stack ANOVA tables on top of contrast tables
@@ -1815,6 +1816,24 @@ comm_biom_tab <- emmeans(comm_biom_lmer, ~ Crop_ID | Corn_weed_management,  infe
   select(Crop_ID, Corn_weed_management, response, std.error) %>%
   rename(biomass = response)
 ```
+
+
+##### Combined table: metric
+
+```{r}
+left_join(comm_dens_tab, comm_biom_tab, by = c("Crop_ID", "Corn_weed_management")) %>%
+  select(Crop_ID, Corn_weed_management,
+         density, std.error.x,
+         biomass, std.error.y) %>%
+  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.1f', .)))) %>%
+  mutate(`density (SE)` = paste0(density, " (", std.error.x, ")") ,
+         `biomass (SE)` = paste0(biomass, " (", std.error.y, ")")) %>%
+  select(Crop_ID, Corn_weed_management, `density (SE)`,  `biomass (SE)`) #%>%
+  # pivot_wider(names_from = Corn_weed_management,
+  #             values_from = c(`density (SE)`,  `biomass (SE)` ))
+```
+
+##### Combined table: imperial
 
 ```{r}
 left_join(comm_dens_tab, comm_biom_tab, by = c("Crop_ID", "Corn_weed_management")) %>%
