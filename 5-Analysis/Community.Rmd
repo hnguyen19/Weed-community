@@ -1818,14 +1818,14 @@ comm_biom_tab <- emmeans(comm_biom_lmer, ~ Crop_ID | Corn_weed_management,  infe
 ```
 
 
-##### Combined table: metric
+##### Combined weed abundance table: metric
 
 ```{r}
 left_join(comm_dens_tab, comm_biom_tab, by = c("Crop_ID", "Corn_weed_management")) %>%
   select(Crop_ID, Corn_weed_management,
          density, std.error.x,
          biomass, std.error.y) %>%
-  mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.1f', .)))) %>%
+  mutate_at(c(3 : 6), ~ sprintf('%.1f', .)) %>%
   mutate(`density (SE)` = paste0(density, " (", std.error.x, ")") ,
          `biomass (SE)` = paste0(biomass, " (", std.error.y, ")")) %>%
   select(Crop_ID, Corn_weed_management, `density (SE)`,  `biomass (SE)`) #%>%
@@ -1833,7 +1833,7 @@ left_join(comm_dens_tab, comm_biom_tab, by = c("Crop_ID", "Corn_weed_management"
   #             values_from = c(`density (SE)`,  `biomass (SE)` ))
 ```
 
-##### Combined table: imperial
+##### Combined weed abundance table: imperial
 
 ```{r}
 left_join(comm_dens_tab, comm_biom_tab, by = c("Crop_ID", "Corn_weed_management")) %>%
@@ -1998,6 +1998,8 @@ sp_biom <- ggplot(data = biom_1720_sum, aes(fill = Species,
 
 
 ```
+
+### Weed abundance: estimated means and stacked raw means
 
 ```{r all-sp-dens-biom, fig.width=8, fig.height=8, echo=FALSE, fig.cap="In panels A and B: weed community stand density and aboveground mass were averaged over four blocks, four years, and two corn weed management regimes; the black dots are estimated marginal means; the blue bars are 95% confidence intervals; the red arrows reflect the comparisons among means; overlapping arrows indicate non-significant differences. In panels C and D: the contribution of the seven most abundant weed species and the rarer species (species ordered eighth and above grouped in OTHERS) in each crop identity, averaged over four blocks and four years, are ordered alphabetically. The abbreviations on the x-axis are crop identities, which are the combinations of the first letter in crop species names and the rotation in which it occurred (C2 - corn in the 2-year rotation, C3 - corn in the 3-year rotation, C4 - corn in the 4-year rotation, S2 - soybean in the 2-year rotation, S3 - soybean in the 3-year rotation, S4 - soybean in the 4-year rotation, O3 - oat in the 3-year rotation, O4 - oat in the 4-year rotation, and A4 - alfalfa in the 4-year rotation.) The less abundant weed species which made up 6% of the whole community are grouped in OTHERS. The means displayed on panels A and B were estimated marginal means, calculated based on the analysis model (with `emmip` function) but the means displayed on panels C and D were arithmetic means, calculated from the data so they are slightly different."}
 grid.arrange(dens_plot, biom_plot, sp_dens, sp_biom, 

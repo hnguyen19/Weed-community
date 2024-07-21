@@ -381,6 +381,7 @@ biom_ct_df_rounded <- biom_ct_df_clean %>%
 ```
 
 ##### Relative abundance of biomass 
+
 ```{r}
 biom_1720_clean.raw <- biom_1720 %>% replace(is.na(.), 0)%>%
   mutate(SETSP = SETFA + SETLU) %>%
@@ -466,12 +467,15 @@ indv_spp_result_t$diag_plots
 indv_spp_result_t$diag_plots.t
 ```
 
+##### Estimated relative abundance: % biomass table
+
 ```{r}
 indv_spp_result_t$means %>%
    map(~ broom::tidy(.x)) %>%
  bind_rows(.id = "spp") %>%
   select(1:5) %>%
-    mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .))*100)) %>%
+#    mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.0f', .)))) %>%
+   mutate_at(c(4 : 5), ~ sprintf('%.0f', .)) %>%
   mutate(Relative.abundance = paste0(response, " (", std.error, ")")) %>%
   select(-c(response, std.error)) %>%
   mutate(spp = substr(spp, 1, 5)) %>%
@@ -480,6 +484,24 @@ indv_spp_result_t$means %>%
                                                 "S2", "S3", "S4",
                                                 "O3", "O4", "A4"))) %>% # Replace with the specific order of Crop_ID you need
   arrange(Corn_weed_management, Crop_ID) #unknown error why the knitted table is totally irrelevant of this table
+```
+```{r}
+indv_spp_result_t$means %>%
+   map(~ broom::tidy(.x)) %>%
+ bind_rows(.id = "spp") %>%
+  select(1:5) %>%
+    mutate(across(where(is.numeric), ~ as.numeric(sprintf('%.2f', .)))) %>%
+  group_by(Crop_ID, Corn_weed_management) %>%
+  mutate(biom_rank = rank(desc(response))) %>%
+  mutate(color.code = ifelse(biom_rank == 1, "red", "grey")) %>%
+#  ggplot(aes(fill = color.code, 
+  ggplot(aes(fill = response, 
+             x = Crop_ID, y = response)) +
+           facet_wrap( ~ Corn_weed_management) +
+           geom_bar(position="stack", stat = "identity") + 
+            ylab(expression(Weed~aboveground~mass~(g~m^{"-2"}))) +
+  xlab("")
+           
 ```
 
 ```{r, include=FALSE}
